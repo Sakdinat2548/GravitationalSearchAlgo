@@ -25,8 +25,8 @@ int main() {
     // auto [val1, pos1] = gsa1.optimize();
 
     // // --- WAY 2: Inline Vector List Bounds (3 dimensions with unique bounds)
-    // --- GravitationalSearchAlgorithm gsa2({-10.0, 0.0, -1.0},
-    // {10.0, 50.0, 1.0}, sphere); auto [val2, pos2] = gsa2.optimize();
+    // --- GravitationalSearchAlgorithm gsa2({-10.0, 0.0, -1.0}, {10.0, 50.0, 1.0}, sphere); 
+    // auto [val2, pos2] = gsa2.optimize();
 
     // std::cout << "Inline Scalar Bounds Result: " << val1 << "\n";
     // std::cout << "Inline Vector Bounds Result: " << val2 << "\n";
