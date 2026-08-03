@@ -37,6 +37,7 @@ class GravitationalSearchAlgorithm {
     std::vector<double> agent_buffer;
     std::vector<double> total_F;
 
+    // Helper to compute the 1D index for a 2D agent-dimension array
     inline constexpr size_t idx(size_t agent, size_t dim) const noexcept {
         return agent * dimensions + dim;
     }
