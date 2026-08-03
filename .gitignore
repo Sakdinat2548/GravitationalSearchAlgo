@@ -1,0 +1,14 @@
+# C/C++ build artifacts
+*.exe
+*.out
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.gch
+
+# Editor/IDE files
+.vscode/
