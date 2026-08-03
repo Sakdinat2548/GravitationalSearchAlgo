@@ -31,16 +31,33 @@ int main() {
     // std::cout << "Inline Scalar Bounds Result: " << val1 << "\n";
     // std::cout << "Inline Vector Bounds Result: " << val2 << "\n";
 
-    GravitationalSearchAlgorithm gsa3(10, -2.048, 2.048, rosenbrock,
-                                      {.n_agents = 50,
-                                       .max_iter = 5000,
-                                       .g0 = 10.0,
-                                       .alpha = 10.0,
-                                       .minimize = true});
-    auto [val3, pos3] = gsa3.optimize();
+    // GravitationalSearchAlgorithm gsa3(10, -2.048, 2.048, rosenbrock,
+    //                                   {.n_agents = 50,
+    //                                    .max_iter = 5000,
+    //                                    .g0 = 10.0,
+    //                                    .alpha = 10.0,
+    //                                    .minimize = true});
+    // auto [val3, pos3] = gsa3.optimize();
+    // std::cout << "Rosenbrock Result: " << val3 << "\n";
+    // for (auto& p : pos3) std::cout << p << " ";
+    // std::cout << "\n";
 
-    std::cout << "Rosenbrock Result: " << val3 << "\n";
-    for (auto& p : pos3) std::cout << p << " ";
+    GravitationalSearchAlgorithm gsa4(
+        30, -500, 500,
+        [](const std::vector<double>& x) {
+            double sum = 0.0;
+            for (double val : x)
+                sum += -val * std::sin(std::sqrt(std::abs(val)));
+            return sum;
+        },
+        {.n_agents = 100,
+         .max_iter = 1000,
+         .g0 = 10.0,
+         .alpha = 20.0,
+         .minimize = true});
+    auto [val4, pos4] = gsa4.optimize();
+    std::cout << "Schwefel Result: " << val4 << "\n";
+    for (auto& p : pos4) std::cout << p << " ";
     std::cout << "\n";
 
     return 0;
