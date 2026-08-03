@@ -32,7 +32,8 @@ int main() {
 
     GsaConfig custom_config;
     custom_config.n_agents = 50;
-    custom_config.max_iter = 2000;
+    custom_config.max_iter = 5000;
+    custom_config.g0 = 1.0;
 
     GravitationalSearchAlgorithm gsa3(3, -2.048, 2.048, rosenbrock, custom_config);
     auto [val3, pos3] = gsa3.optimize();

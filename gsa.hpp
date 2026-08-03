@@ -7,6 +7,8 @@
 #include <random>
 #include <algorithm>
 #include <limits>
+#include <fstream>
+#include <string>
 
 struct GsaConfig {
     int n_agents = 40;
@@ -37,6 +39,19 @@ private:
 
     inline constexpr size_t idx(size_t agent, size_t dim) const noexcept {
         return agent * dimensions + dim;
+    }
+
+    // Helper to export particle locations to a text file
+    void save_positions_to_file(const std::string& filename) const {
+        std::ofstream file(filename);
+        if (!file.is_open()) return;
+
+        for (int i = 0; i < config.n_agents; ++i) {
+            for (int d = 0; d < dimensions; ++d) {
+                file << X[idx(i, d)] << (d == dimensions - 1 ? "" : " ");
+            }
+            file << "\n";
+        }
     }
 
     // Helper 1: Initialize positions randomly across bounds
@@ -171,6 +186,7 @@ public:
         std::uniform_real_distribution<double> rand_uni(0.0, 1.0);
 
         initialize_positions(gen);
+        // save_positions_to_file("initial_positions.txt");
 
         double global_best_val = config.minimize ? std::numeric_limits<double>::max() 
                                                  : std::numeric_limits<double>::lowest();
@@ -188,8 +204,10 @@ public:
         }
 
         evaluate_fitness(global_best_val, global_best_pos);
+        // save_positions_to_file("final_positions.txt");
+
         return {global_best_val, global_best_pos};
     }
 };
 
-#endif // GSA_HPP
+#endif // GSA_HPP`
