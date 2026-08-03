@@ -31,7 +31,7 @@ int main() {
     // std::cout << "Inline Scalar Bounds Result: " << val1 << "\n";
     // std::cout << "Inline Vector Bounds Result: " << val2 << "\n";
 
-    GravitationalSearchAlgorithm gsa3(5, -2.048, 2.048, rosenbrock,
+    GravitationalSearchAlgorithm gsa3(4, -2.048, 2.048, rosenbrock,
                                       {.n_agents = 50,
                                        .max_iter = 5000,
                                        .g0 = 10.0,
