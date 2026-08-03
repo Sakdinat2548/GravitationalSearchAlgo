@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Gsa.hpp"
+#include "gsa.hpp"
 
 double sphere(const std::vector<double>& x) {
     double sum = 0.0;
