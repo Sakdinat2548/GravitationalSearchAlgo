@@ -59,11 +59,11 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
 // Helper 3: Normalize agent masses based on fitness performance
 void GravitationalSearchAlgorithm::compute_masses() {
     auto [min_it, max_it] = std::minmax_element(fitness.begin(), fitness.end());
-    double min_fit = *min_it;
-    double max_fit = *max_it;
+    const double min_fit = *min_it;
+    const double max_fit = *max_it;
 
-    double best_fit = config.minimize ? min_fit : max_fit;
-    double worst_fit = config.minimize ? max_fit : min_fit;
+    const double best_fit = config.minimize ? min_fit : max_fit;
+    const double worst_fit = config.minimize ? max_fit : min_fit;
 
     double fit_diff = best_fit - worst_fit;
     if (std::abs(fit_diff) < 1e-12) fit_diff = 1e-6;
