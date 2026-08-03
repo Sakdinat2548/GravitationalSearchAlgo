@@ -147,6 +147,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     : min_bounds(lower), max_bounds(upper), objective_fn(func), config(cfg) {
     dimensions = static_cast<int>(lower.size());
 
+    // Pre-allocate physical state vectors and scratchpad buffers
     X.resize(config.n_agents * dimensions);
     V.resize(config.n_agents * dimensions, 0.0);
     A.resize(config.n_agents * dimensions, 0.0);
