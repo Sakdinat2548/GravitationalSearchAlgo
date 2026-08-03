@@ -173,6 +173,8 @@ GravitationalSearchAlgorithm::optimize() {
 
     initialize_positions(gen);
 
+    // save_positions_to_file("initial_positions.txt");
+
     double global_best_val = config.minimize
                                  ? std::numeric_limits<double>::max()
                                  : std::numeric_limits<double>::lowest();
