@@ -1,5 +1,12 @@
 #include "gsa.hpp"
 
+#include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <limits>
+#include <numeric>
+#include <stdexcept>
+
 // Helper to compute the 1D index for a 2D agent-dimension array
 inline constexpr size_t GravitationalSearchAlgorithm::idx(
     size_t agent, size_t dim) const noexcept {
@@ -106,7 +113,6 @@ void GravitationalSearchAlgorithm::compute_accelerations(
         const double m_i = M[i];
 
         for (int k = 0; k < k_best_count; ++k) {
-            // Get the index of the k-th best agent
             int j = sorted_indices[k];
 
             if (i == j) continue;
@@ -150,9 +156,23 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     const std::vector<double>& lower, const std::vector<double>& upper,
     std::function<double(const std::vector<double>&)> func, GsaConfig cfg)
     : min_bounds(lower), max_bounds(upper), objective_fn(func), config(cfg) {
+    if (lower.empty() || upper.empty()) {
+        throw std::invalid_argument("Bounds vectors must not be empty");
+    }
+    if (lower.size() != upper.size()) {
+        throw std::invalid_argument("Lower and upper bounds must have the same size");
+    }
+    if (config.n_agents <= 0 || config.max_iter <= 0) {
+        throw std::invalid_argument("n_agents and max_iter must be positive");
+    }
+    for (size_t i = 0; i < lower.size(); ++i) {
+        if (lower[i] > upper[i]) {
+            throw std::invalid_argument("Each lower bound must be <= its upper bound");
+        }
+    }
+
     dimensions = static_cast<int>(lower.size());
 
-    // Pre-allocate physical state vectors and scratchpad buffers
     X.resize(config.n_agents * dimensions);
     V.resize(config.n_agents * dimensions, 0.0);
     A.resize(config.n_agents * dimensions, 0.0);

@@ -1,14 +1,11 @@
 #ifndef GSA_HPP
 #define GSA_HPP
 
-#include <algorithm>
-#include <cmath>
-#include <fstream>
+#include <cstddef>
 #include <functional>
-#include <limits>
-#include <numeric>
 #include <random>
 #include <string>
+#include <utility>
 #include <vector>
 
 struct GsaConfig {
