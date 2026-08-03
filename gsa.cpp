@@ -61,14 +61,16 @@ void GravitationalSearchAlgorithm::compute_masses() {
     double fit_diff = best_fit - worst_fit;
     if (std::abs(fit_diff) < 1e-12) fit_diff = 1e-6;
 
+    const double inv_fit_diff = 1.0 / fit_diff;
+
     double sum_q = 0.0;
     for (int i = 0; i < config.n_agents; ++i) {
-        M[i] = (fitness[i] - worst_fit) / fit_diff;
+        M[i] = (fitness[i] - worst_fit) * inv_fit_diff;
         sum_q += M[i];
     }
     if (sum_q == 0.0) sum_q = 1e-6;
 
-    double inv_sum_q = 1.0 / sum_q;
+    const double inv_sum_q = 1.0 / sum_q;
     for (int i = 0; i < config.n_agents; ++i) {
         M[i] *= inv_sum_q;
     }
@@ -82,6 +84,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
 
     // 1. Sort agent indices based on fitness (best fitness first)
     std::vector<int> sorted_indices(config.n_agents);
+    // Fill with 0, 1, 2, ..., n_agents-1
     std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
 
     std::sort(sorted_indices.begin(), sorted_indices.end(),
@@ -91,7 +94,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
               });
 
     // 2. Linearly decrease Kbest from N down to 1 over max_iter
-    double progress = static_cast<double>(current_iter) /
+    const double progress = static_cast<double>(current_iter) /
                       static_cast<double>(config.max_iter);
     int k_best_count =
         static_cast<int>(config.n_agents - progress * (config.n_agents - 1));
@@ -103,17 +106,19 @@ void GravitationalSearchAlgorithm::compute_accelerations(
         const double m_i = M[i];
 
         for (int k = 0; k < k_best_count; ++k) {
+            // Get the index of the k-th best agent
             int j = sorted_indices[k];
+
             if (i == j) continue;
 
             double r_squared = 0.0;
             for (int d = 0; d < dimensions; ++d) {
-                double diff = X[idx(i, d)] - X[idx(j, d)];
+                const double diff = X[idx(i, d)] - X[idx(j, d)];
                 r_squared += diff * diff;
             }
 
-            double R = std::sqrt(r_squared);
-            double force_mag = G * (m_i * M[j]) / (R + 1e-6);
+            const double R = std::sqrt(r_squared);
+            const double force_mag = G * (m_i * M[j]) / (R + 1e-6);
 
             for (int d = 0; d < dimensions; ++d) {
                 total_F[d] +=
@@ -121,7 +126,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
             }
         }
 
-        double inv_mass = 1.0 / (m_i + 1e-6);
+        const double inv_mass = 1.0 / (m_i + 1e-6);
         for (int d = 0; d < dimensions; ++d) {
             A[idx(i, d)] = total_F[d] * inv_mass;
         }
@@ -133,7 +138,7 @@ void GravitationalSearchAlgorithm::update_kinematics(
     std::mt19937& gen, std::uniform_real_distribution<double>& rand_uni) {
     for (int i = 0; i < config.n_agents; ++i) {
         for (int d = 0; d < dimensions; ++d) {
-            size_t index = idx(i, d);
+            const size_t index = idx(i, d);
             V[index] = rand_uni(gen) * V[index] + A[index];
             X[index] =
                 std::clamp(X[index] + V[index], min_bounds[d], max_bounds[d]);
