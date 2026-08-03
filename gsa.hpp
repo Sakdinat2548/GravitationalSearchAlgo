@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <limits>
 
-// default configuration 
 struct GsaConfig {
     int n_agents = 40;
     int max_iter = 500;
@@ -29,12 +28,11 @@ private:
     std::vector<double> V;
     std::vector<double> A;
 
-    inline size_t idx(size_t agent, size_t dim) const {
+    inline constexpr size_t idx(size_t agent, size_t dim) const noexcept {
         return agent * dimensions + dim;
     }
 
 public:
-    // Constructor 1: Unequal vector bounds per dimension
     GravitationalSearchAlgorithm(
         const std::vector<double>& lower, 
         const std::vector<double>& upper, 
@@ -43,13 +41,11 @@ public:
         : min_bounds(lower), max_bounds(upper), objective_fn(func), config(cfg) {
         
         dimensions = static_cast<int>(lower.size());
-
         X.resize(config.n_agents * dimensions);
         V.resize(config.n_agents * dimensions, 0.0);
         A.resize(config.n_agents * dimensions, 0.0);
     }
 
-    // Constructor 2: Equal scalar bounds inline across N dimensions
     GravitationalSearchAlgorithm(
         int dims, double lower, double upper, 
         std::function<double(const std::vector<double>&)> func,
@@ -64,7 +60,9 @@ public:
         std::mt19937 gen(rd());
         std::uniform_real_distribution<double> rand_uni(0.0, 1.0);
 
+        // random distributions for each dimension
         std::vector<std::uniform_real_distribution<double>> rand_space;
+        rand_space.reserve(dimensions);
         for (int d = 0; d < dimensions; ++d) {
             rand_space.emplace_back(min_bounds[d], max_bounds[d]);
         }
@@ -79,18 +77,22 @@ public:
         std::vector<double> fitness(config.n_agents);
         std::vector<double> M(config.n_agents);
         std::vector<double> agent_buffer(dimensions);
+        std::vector<double> total_F(dimensions);
 
         double global_best_val = config.minimize ? std::numeric_limits<double>::max() 
                                                  : std::numeric_limits<double>::lowest();
         std::vector<double> global_best_pos(dimensions);
 
-        // Iteration loop
-        for (int k = 1; k <= config.max_iter; ++k) {
-            double G = config.g0 * std::exp(-config.alpha * static_cast<double>(k) / config.max_iter);
+        const double inv_max_iter = 1.0 / static_cast<double>(config.max_iter);
 
-            // Evaluate fitness
+        for (int k = 1; k <= config.max_iter; ++k) {
+            double G = config.g0 * std::exp(-config.alpha * static_cast<double>(k) * inv_max_iter);
+
+            // 1. Evaluate Fitness
             for (int i = 0; i < config.n_agents; ++i) {
-                std::copy(X.begin() + (i * dimensions), X.begin() + ((i + 1) * dimensions), agent_buffer.begin());
+                for (int d = 0; d < dimensions; ++d) {
+                    agent_buffer[d] = X[idx(i, d)];
+                }
                 fitness[i] = objective_fn(agent_buffer);
 
                 bool is_better = config.minimize ? (fitness[i] < global_best_val) 
@@ -102,49 +104,60 @@ public:
                 }
             }
 
-            double min_fit = *std::min_element(fitness.begin(), fitness.end());
-            double max_fit = *std::max_element(fitness.begin(), fitness.end());
+            // Single pass min and max extraction
+            auto [min_it, max_it] = std::minmax_element(fitness.begin(), fitness.end());
+            double min_fit = *min_it;
+            double max_fit = *max_it;
 
             double best_fit  = config.minimize ? min_fit : max_fit;
             double worst_fit = config.minimize ? max_fit : min_fit;
 
-            if (best_fit == worst_fit) worst_fit += 1e-6;
+            double fit_diff = best_fit - worst_fit;
+            if (std::abs(fit_diff) < 1e-12) fit_diff = 1e-6;
 
-            // Calculate relative mass
+            // 2. Compute Relative Mass
             double sum_q = 0.0;
             for (int i = 0; i < config.n_agents; ++i) {
-                M[i] = (fitness[i] - worst_fit) / (best_fit - worst_fit);
+                M[i] = (fitness[i] - worst_fit) / fit_diff;
                 sum_q += M[i];
             }
-            if (sum_q == 0) sum_q = 1e-6;
-            for (double& mass : M) mass /= sum_q;
+            if (sum_q == 0.0) sum_q = 1e-6;
+            
+            double inv_sum_q = 1.0 / sum_q;
+            for (int i = 0; i < config.n_agents; ++i) {
+                M[i] *= inv_sum_q;
+            }
 
-            // Forces & acceleration
+            // 3. Compute Forces & Acceleration
             std::fill(A.begin(), A.end(), 0.0);
             for (int i = 0; i < config.n_agents; ++i) {
-                std::vector<double> total_F(dimensions, 0.0);
+                std::fill(total_F.begin(), total_F.end(), 0.0);
+                const double m_i = M[i];
 
                 for (int j = 0; j < config.n_agents; ++j) {
                     if (i == j) continue;
 
                     double r_squared = 0.0;
                     for (int d = 0; d < dimensions; ++d) {
-                        r_squared += std::pow(X[idx(i, d)] - X[idx(j, d)], 2);
+                        double diff = X[idx(i, d)] - X[idx(j, d)];
+                        r_squared += diff * diff;
                     }
+
                     double R = std::sqrt(r_squared);
-                    double force_mag = G * (M[i] * M[j]) / (R + 1e-6);
+                    double force_mag = G * (m_i * M[j]) / (R + 1e-6);
 
                     for (int d = 0; d < dimensions; ++d) {
                         total_F[d] += rand_uni(gen) * force_mag * (X[idx(j, d)] - X[idx(i, d)]);
                     }
                 }
 
+                double inv_mass = 1.0 / (m_i + 1e-6);
                 for (int d = 0; d < dimensions; ++d) {
-                    A[idx(i, d)] = total_F[d] / (M[i] + 1e-6);
+                    A[idx(i, d)] = total_F[d] * inv_mass;
                 }
             }
 
-            // Update kinematics & clamp
+            // 4. Update Kinematics
             for (int i = 0; i < config.n_agents; ++i) {
                 for (int d = 0; d < dimensions; ++d) {
                     size_t index = idx(i, d);
