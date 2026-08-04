@@ -53,9 +53,8 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
     const int dim = dimensions;
 
     for (int i = 0; i < n_agents; ++i) {
-        for (int d = 0; d < dim; ++d) {
-            agent_buffer[d] = X[idx(i, d)];
-        }
+        const size_t row_offset = idx(i, 0);
+        std::copy_n(X.begin() + row_offset, dim, agent_buffer.begin());
 
         const double fitness_value = objective_fn(agent_buffer);
         fitness[i] = fitness_value;
@@ -112,7 +111,6 @@ void GravitationalSearchAlgorithm::compute_accelerations(
     std::fill(A.begin(), A.end(), 0.0);
 
     // 1. Sort agent indices based on fitness (best fitness first)
-    std::vector<int> sorted_indices(n_agents);
     std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
 
     std::sort(sorted_indices.begin(), sorted_indices.end(),
@@ -121,10 +119,16 @@ void GravitationalSearchAlgorithm::compute_accelerations(
                                   : (fitness[a] > fitness[b]);
               });
 
-    // 2. Linearly decrease Kbest from N down to 1 over max_iter
+    // 2. For very small populations, use the full population as the
+    //    interaction set. Otherwise, linearly decrease Kbest from N down to 1
+    //    over max_iter.
+    constexpr int small_problem_threshold = 10;
+    const bool is_small_problem = n_agents <= small_problem_threshold;
     const double progress =
         static_cast<double>(current_iter) / static_cast<double>(max_iter);
-    int k_best_count = static_cast<int>(n_agents - progress * (n_agents - 1));
+    int k_best_count = is_small_problem
+                           ? n_agents
+                           : static_cast<int>(n_agents - progress * (n_agents - 1));
     k_best_count = std::clamp(k_best_count, 1, n_agents);
 
     // 3. Compute forces only from agents in the Kbest set (Eq. 21)
@@ -206,6 +210,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     M.resize(config.n_agents);
     agent_buffer.resize(dimensions);
     total_F.resize(dimensions);
+    sorted_indices.resize(config.n_agents);
 }
 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
