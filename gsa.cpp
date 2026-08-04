@@ -85,7 +85,7 @@ void GravitationalSearchAlgorithm::compute_masses() {
 
 // Helper 4: Compute gravitational forces using Kbest (Eq. 21)
 void GravitationalSearchAlgorithm::compute_accelerations(
-    double G, int current_iter, std::mt19937& gen,
+    const double G, const int current_iter, std::mt19937& gen,
     std::uniform_real_distribution<double>& rand_uni) {
     std::fill(A.begin(), A.end(), 0.0);
 
@@ -102,7 +102,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
 
     // 2. Linearly decrease Kbest from N down to 1 over max_iter
     const double progress = static_cast<double>(current_iter) /
-                      static_cast<double>(config.max_iter);
+                            static_cast<double>(config.max_iter);
     int k_best_count =
         static_cast<int>(config.n_agents - progress * (config.n_agents - 1));
     k_best_count = std::clamp(k_best_count, 1, config.n_agents);
@@ -154,24 +154,29 @@ void GravitationalSearchAlgorithm::update_kinematics(
 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     const std::vector<double>& lower, const std::vector<double>& upper,
-    std::function<double(const std::vector<double>&)> func, GsaConfig cfg)
-    : min_bounds(lower), max_bounds(upper), objective_fn(func), config(cfg) {
-    if (lower.empty() || upper.empty()) {
+    const ObjectiveFunction& func, const GsaConfig& cfg)
+    : min_bounds(lower),
+      max_bounds(upper),
+      objective_fn(func),
+      config(cfg) {
+    if (min_bounds.empty() || max_bounds.empty()) {
         throw std::invalid_argument("Bounds vectors must not be empty");
     }
-    if (lower.size() != upper.size()) {
-        throw std::invalid_argument("Lower and upper bounds must have the same size");
+    if (min_bounds.size() != max_bounds.size()) {
+        throw std::invalid_argument(
+            "Lower and upper bounds must have the same size");
     }
     if (config.n_agents <= 0 || config.max_iter <= 0) {
         throw std::invalid_argument("n_agents and max_iter must be positive");
     }
-    for (size_t i = 0; i < lower.size(); ++i) {
-        if (lower[i] > upper[i]) {
-            throw std::invalid_argument("Each lower bound must be <= its upper bound");
+    for (size_t i = 0; i < min_bounds.size(); ++i) {
+        if (min_bounds[i] > max_bounds[i]) {
+            throw std::invalid_argument(
+                "Each lower bound must be <= its upper bound");
         }
     }
 
-    dimensions = static_cast<int>(lower.size());
+    dimensions = static_cast<int>(min_bounds.size());
 
     X.resize(config.n_agents * dimensions);
     V.resize(config.n_agents * dimensions, 0.0);
@@ -184,8 +189,8 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
 }
 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
-    int dims, double lower, double upper,
-    std::function<double(const std::vector<double>&)> func, GsaConfig cfg)
+    int dims, double lower, double upper, const ObjectiveFunction& func,
+    const GsaConfig& cfg)
     : GravitationalSearchAlgorithm(std::vector<double>(dims, lower),
                                    std::vector<double>(dims, upper), func,
                                    cfg) {}

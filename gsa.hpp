@@ -16,13 +16,15 @@ struct GsaConfig {
     bool minimize = true;
 };
 
+using ObjectiveFunction = std::function<double(const std::vector<double>&)>;
+
 class GravitationalSearchAlgorithm {
    private:
-    GsaConfig config;
-    int dimensions;
+    GsaConfig config{};
+    int dimensions{0};
     std::vector<double> min_bounds;
     std::vector<double> max_bounds;
-    std::function<double(const std::vector<double>&)> objective_fn;
+    ObjectiveFunction objective_fn;
 
     // Physical state vectors
     std::vector<double> X;
@@ -53,7 +55,7 @@ class GravitationalSearchAlgorithm {
 
     // Helper 4: Compute gravitational forces using Kbest (Eq. 21)
     void compute_accelerations(
-        double G, int current_iter, std::mt19937& gen,
+        const double G, const int current_iter, std::mt19937& gen,
         std::uniform_real_distribution<double>& rand_uni);
 
     // Helper 5: Update velocity, move particles, and clamp to bounds
@@ -63,15 +65,13 @@ class GravitationalSearchAlgorithm {
    public:
     GravitationalSearchAlgorithm(
         const std::vector<double>& lower, const std::vector<double>& upper,
-        std::function<double(const std::vector<double>&)> func,
-        GsaConfig cfg = GsaConfig{});
+        const ObjectiveFunction& func, const GsaConfig& cfg = GsaConfig{});
 
     GravitationalSearchAlgorithm(
-        int dims, double lower, double upper,
-        std::function<double(const std::vector<double>&)> func,
-        GsaConfig cfg = GsaConfig{});
+        int dims, double lower, double upper, const ObjectiveFunction& func,
+        const GsaConfig& cfg = GsaConfig{});
 
-    std::pair<double, std::vector<double>> optimize();
+    [[nodiscard]] std::pair<double, std::vector<double>> optimize();
 };
 
 #endif  // GSA_HPP`
