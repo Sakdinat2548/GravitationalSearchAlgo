@@ -127,13 +127,14 @@ void GravitationalSearchAlgorithm::compute_accelerations(
     int k_best_count = static_cast<int>(n_agents - progress * (n_agents - 1));
     k_best_count = std::clamp(k_best_count, 1, n_agents);
 
-    // 3. Compute forces only from agents in the Kbest set (Eq. 21)
-    for (int i = 0; i < n_agents; ++i) {
+    // 3. Only the Kbest agents are updated by the gravitational forces
+    for (int k = 0; k < k_best_count; ++k) {
+        const int i = sorted_indices[k];
         std::fill(total_F.begin(), total_F.end(), 0.0);
         const double m_i = M[i];
 
-        for (int k = 0; k < k_best_count; ++k) {
-            const int j = sorted_indices[k];
+        for (int j_idx = 0; j_idx < k_best_count; ++j_idx) {
+            const int j = sorted_indices[j_idx];
 
             if (i == j) continue;
 
