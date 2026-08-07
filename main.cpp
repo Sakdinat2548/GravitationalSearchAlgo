@@ -4,13 +4,13 @@
 
 #include "gsa.hpp"
 
-double sphere(const std::vector<double>& x) {
+double sphere(std::span<const double> x) {
     double sum = 0.0;
     for (double val : x) sum += val * val;
     return sum;
 }
 
-double rosenbrock(const std::vector<double>& x) {
+double rosenbrock(std::span<const double> x) {
     double sum = 0.0;
     for (size_t i = 0; i < x.size() - 1; ++i) {
         sum += 100.0 * std::pow(x[i + 1] - std::pow(x[i], 2), 2) +

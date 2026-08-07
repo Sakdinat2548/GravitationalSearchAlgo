@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <functional>
 #include <random>
+#include <span>
 #include <string>
 #include <utility>
 #include <vector>
@@ -16,7 +17,7 @@ struct GsaConfig {
     bool minimize = true;
 };
 
-using ObjectiveFunction = std::function<double(const std::vector<double>&)>;
+using ObjectiveFunction = std::function<double(std::span<const double>)>;
 
 class GravitationalSearchAlgorithm {
    private:
@@ -48,7 +49,7 @@ class GravitationalSearchAlgorithm {
     void save_positions_to_file(const std::string& filename) const;
 
     /** Initialize agent positions uniformly at random between bounds. */
-    void initialize_positions(std::mt19937& gen);
+    void initialize_positions(class Xoshiro256PlusPlus& gen);
 
     /** Evaluate objective for each agent and update the global best. */
     void evaluate_fitness(double& global_best_val,
@@ -63,11 +64,11 @@ class GravitationalSearchAlgorithm {
      * gravitational constant for the current iteration.
      */
     void compute_accelerations(
-        const double G, const int current_iter, std::mt19937& gen,
+        const double G, const int current_iter, class Xoshiro256PlusPlus& gen,
         std::uniform_real_distribution<double>& rand_uni);
 
     /** Update velocities, move agents, and clamp positions to bounds. */
-    void update_kinematics(std::mt19937& gen,
+    void update_kinematics(class Xoshiro256PlusPlus& gen,
                            std::uniform_real_distribution<double>& rand_uni);
 
    public:

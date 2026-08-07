@@ -4,7 +4,7 @@
 
 #include "../gsa.hpp"
 
-static double sphere(const std::vector<double>& x) {
+static double sphere(std::span<const double> x) {
     double s = 0.0;
     for (double v : x) s += v * v;
     return s;
