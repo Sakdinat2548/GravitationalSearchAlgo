@@ -6,7 +6,7 @@
 
 double sphere(const std::vector<double>& x) {
     double sum = 0.0;
-    for (double val : x) sum += std::pow(val, 2);
+    for (double val : x) sum += val * val;
     return sum;
 }
 

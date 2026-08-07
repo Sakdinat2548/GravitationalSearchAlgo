@@ -38,7 +38,8 @@ void GravitationalSearchAlgorithm::save_positions_to_file(
     }
 }
 
-/** Initialize agent positions uniformly at random between `min_bounds` and `max_bounds`. */
+/** Initialize agent positions uniformly at random between `min_bounds` and
+ * `max_bounds`. */
 void GravitationalSearchAlgorithm::initialize_positions(std::mt19937& gen) {
     const int n_agents = config.n_agents;
     const int dim = dimensions;
@@ -141,11 +142,12 @@ void GravitationalSearchAlgorithm::compute_accelerations(
     // 2. Determine Kbest: full population for small problems, otherwise
     //    linearly decrease from N to 1 over iterations.
     const bool is_small_problem = n_agents <= kSmallProblemThreshold;
-    const double progress = static_cast<double>(current_iter) /
-                            static_cast<double>(max_iter);
-    int k_best_count = is_small_problem
-                           ? n_agents
-                           : static_cast<int>(n_agents - progress * (n_agents - 1));
+    const double progress =
+        static_cast<double>(current_iter) / static_cast<double>(max_iter);
+    int k_best_count =
+        is_small_problem
+            ? n_agents
+            : static_cast<int>(n_agents - progress * (n_agents - 1));
     k_best_count = std::clamp(k_best_count, 1, n_agents);
 
     // 3. Compute forces only from agents in the Kbest set (Eq. 21)
@@ -191,8 +193,7 @@ void GravitationalSearchAlgorithm::update_kinematics(
         for (int d = 0; d < dim; ++d) {
             const size_t index = idx(i, d);
             V[index] = rand_uni(gen) * V[index] + A[index];
-            X[index] =
-                std::clamp(X[index] + V[index], min_b[d], max_b[d]);
+            X[index] = std::clamp(X[index] + V[index], min_b[d], max_b[d]);
         }
     }
 }
@@ -231,7 +232,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     sorted_indices.resize(config.n_agents);
 }
 
-// Delegating constructor for inline equal bounds (scalar lower and upper) 
+// Delegating constructor for inline equal bounds (scalar lower and upper)
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     int dims, double lower, double upper, const ObjectiveFunction& func,
     const GsaConfig& cfg)
