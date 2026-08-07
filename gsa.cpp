@@ -133,8 +133,8 @@ void GravitationalSearchAlgorithm::compute_accelerations(
 
     std::fill(A.begin(), A.end(), 0.0);
 
-    // 2. Determine Kbest: full population for small problems, otherwise
-    //    linearly decrease from N to 1 over iterations.
+    // Determine Kbest: full population for small problems, otherwise
+    // linearly decrease from N to 1 over iterations.
     const bool is_small_problem = n_agents <= kSmallProblemThreshold;
     const double progress =
         static_cast<double>(current_iter) / static_cast<double>(max_iter);
@@ -143,14 +143,17 @@ void GravitationalSearchAlgorithm::compute_accelerations(
                          : static_cast<int>(n_agents - progress * (n_agents - 1));
     k_best_count = std::clamp(k_best_count, 1, n_agents);
 
-    // 1. Sort/partition agent indices based on fitness (best first)
+    // Sort/partition agent indices based on fitness (best first)
     std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
     auto comp = [this, minimize](int a, int b) {
         return minimize ? (fitness[a] < fitness[b]) : (fitness[a] > fitness[b]);
     };
 
     if (k_best_count < n_agents) {
-        // Partition so that the first k_best_count indices are the K-best (unordered)
+        // Partition so that the first k_best_count indices are the K-best
+        // (unordered) ex. nth_element=6; 3, 2, 10, 45, 33, 56, 23, 47
+        // -> 33, 2, 10, 23, 3, 45, 47, 56; 45 is the 6th largest, and all
+        // elements before it are <= 45, all after are >= 45
         std::nth_element(sorted_indices.begin(),
                          sorted_indices.begin() + k_best_count,
                          sorted_indices.end(),
@@ -160,7 +163,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
         std::sort(sorted_indices.begin(), sorted_indices.end(), comp);
     }
 
-    // 3. Compute forces only from agents in the Kbest set (Eq. 21)
+    // Compute forces only from agents in the Kbest set (Eq. 21)
     for (int i = 0; i < n_agents; ++i) {
         std::fill(total_F.begin(), total_F.end(), 0.0);
         const double m_i = M[i];
