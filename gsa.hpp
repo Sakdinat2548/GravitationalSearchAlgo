@@ -38,28 +38,35 @@ class GravitationalSearchAlgorithm {
     std::vector<double> total_F;
     std::vector<int> sorted_indices;
 
-    // Helper to compute the 1D index for a 2D agent-dimension array
+    /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
     inline constexpr size_t idx(size_t agent, size_t dim) const noexcept;
 
-    // Helper to export particle locations to a text file
+    /**
+     * Save current particle positions to a whitespace-separated text file.
+     * Each line is one agent; columns correspond to dimensions.
+     */
     void save_positions_to_file(const std::string& filename) const;
 
-    // Helper 1: Initialize positions randomly across bounds
+    /** Initialize agent positions uniformly at random between bounds. */
     void initialize_positions(std::mt19937& gen);
 
-    // Helper 2: Evaluate fitness and update the global best solution
+    /** Evaluate objective for each agent and update the global best. */
     void evaluate_fitness(double& global_best_val,
                           std::vector<double>& global_best_pos);
 
-    // Helper 3: Normalize agent masses based on fitness performance
+    /** Compute normalized agent masses from fitness values. */
     void compute_masses();
 
-    // Helper 4: Compute gravitational forces using Kbest (Eq. 21)
+    /**
+     * Compute accelerations using interactions from the K-best agents.
+     * Kbest decreases linearly from N to 1 over iterations; `G` is the
+     * gravitational constant for the current iteration.
+     */
     void compute_accelerations(
         const double G, const int current_iter, std::mt19937& gen,
         std::uniform_real_distribution<double>& rand_uni);
 
-    // Helper 5: Update velocity, move particles, and clamp to bounds
+    /** Update velocities, move agents, and clamp positions to bounds. */
     void update_kinematics(std::mt19937& gen,
                            std::uniform_real_distribution<double>& rand_uni);
 
