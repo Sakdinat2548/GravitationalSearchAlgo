@@ -8,7 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "rng.hpp"
+#include "XoshiroCpp.hpp"
 
 struct GsaConfig {
     int n_agents = 40;
@@ -19,6 +19,8 @@ struct GsaConfig {
 };
 
 using ObjectiveFunction = std::function<double(std::span<const double>)>;
+
+using random_engine_t = class XoshiroCpp::Xoshiro256PlusPlus;
 
 class GravitationalSearchAlgorithm {
    private:
@@ -50,7 +52,7 @@ class GravitationalSearchAlgorithm {
     void save_positions_to_file(const std::string& filename) const;
 
     /** Initialize agent positions uniformly at random between bounds. */
-    void initialize_positions(class Xoshiro256PlusPlus& gen);
+    void initialize_positions(random_engine_t& gen);
 
     /** Evaluate objective for each agent and update the global best. */
     void evaluate_fitness(double& global_best_val,
@@ -65,11 +67,11 @@ class GravitationalSearchAlgorithm {
      * gravitational constant for the current iteration.
      */
     void compute_accelerations(
-        const double G, const int current_iter, class Xoshiro256PlusPlus& gen,
+        const double G, const int current_iter, random_engine_t& gen,
         std::uniform_real_distribution<double>& rand_uni);
 
     /** Update velocities, move agents, and clamp positions to bounds. */
-    void update_kinematics(class Xoshiro256PlusPlus& gen,
+    void update_kinematics(random_engine_t& gen,
                            std::uniform_real_distribution<double>& rand_uni);
 
    public:
