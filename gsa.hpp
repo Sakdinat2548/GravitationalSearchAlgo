@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "rng.hpp"
 
 struct GsaConfig {
     int n_agents = 40;

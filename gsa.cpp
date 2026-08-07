@@ -6,8 +6,6 @@
 #include <limits>
 #include <numeric>
 #include <stdexcept>
-#include <span>
-#include "rng.hpp"
 
 static constexpr double kEpsilon = 1e-6;              // small value to avoid div-by-zero
 static constexpr double kFitDiffEps = 1e-12;          // threshold for near-equal fitness
