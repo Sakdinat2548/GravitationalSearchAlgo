@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 #include "XoshiroCpp.hpp"
 
 struct GsaConfig {
@@ -66,13 +67,11 @@ class GravitationalSearchAlgorithm {
      * Kbest decreases linearly from N to 1 over iterations; `G` is the
      * gravitational constant for the current iteration.
      */
-    void compute_accelerations(
-        const double G, const int current_iter, random_engine_t& gen,
-        std::uniform_real_distribution<double>& rand_uni);
+    void compute_accelerations(const double G, const int current_iter,
+                              random_engine_t& gen);
 
     /** Update velocities, move agents, and clamp positions to bounds. */
-    void update_kinematics(random_engine_t& gen,
-                           std::uniform_real_distribution<double>& rand_uni);
+    void update_kinematics(random_engine_t& gen);
 
    public:
     GravitationalSearchAlgorithm(
