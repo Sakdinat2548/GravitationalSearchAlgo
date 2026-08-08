@@ -21,7 +21,7 @@ struct GsaConfig {
 
 using ObjectiveFunction = std::function<double(std::span<const double>)>;
 
-using random_engine_t = class XoshiroCpp::Xoshiro256PlusPlus;
+using random_engine_t = XoshiroCpp::Xoshiro256PlusPlus;
 
 class GravitationalSearchAlgorithm {
    private:
