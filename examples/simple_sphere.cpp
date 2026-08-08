@@ -11,7 +11,7 @@ static double sphere(std::span<const double> x) {
 }
 
 int main() {
-    // Quick preset
+    // Quick
     GsaConfig quick{.n_agents = 30,
                     .max_iter = 1000,
                     .g0 = 50.0,
@@ -30,7 +30,7 @@ int main() {
     for (auto& p : pos_q) std::cout << p << " ";
     std::cout << "\n";
 
-    // Balanced preset
+    // Balanced
     GsaConfig balanced{.n_agents = 80,
                        .max_iter = 2000,
                        .g0 = 50.0,

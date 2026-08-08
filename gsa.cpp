@@ -43,8 +43,6 @@ void GravitationalSearchAlgorithm::save_positions_to_file(
     }
 }
 
-/** Initialize agent positions uniformly at random between `min_bounds` and
- * `max_bounds`. */
 void GravitationalSearchAlgorithm::initialize_positions(
     random_engine_t& gen) {
     const int n_agents = config.n_agents;
@@ -59,7 +57,6 @@ void GravitationalSearchAlgorithm::initialize_positions(
     }
 }
 
-/** Evaluate objective function for each agent and update the global best. */
 void GravitationalSearchAlgorithm::evaluate_fitness(
     double& global_best_val, std::vector<double>& global_best_pos) {
     const bool minimize = config.minimize;
@@ -83,9 +80,6 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
     }
 }
 
-/** Compute normalized agent masses from fitness values.
- *  Masses are scaled so that sum(M) == 1 and depend on fitness ranking.
- */
 void GravitationalSearchAlgorithm::compute_masses() {
     const bool minimize = config.minimize;
     const int n_agents = config.n_agents;
@@ -114,12 +108,6 @@ void GravitationalSearchAlgorithm::compute_masses() {
     }
 }
 
-/**
- * Compute accelerations for each agent using weighted interactions from the
- * current K-best subset of agents. Kbest decreases linearly from N to 1 as
- * iterations progress (Eq. 21); for very small populations the full set is
- * used.
- */
 void GravitationalSearchAlgorithm::compute_accelerations(
     const double G, const int current_iter, random_engine_t& gen) {
     const bool minimize = config.minimize;
@@ -189,7 +177,6 @@ void GravitationalSearchAlgorithm::compute_accelerations(
     }
 }
 
-/** Update velocities, move agents, and clamp positions to bounds. */
 void GravitationalSearchAlgorithm::update_kinematics(random_engine_t& gen) {
     const int n_agents = config.n_agents;
     const int dim = dimensions;
@@ -239,7 +226,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     sorted_indices.resize(config.n_agents);
 }
 
-// Delegating constructor for inline equal bounds (scalar lower and upper)
+// Delegating constructor is like USB-A to Lightning adapter 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     int dims, double lower, double upper, const ObjectiveFunction& func,
     const GsaConfig& cfg)
