@@ -6,11 +6,16 @@
 #include <limits>
 #include <numeric>
 #include <stdexcept>
+#include <cstdint>
 
-static constexpr double kEpsilon = 1e-6;              // small value to avoid div-by-zero
-static constexpr double kFitDiffEps = 1e-12;          // threshold for near-equal fitness
-static constexpr double kSmallPositive = 1e-6;        // fallback small positive value
+static constexpr double kEpsilon = 1e-12;              // small value to avoid div-by-zero
 static constexpr int kSmallProblemThreshold = 10;     // population size under which Kbest == N
+
+// Fast conversion of 64-bit random to double in [min, max). Use top 53 bits.
+static inline double rand_uni(random_engine_t& gen, double min, double max) noexcept {
+    constexpr double scale = 0x1.0p-53; // 2^-53
+    return min + static_cast<double>(gen() >> 11) * scale * (max - min);
+}
 
 // Helper to compute the 1D index for a 2D agent-dimension array
 inline constexpr size_t GravitationalSearchAlgorithm::idx(
@@ -40,21 +45,16 @@ void GravitationalSearchAlgorithm::save_positions_to_file(
 
 /** Initialize agent positions uniformly at random between `min_bounds` and
  * `max_bounds`. */
-void GravitationalSearchAlgorithm::initialize_positions(std::mt19937& gen) {
+void GravitationalSearchAlgorithm::initialize_positions(
+    random_engine_t& gen) {
     const int n_agents = config.n_agents;
     const int dim = dimensions;
     const auto& min_b = min_bounds;
     const auto& max_b = max_bounds;
 
-    std::vector<std::uniform_real_distribution<double>> dists;
-    dists.reserve(dim);
-    for (int d = 0; d < dim; ++d) {
-        dists.emplace_back(min_b[d], max_b[d]);
-    }
-
     for (int i = 0; i < n_agents; ++i) {
         for (int d = 0; d < dim; ++d) {
-            X[idx(i, d)] = dists[d](gen);
+            X[idx(i, d)] = rand_uni(gen, min_b[d], max_b[d]);
         }
     }
 }
@@ -71,7 +71,7 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
         const size_t row_offset = idx(i, 0);
         std::copy_n(X.begin() + row_offset, dim, agent_buffer.begin());
 
-        const double fitness_value = obj(agent_buffer);
+        const double fitness_value = obj(std::span<const double>(agent_buffer));
         fitness[i] = fitness_value;
 
         const bool is_better = minimize ? (fitness_value < global_best_val)
@@ -94,20 +94,19 @@ void GravitationalSearchAlgorithm::compute_masses() {
     const double min_fit = *min_it;
     const double max_fit = *max_it;
 
-    const double best_fit = minimize ? min_fit : max_fit;
-    const double worst_fit = minimize ? max_fit : min_fit;
-
-    double fit_diff = best_fit - worst_fit;
-    if (std::abs(fit_diff) < kFitDiffEps) fit_diff = kSmallPositive;
+    double fit_diff = std::max(max_fit - min_fit, kEpsilon);
 
     const double inv_fit_diff = 1.0 / fit_diff;
 
     double sum_q = 0.0;
     for (int i = 0; i < n_agents; ++i) {
-        M[i] = (fitness[i] - worst_fit) * inv_fit_diff;
+        M[i] = std::max(
+            (minimize ? (max_fit - fitness[i]) : (fitness[i] - min_fit)) *
+                inv_fit_diff,
+            0.0);
         sum_q += M[i];
     }
-    if (sum_q == 0.0) sum_q = kSmallPositive;
+    if (sum_q < kEpsilon) sum_q = kEpsilon;
 
     const double inv_sum_q = 1.0 / sum_q;
     for (int i = 0; i < n_agents; ++i) {
@@ -122,8 +121,7 @@ void GravitationalSearchAlgorithm::compute_masses() {
  * used.
  */
 void GravitationalSearchAlgorithm::compute_accelerations(
-    const double G, const int current_iter, std::mt19937& gen,
-    std::uniform_real_distribution<double>& rand_uni) {
+    const double G, const int current_iter, random_engine_t& gen) {
     const bool minimize = config.minimize;
     const int n_agents = config.n_agents;
     const int max_iter = config.max_iter;
@@ -131,16 +129,8 @@ void GravitationalSearchAlgorithm::compute_accelerations(
 
     std::fill(A.begin(), A.end(), 0.0);
 
-    // 1. Sort agent indices based on fitness (best first)
-    std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
-    std::sort(sorted_indices.begin(), sorted_indices.end(),
-              [this, minimize](int a, int b) {
-                  return minimize ? (fitness[a] < fitness[b])
-                                  : (fitness[a] > fitness[b]);
-              });
-
-    // 2. Determine Kbest: full population for small problems, otherwise
-    //    linearly decrease from N to 1 over iterations.
+    // Determine Kbest: full population for small problems, otherwise
+    // linearly decrease from N to 1 over iterations.
     const bool is_small_problem = n_agents <= kSmallProblemThreshold;
     const double progress =
         static_cast<double>(current_iter) / static_cast<double>(max_iter);
@@ -150,7 +140,26 @@ void GravitationalSearchAlgorithm::compute_accelerations(
             : static_cast<int>(n_agents - progress * (n_agents - 1));
     k_best_count = std::clamp(k_best_count, 1, n_agents);
 
-    // 3. Compute forces only from agents in the Kbest set (Eq. 21)
+    // Sort/partition agent indices based on fitness (best first)
+    std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
+    auto comp = [this, minimize](int a, int b) {
+        return minimize ? (fitness[a] < fitness[b]) : (fitness[a] > fitness[b]);
+    };
+
+    if (k_best_count < n_agents) {
+        // Partition so that the first k_best_count indices are the K-best
+        // (unordered) ex. nth_element=6; 3, 2, 10, 45, 33, 56, 23, 47
+        // -> 33, 2, 10, 23, 3, 45, 47, 56; 45 is the 6th largest, and all
+        // elements before it are <= 45, all after are >= 45
+        std::nth_element(sorted_indices.begin(),
+                         sorted_indices.begin() + k_best_count,
+                         sorted_indices.end(), comp);
+    } else {
+        // small problem: keep full ordering
+        std::sort(sorted_indices.begin(), sorted_indices.end(), comp);
+    }
+
+    // Compute forces only from agents in the Kbest set (Eq. 21)
     for (int i = 0; i < n_agents; ++i) {
         std::fill(total_F.begin(), total_F.end(), 0.0);
         const double m_i = M[i];
@@ -169,8 +178,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
             const double force_mag = G * (m_i * M[j]) / (R + kEpsilon);
 
             for (int d = 0; d < dim; ++d) {
-                total_F[d] +=
-                    rand_uni(gen) * force_mag * (X[idx(j, d)] - X[idx(i, d)]);
+                total_F[d] += rand_uni(gen, 0.0, 1.0) * force_mag * (X[idx(j, d)] - X[idx(i, d)]);
             }
         }
 
@@ -182,8 +190,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
 }
 
 /** Update velocities, move agents, and clamp positions to bounds. */
-void GravitationalSearchAlgorithm::update_kinematics(
-    std::mt19937& gen, std::uniform_real_distribution<double>& rand_uni) {
+void GravitationalSearchAlgorithm::update_kinematics(random_engine_t& gen) {
     const int n_agents = config.n_agents;
     const int dim = dimensions;
     const auto& min_b = min_bounds;
@@ -192,7 +199,7 @@ void GravitationalSearchAlgorithm::update_kinematics(
     for (int i = 0; i < n_agents; ++i) {
         for (int d = 0; d < dim; ++d) {
             const size_t index = idx(i, d);
-            V[index] = rand_uni(gen) * V[index] + A[index];
+            V[index] = rand_uni(gen, 0.0, 1.0) * V[index] + A[index];
             X[index] = std::clamp(X[index] + V[index], min_b[d], max_b[d]);
         }
     }
@@ -243,8 +250,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
 std::pair<double, std::vector<double>>
 GravitationalSearchAlgorithm::optimize() {
     std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> rand_uni(0.0, 1.0);
+    random_engine_t gen(rd());
 
     const bool minimize = config.minimize;
     const int max_iter = config.max_iter;
@@ -266,8 +272,8 @@ GravitationalSearchAlgorithm::optimize() {
 
         evaluate_fitness(global_best_val, global_best_pos);
         compute_masses();
-        compute_accelerations(G, k, gen, rand_uni);
-        update_kinematics(gen, rand_uni);
+        compute_accelerations(G, k, gen);
+        update_kinematics(gen);
     }
 
     evaluate_fitness(global_best_val, global_best_pos);

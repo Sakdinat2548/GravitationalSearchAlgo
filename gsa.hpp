@@ -4,9 +4,12 @@
 #include <cstddef>
 #include <functional>
 #include <random>
+#include <span>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "XoshiroCpp.hpp"
 
 struct GsaConfig {
     int n_agents = 40;
@@ -16,7 +19,9 @@ struct GsaConfig {
     bool minimize = true;
 };
 
-using ObjectiveFunction = std::function<double(const std::vector<double>&)>;
+using ObjectiveFunction = std::function<double(std::span<const double>)>;
+
+using random_engine_t = class XoshiroCpp::Xoshiro256PlusPlus;
 
 class GravitationalSearchAlgorithm {
    private:
@@ -48,7 +53,7 @@ class GravitationalSearchAlgorithm {
     void save_positions_to_file(const std::string& filename) const;
 
     /** Initialize agent positions uniformly at random between bounds. */
-    void initialize_positions(std::mt19937& gen);
+    void initialize_positions(random_engine_t& gen);
 
     /** Evaluate objective for each agent and update the global best. */
     void evaluate_fitness(double& global_best_val,
@@ -62,13 +67,11 @@ class GravitationalSearchAlgorithm {
      * Kbest decreases linearly from N to 1 over iterations; `G` is the
      * gravitational constant for the current iteration.
      */
-    void compute_accelerations(
-        const double G, const int current_iter, std::mt19937& gen,
-        std::uniform_real_distribution<double>& rand_uni);
+    void compute_accelerations(const double G, const int current_iter,
+                              random_engine_t& gen);
 
     /** Update velocities, move agents, and clamp positions to bounds. */
-    void update_kinematics(std::mt19937& gen,
-                           std::uniform_real_distribution<double>& rand_uni);
+    void update_kinematics(random_engine_t& gen);
 
    public:
     GravitationalSearchAlgorithm(

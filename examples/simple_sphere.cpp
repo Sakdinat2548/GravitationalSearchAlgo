@@ -4,7 +4,7 @@
 
 #include "../gsa.hpp"
 
-static double sphere(const std::vector<double>& x) {
+static double sphere(std::span<const double> x) {
     double s = 0.0;
     for (double v : x) s += v * v;
     return s;
@@ -12,8 +12,8 @@ static double sphere(const std::vector<double>& x) {
 
 int main() {
     // Quick preset
-    GsaConfig quick{.n_agents = 20,
-                    .max_iter = 200,
+    GsaConfig quick{.n_agents = 30,
+                    .max_iter = 1000,
                     .g0 = 50.0,
                     .alpha = 10.0,
                     .minimize = true};

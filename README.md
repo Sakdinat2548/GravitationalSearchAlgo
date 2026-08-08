@@ -4,10 +4,10 @@ This project implements a Gravitational Search Algorithm (GSA) in C++.
 
 ## Build
 
-Compile the program with g++ using optimization level 3 and include the implementation source file:
+Compile the program with g++ using O3, flto and include the implementation source file:
 
 ```bash
-g++.exe -O3 -std=c++17 main.cpp gsa.cpp -o main.exe
+g++.exe -O3 -march=native -flto -std=c++20 main.cpp gsa.cpp -o main.exe
 ```
 
 Run the executable:
@@ -80,7 +80,7 @@ search more conservative, decrease `g0` or increase `alpha`.
 An example program is provided in `examples/simple_sphere.cpp` demonstrating usage and two presets. Build it with:
 
 ```bash
-g++.exe -O3 -std=c++17 examples/simple_sphere.cpp gsa.cpp -o examples/simple_sphere.exe
+g++.exe -O3 -march=native -flto -std=c++20 examples/simple_sphere.cpp gsa.cpp -o examples/simple_sphere.exe
 ```
 
 Run:
