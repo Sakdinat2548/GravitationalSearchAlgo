@@ -2,31 +2,27 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <fstream>
 #include <limits>
 #include <numeric>
 #include <stdexcept>
-#include <cstdint>
 
-static constexpr double kEpsilon = 1e-12;              // small value to avoid div-by-zero
-static constexpr int kSmallProblemThreshold = 10;     // population size under which Kbest == N
+static constexpr double kEpsilon = 1e-12;
+static constexpr int kSmallProblemThreshold = 10;
 
-// Fast conversion of 64-bit random to double in [min, max). Use top 53 bits.
-static inline double rand_uni(random_engine_t& gen, double min, double max) noexcept {
-    constexpr double scale = 0x1.0p-53; // 2^-53
+// Fast uniform random generator using top 53 bits
+static inline double rand_uni(random_engine_t& gen, double min,
+                              double max) noexcept {
+    constexpr double scale = 0x1.0p-53;  // 2^-53
     return min + static_cast<double>(gen() >> 11) * scale * (max - min);
 }
 
-// Helper to compute the 1D index for a 2D agent-dimension array
 inline constexpr size_t GravitationalSearchAlgorithm::idx(
     size_t agent, size_t dim) const noexcept {
     return agent * static_cast<size_t>(dimensions) + dim;
 }
 
-/**
- * Save current particle positions to `filename`.
- * Each line contains one agent's coordinates separated by spaces.
- */
 void GravitationalSearchAlgorithm::save_positions_to_file(
     const std::string& filename) const {
     std::ofstream file(filename);
@@ -36,23 +32,24 @@ void GravitationalSearchAlgorithm::save_positions_to_file(
     const int dim = dimensions;
 
     for (int i = 0; i < n_agents; ++i) {
+        const size_t offset = idx(i, 0);
         for (int d = 0; d < dim; ++d) {
-            file << X[idx(i, d)] << (d == dim - 1 ? "" : " ");
+            file << X[offset + d] << (d == dim - 1 ? "" : " ");
         }
         file << "\n";
     }
 }
 
-void GravitationalSearchAlgorithm::initialize_positions(
-    random_engine_t& gen) {
+void GravitationalSearchAlgorithm::initialize_positions(random_engine_t& gen) {
     const int n_agents = config.n_agents;
     const int dim = dimensions;
     const auto& min_b = min_bounds;
     const auto& max_b = max_bounds;
 
     for (int i = 0; i < n_agents; ++i) {
+        const size_t offset = idx(i, 0);
         for (int d = 0; d < dim; ++d) {
-            X[idx(i, d)] = rand_uni(gen, min_b[d], max_b[d]);
+            X[offset + d] = rand_uni(gen, min_b[d], max_b[d]);
         }
     }
 }
@@ -86,8 +83,7 @@ void GravitationalSearchAlgorithm::compute_masses() {
     const double min_fit = *min_it;
     const double max_fit = *max_it;
 
-    double fit_diff = std::max(max_fit - min_fit, kEpsilon);
-
+    const double fit_diff = std::max(max_fit - min_fit, kEpsilon);
     const double inv_fit_diff = 1.0 / fit_diff;
 
     double sum_q = 0.0;
@@ -106,17 +102,15 @@ void GravitationalSearchAlgorithm::compute_masses() {
     }
 }
 
-void GravitationalSearchAlgorithm::compute_accelerations(
-    const double G, const int current_iter, random_engine_t& gen) {
+void GravitationalSearchAlgorithm::compute_accelerations(const double G,
+                                                         const int current_iter,
+                                                         random_engine_t& gen) {
     const bool minimize = config.minimize;
     const int n_agents = config.n_agents;
     const int max_iter = config.max_iter;
     const int dim = dimensions;
 
-    std::fill(A.begin(), A.end(), 0.0);
-
-    // Determine Kbest: full population for small problems, otherwise
-    // linearly decrease from N to 1 over iterations.
+    // Determine Kbest
     const bool is_small_problem = n_agents <= kSmallProblemThreshold;
     const double progress =
         static_cast<double>(current_iter) / static_cast<double>(max_iter);
@@ -145,18 +139,22 @@ void GravitationalSearchAlgorithm::compute_accelerations(
         std::sort(sorted_indices.begin(), sorted_indices.end(), comp);
     }
 
-    // Compute forces only from agents in the Kbest set (Eq. 21)
+    // Compute forces
     for (int i = 0; i < n_agents; ++i) {
-        std::fill(total_F.begin(), total_F.end(), 0.0);
+        const size_t i_offset = idx(i, 0);
         const double m_i = M[i];
+
+        std::fill_n(total_F.begin(), dim, 0.0);
 
         for (int k = 0; k < k_best_count; ++k) {
             const int j = sorted_indices[k];
             if (i == j) continue;
 
+            const size_t j_offset = idx(j, 0);
+
             double r_squared = 0.0;
             for (int d = 0; d < dim; ++d) {
-                const double diff = X[idx(i, d)] - X[idx(j, d)];
+                const double diff = X[i_offset + d] - X[j_offset + d];
                 r_squared += diff * diff;
             }
 
@@ -164,13 +162,14 @@ void GravitationalSearchAlgorithm::compute_accelerations(
             const double force_mag = G * (m_i * M[j]) / (R + kEpsilon);
 
             for (int d = 0; d < dim; ++d) {
-                total_F[d] += rand_uni(gen, 0.0, 1.0) * force_mag * (X[idx(j, d)] - X[idx(i, d)]);
+                total_F[d] += rand_uni(gen, 0.0, 1.0) * force_mag *
+                              (X[j_offset + d] - X[i_offset + d]);
             }
         }
 
         const double inv_mass = 1.0 / (m_i + kEpsilon);
         for (int d = 0; d < dim; ++d) {
-            A[idx(i, d)] = total_F[d] * inv_mass;
+            A[i_offset + d] = total_F[d] * inv_mass;
         }
     }
 }
@@ -182,8 +181,9 @@ void GravitationalSearchAlgorithm::update_kinematics(random_engine_t& gen) {
     const auto& max_b = max_bounds;
 
     for (int i = 0; i < n_agents; ++i) {
+        const size_t offset = idx(i, 0);
         for (int d = 0; d < dim; ++d) {
-            const size_t index = idx(i, d);
+            const size_t index = offset + d;
             V[index] = rand_uni(gen, 0.0, 1.0) * V[index] + A[index];
             X[index] = std::clamp(X[index] + V[index], min_b[d], max_b[d]);
         }
@@ -228,11 +228,10 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
 
 // Delegating constructor is like USB-A to Lightning adapter 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
-    int dims, double lower, double upper, ObjectiveFunction func,
-    GsaConfig cfg)
+    int dims, double lower, double upper, ObjectiveFunction func, GsaConfig cfg)
     : GravitationalSearchAlgorithm(std::vector<double>(dims, lower),
-                                   std::vector<double>(dims, upper), func,
-                                   cfg) {}
+                                   std::vector<double>(dims, upper),
+                                   std::move(func), std::move(cfg)) {}
 
 std::pair<double, std::vector<double>>
 GravitationalSearchAlgorithm::optimize() {
