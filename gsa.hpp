@@ -31,16 +31,17 @@ class GravitationalSearchAlgorithm {
     std::vector<double> max_bounds;
     ObjectiveFunction objective_fn;
 
-    // Physical state vectors
     std::vector<double> X;
     std::vector<double> V;
     std::vector<double> A;
-
-    // Pre-allocated scratchpad buffers
     std::vector<double> fitness;
     std::vector<double> M;
     std::vector<double> total_F;
     std::vector<int> sorted_indices;
+
+    static void validate_inputs(const std::vector<double>& lower,
+                            const std::vector<double>& upper,
+                            const GsaConfig& cfg);
 
     /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
     inline constexpr size_t idx(size_t agent, size_t dim) const noexcept;
@@ -66,7 +67,7 @@ class GravitationalSearchAlgorithm {
      * Kbest decreases linearly from N to 1 over iterations; `G` is the
      * gravitational constant for the current iteration.
      */
-    void compute_accelerations(const double G, const int current_iter,
+    void compute_accelerations(const int current_iter,
                               random_engine_t& gen);
 
     /** Update velocities, move agents, and clamp positions to bounds. */
