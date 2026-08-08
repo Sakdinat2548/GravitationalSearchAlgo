@@ -28,7 +28,7 @@ Example: simple usage with scalar (equal) bounds
 ```cpp
 #include "gsa.hpp"
 
-double sphere(const std::vector<double>& x) {
+double sphere(std::span<const double> x) {
 	double s = 0.0; for (double v : x) s += v*v; return s;
 }
 
@@ -40,8 +40,8 @@ Example: per-dimension bounds and custom configuration
 
 ```cpp
 GravitationalSearchAlgorithm gsa2(
-	std::vector<double>{-10.0, 0.0, -1.0},
-	std::vector<double>{10.0, 50.0, 1.0},
+	{-10.0, 0.0, -1.0},
+	{10.0, 50.0, 1.0},
 	sphere,
 	{.n_agents = 50, .max_iter = 1000, .g0 = 10.0, .alpha = 10.0, .minimize = true}
 );
@@ -52,7 +52,7 @@ Example: using a lambda objective
 
 ```cpp
 GravitationalSearchAlgorithm gsa3(2, -65.53, 65.53,
-	[](const std::vector<double>& x){ return std::sin(x[0]) + std::cos(x[1]); },
+	[](std::span<const double> x){ return std::sin(x[0]) + std::cos(x[1]); },
 	{.n_agents = 40, .max_iter = 500}
 );
 auto [v, p] = gsa3.optimize();
