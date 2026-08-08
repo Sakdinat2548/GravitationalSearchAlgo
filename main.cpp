@@ -60,20 +60,22 @@ int main() {
     // for (auto& p : pos4) std::cout << p << " ";
     // std::cout << "\n";
 
-    const std::vector<std::vector<double>> aij{
-        {-32, -16, 0,   16,  32, -32, -16, 0,   16,  32, -32, -16, 0,
-         16,  32,  -32, -16, 0,  16,  32,  -32, -16, 0,  16,  32},
-        {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
-         0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}};
     GravitationalSearchAlgorithm gsa5(
         2, -65.53, 65.53,
-        [&aij](std::span<const double> x) {
+        [](std::span<const double> x) noexcept -> double {
+            static constexpr std::array<std::array<double, 25>, 2> aij = {
+                {{-32, -16, 0,   16,  32, -32, -16, 0,   16,  32, -32, -16, 0,
+                  16,  32,  -32, -16, 0,  16,  32,  -32, -16, 0,  16,  32},
+                 {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
+                  0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
             double sum = 0.0;
             sum += 1.0/500.0;
             for (size_t j = 0; j < 25; ++j) {
                 double inner_sum = 0.0;
                 for (size_t i = 0; i < 2; ++i) {
-                    inner_sum += std::pow(x[i] - aij[i][j], 6);
+                    const double xi_minus_aij = (x[i] - aij[i][j]);
+                    inner_sum += xi_minus_aij * xi_minus_aij * xi_minus_aij *
+                                 xi_minus_aij * xi_minus_aij * xi_minus_aij;
                 }
                 sum += 1.0 / (j + 1 + inner_sum);
             }
@@ -85,15 +87,17 @@ int main() {
          .g0 = 1.0,
          .alpha = 10.0,
          .minimize = true});
+    const int n_shekel = 30;
     double avg_val = 0.0;
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < n_shekel; ++i) {
         auto [val5, pos5] = gsa5.optimize();
         avg_val += val5;
         std::cout << "Shekel Result "<< i << ": " << val5 << ", Position: ";
         for (auto& p : pos5) std::cout << p << " ";
         std::cout << "\n";
     }
-    std::cout << "Average Shekel Result: " << avg_val / 30.0 << "\n";
+    std::cout << "Average Shekel Result: "
+              << avg_val / static_cast<double>(n_shekel) << "\n";
 
     return 0;
 }

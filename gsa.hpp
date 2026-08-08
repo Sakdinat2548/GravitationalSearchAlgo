@@ -39,7 +39,6 @@ class GravitationalSearchAlgorithm {
     // Pre-allocated scratchpad buffers
     std::vector<double> fitness;
     std::vector<double> M;
-    std::vector<double> agent_buffer;
     std::vector<double> total_F;
     std::vector<int> sorted_indices;
 
@@ -74,13 +73,14 @@ class GravitationalSearchAlgorithm {
     void update_kinematics(random_engine_t& gen);
 
    public:
-    GravitationalSearchAlgorithm(
-        const std::vector<double>& lower, const std::vector<double>& upper,
-        const ObjectiveFunction& func, const GsaConfig& cfg = GsaConfig{});
+    GravitationalSearchAlgorithm(std::vector<double> lower,
+                                 std::vector<double> upper,
+                                 ObjectiveFunction func,
+                                 GsaConfig cfg = GsaConfig{});
 
-    GravitationalSearchAlgorithm(
-        int dims, double lower, double upper, const ObjectiveFunction& func,
-        const GsaConfig& cfg = GsaConfig{});
+    GravitationalSearchAlgorithm(int dims, double lower, double upper,
+                                 ObjectiveFunction func,
+                                 GsaConfig cfg = GsaConfig{});
 
     [[nodiscard]] std::pair<double, std::vector<double>> optimize();
 };

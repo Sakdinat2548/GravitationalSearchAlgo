@@ -20,7 +20,7 @@ static inline double rand_uni(random_engine_t& gen, double min, double max) noex
 // Helper to compute the 1D index for a 2D agent-dimension array
 inline constexpr size_t GravitationalSearchAlgorithm::idx(
     size_t agent, size_t dim) const noexcept {
-    return agent * dimensions + dim;
+    return agent * static_cast<size_t>(dimensions) + dim;
 }
 
 /**
@@ -65,17 +65,15 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
     const auto& obj = objective_fn;
 
     for (int i = 0; i < n_agents; ++i) {
-        const size_t row_offset = idx(i, 0);
-        std::copy_n(X.begin() + row_offset, dim, agent_buffer.begin());
-
-        const double fitness_value = obj(std::span<const double>(agent_buffer));
+        std::span<const double> agent_view(&X[idx(i, 0)], dim);
+        const double fitness_value = obj(agent_view);
         fitness[i] = fitness_value;
 
         const bool is_better = minimize ? (fitness_value < global_best_val)
                                         : (fitness_value > global_best_val);
         if (is_better) {
             global_best_val = fitness_value;
-            global_best_pos = agent_buffer;
+            global_best_pos.assign(agent_view.begin(), agent_view.end());
         }
     }
 }
@@ -193,9 +191,12 @@ void GravitationalSearchAlgorithm::update_kinematics(random_engine_t& gen) {
 }
 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
-    const std::vector<double>& lower, const std::vector<double>& upper,
-    const ObjectiveFunction& func, const GsaConfig& cfg)
-    : min_bounds(lower), max_bounds(upper), objective_fn(func), config(cfg) {
+    std::vector<double> lower, std::vector<double> upper,
+    ObjectiveFunction func, GsaConfig cfg)
+    : min_bounds(std::move(lower)),
+      max_bounds(std::move(upper)),
+      objective_fn(std::move(func)),
+      config(std::move(cfg)) {
     if (min_bounds.empty() || max_bounds.empty()) {
         throw std::invalid_argument("Bounds vectors must not be empty");
     }
@@ -221,15 +222,14 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
 
     fitness.resize(config.n_agents);
     M.resize(config.n_agents);
-    agent_buffer.resize(dimensions);
     total_F.resize(dimensions);
     sorted_indices.resize(config.n_agents);
 }
 
 // Delegating constructor is like USB-A to Lightning adapter 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
-    int dims, double lower, double upper, const ObjectiveFunction& func,
-    const GsaConfig& cfg)
+    int dims, double lower, double upper, ObjectiveFunction func,
+    GsaConfig cfg)
     : GravitationalSearchAlgorithm(std::vector<double>(dims, lower),
                                    std::vector<double>(dims, upper), func,
                                    cfg) {}
