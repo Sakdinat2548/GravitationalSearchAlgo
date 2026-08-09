@@ -207,15 +207,10 @@ GsaResult GravitationalSearchAlgorithm::optimize() const {
     std::random_device rd;
     random_engine_t gen(config.seed != 0 ? config.seed : rd());
 
-    initialize_positions(s, gen);
-
     double global_best_val = config.minimize
                                  ? std::numeric_limits<double>::max()
                                  : std::numeric_limits<double>::lowest();
     std::vector<double> global_best_pos(dimensions);
-
-    GsaResult result{};
-    result.history.reserve(config.max_iter + 1);
 
     auto record_iteration = [&]() -> GsaIterationInfo {
         auto& v = s.sorted_fitness;
@@ -232,6 +227,11 @@ GsaResult GravitationalSearchAlgorithm::optimize() const {
                 (v[(n - 1) / 2] + v[n / 2]) / 2,
                 std::sqrt(std::max(0.0, sq / n - m * m))};
     };
+
+    GsaResult result{};
+    result.history.reserve(config.max_iter + 1);
+
+    initialize_positions(s, gen);
 
     for (int k = 1; k <= config.max_iter; ++k) {
         evaluate_fitness(s, global_best_val, global_best_pos);
