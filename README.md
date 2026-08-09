@@ -74,7 +74,7 @@ Each `GsaIterationInfo` records for its iteration: `best_so_far`,
 API notes
 - `GsaConfig` controls `n_agents`, `max_iter`, `g0`, `alpha`, `minimize`, and `seed`.
 - `optimize()` returns a `GsaResult` with `best_val`, `best_pos`, and `history`.
-- The implementation is single-threaded; if you call `optimize()` multiple times concurrently, protect the instance or create separate instances. Calling `optimize()` again on the same instance continues from the previous engine state (positions, velocities), which is intentional and matches the GSA formulation.
+- `optimize()` is `const` and thread-safe: concurrent calls on the same instance are fine (your objective function must be thread-safe). Each call is an independent run.
 
 Configuration tuning
 
