@@ -22,9 +22,8 @@ inline constexpr size_t GravitationalSearchAlgorithm::idx(
     return agent * static_cast<size_t>(dimensions) + dim;
 }
 
-void GravitationalSearchAlgorithm::initialize_positions(IterationState& s,
-                                                        random_engine_t& gen)
-    const {
+void GravitationalSearchAlgorithm::initialize_positions(
+    IterationState& s, random_engine_t& gen) const {
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t offset = idx(i, 0);
         for (int d = 0; d < dimensions; ++d) {
@@ -76,10 +75,8 @@ void GravitationalSearchAlgorithm::compute_masses(IterationState& s) const {
     }
 }
 
-void GravitationalSearchAlgorithm::compute_accelerations(IterationState& s,
-                                                         int current_iter,
-                                                         random_engine_t& gen)
-    const {
+void GravitationalSearchAlgorithm::compute_accelerations(
+    IterationState& s, int current_iter, random_engine_t& gen) const {
     const double inv_max_iter = 1.0 / static_cast<double>(config.max_iter);
     const double G = config.g0 * std::exp(-config.alpha * inv_max_iter *
                                           static_cast<double>(current_iter));
@@ -140,9 +137,8 @@ void GravitationalSearchAlgorithm::compute_accelerations(IterationState& s,
     }
 }
 
-void GravitationalSearchAlgorithm::update_kinematics(IterationState& s,
-                                                     random_engine_t& gen)
-    const {
+void GravitationalSearchAlgorithm::update_kinematics(
+    IterationState& s, random_engine_t& gen) const {
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t offset = idx(i, 0);
         for (int d = 0; d < dimensions; ++d) {
@@ -228,8 +224,10 @@ GsaResult GravitationalSearchAlgorithm::optimize() const {
         for (double x : v) sm += x, sq += x * x;
         const size_t n = v.size();
         const double m = sm / n;
-        return {global_best_val, config.minimize ? v.front() : v.back(),
-                config.minimize ? v.back() : v.front(), m,
+        return {global_best_val,
+                config.minimize ? v.front() : v.back(),
+                config.minimize ? v.back() : v.front(),
+                m,
                 (v[(n - 1) / 2] + v[n / 2]) / 2,
                 std::sqrt(std::max(0.0, sq / n - m * m))};
     };

@@ -21,12 +21,12 @@ struct GsaConfig {
 
 /** Per-iteration snapshot of the agent population. */
 struct GsaIterationInfo {
-    double best_so_far;    // best value up to and including this iteration
-    double best_iter;      // best agent fitness this iteration
-    double worst_iter;     // worst agent fitness this iteration
-    double mean_fitness;   // mean agent fitness this iteration
-    double median_fitness; // median agent fitness this iteration
-    double stddev_fitness; // std dev of agent fitness this iteration
+    double best_so_far;     // best value up to and including this iteration
+    double best_iter;       // best agent fitness this iteration
+    double worst_iter;      // worst agent fitness this iteration
+    double mean_fitness;    // mean agent fitness this iteration
+    double median_fitness;  // median agent fitness this iteration
+    double stddev_fitness;  // std dev of agent fitness this iteration
 };
 
 struct GsaResult {
@@ -41,7 +41,8 @@ using random_engine_t = XoshiroCpp::Xoshiro256PlusPlus;
 
 class GravitationalSearchAlgorithm {
    private:
-    /** Per-run working buffers; held by optimize() so the instance stays const. */
+    /** Per-run working buffers; held by optimize() so the instance stays const.
+     */
     struct IterationState {
         std::vector<double> X, V, A, fitness, M, total_F;
         std::vector<int> sorted_indices;
@@ -55,8 +56,8 @@ class GravitationalSearchAlgorithm {
     ObjectiveFunction objective_fn;
 
     static void validate_inputs(const std::vector<double>& lower,
-                            const std::vector<double>& upper,
-                            const GsaConfig& cfg);
+                                const std::vector<double>& upper,
+                                const GsaConfig& cfg);
 
     /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
     inline constexpr size_t idx(size_t agent, size_t dim) const noexcept;
