@@ -50,7 +50,7 @@ class GravitationalSearchAlgorithm {
     };
 
     GsaConfig config{};
-    int dimensions{0};
+    size_t dimensions{0};
     std::vector<double> min_bounds;
     std::vector<double> max_bounds;
     ObjectiveFunction objective_fn;

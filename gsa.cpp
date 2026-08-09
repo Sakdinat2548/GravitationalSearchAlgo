@@ -19,14 +19,14 @@ static inline double rand_uni(random_engine_t& gen, double min,
 
 inline constexpr size_t GravitationalSearchAlgorithm::idx(
     size_t agent, size_t dim) const noexcept {
-    return agent * static_cast<size_t>(dimensions) + dim;
+    return agent * dimensions + dim;
 }
 
 void GravitationalSearchAlgorithm::initialize_positions(
     IterationState& s, random_engine_t& gen) const {
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t offset = idx(i, 0);
-        for (int d = 0; d < dimensions; ++d) {
+        for (size_t d = 0; d < dimensions; ++d) {
             s.X[offset + d] = rand_uni(gen, min_bounds[d], max_bounds[d]);
         }
     }
@@ -38,7 +38,7 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t offset = idx(i, 0);
         const double fitness_value =
-            objective_fn({&s.X[offset], static_cast<size_t>(dimensions)});
+            objective_fn({&s.X[offset], dimensions});
         s.fitness[i] = fitness_value;
 
         const bool is_better = config.minimize
@@ -105,6 +105,7 @@ void GravitationalSearchAlgorithm::compute_accelerations(
 
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t i_offset = idx(i, 0);
+        const double* x_i = s.X.data() + i_offset;
         const double m_i = s.M[i];
 
         std::ranges::fill(s.total_F, 0.0);
@@ -113,25 +114,25 @@ void GravitationalSearchAlgorithm::compute_accelerations(
             const int j = s.sorted_indices[k];
             if (i == j) continue;
 
-            const size_t j_offset = idx(j, 0);
+            const double* x_j = s.X.data() + idx(j, 0);
 
             double r_squared = 0.0;
-            for (int d = 0; d < dimensions; ++d) {
-                const double diff = s.X[i_offset + d] - s.X[j_offset + d];
+            for (size_t d = 0; d < dimensions; ++d) {
+                const double diff = x_i[d] - x_j[d];
                 r_squared += diff * diff;
             }
 
             const double R = std::sqrt(r_squared);
             const double force_mag = G * (m_i * s.M[j]) / (R + kEpsilon);
 
-            for (int d = 0; d < dimensions; ++d) {
+            for (size_t d = 0; d < dimensions; ++d) {
                 s.total_F[d] += rand_uni(gen, 0.0, 1.0) * force_mag *
-                                (s.X[j_offset + d] - s.X[i_offset + d]);
+                                (x_j[d] - x_i[d]);
             }
         }
 
         const double inv_mass = 1.0 / (m_i + kEpsilon);
-        for (int d = 0; d < dimensions; ++d) {
+        for (size_t d = 0; d < dimensions; ++d) {
             s.A[i_offset + d] = s.total_F[d] * inv_mass;
         }
     }
@@ -141,7 +142,7 @@ void GravitationalSearchAlgorithm::update_kinematics(
     IterationState& s, random_engine_t& gen) const {
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t offset = idx(i, 0);
-        for (int d = 0; d < dimensions; ++d) {
+        for (size_t d = 0; d < dimensions; ++d) {
             const size_t index = offset + d;
             s.V[index] = rand_uni(gen, 0.0, 1.0) * s.V[index] + s.A[index];
             s.X[index] = std::clamp(s.X[index] + s.V[index], min_bounds[d],
@@ -178,7 +179,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
       min_bounds(std::move(lower)),
       max_bounds(std::move(upper)),
       objective_fn(std::move(func)) {
-    dimensions = static_cast<int>(min_bounds.size());
+    dimensions = min_bounds.size();
 
     validate_inputs(min_bounds, max_bounds, config);
 }
