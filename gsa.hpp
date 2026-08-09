@@ -19,10 +19,20 @@ struct GsaConfig {
     uint64_t seed = 0;
 };
 
+/** Per-iteration snapshot of the agent population. */
+struct GsaIterationInfo {
+    double best_so_far;    // best value up to and including this iteration
+    double best_iter;      // best agent fitness this iteration
+    double worst_iter;     // worst agent fitness this iteration
+    double mean_fitness;   // mean agent fitness this iteration
+    double median_fitness; // median agent fitness this iteration
+    double stddev_fitness; // std dev of agent fitness this iteration
+};
+
 struct GsaResult {
     double best_val;
     std::vector<double> best_pos;
-    std::vector<double> history;
+    std::vector<GsaIterationInfo> history;
 };
 
 using ObjectiveFunction = std::function<double(std::span<const double>)>;
@@ -44,6 +54,7 @@ class GravitationalSearchAlgorithm {
     std::vector<double> M;
     std::vector<double> total_F;
     std::vector<int> sorted_indices;
+    std::vector<double> sorted_fitness;
 
     static void validate_inputs(const std::vector<double>& lower,
                             const std::vector<double>& upper,

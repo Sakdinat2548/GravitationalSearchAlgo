@@ -50,7 +50,7 @@ void GravitationalSearchAlgorithm::evaluate_fitness(
 }
 
 void GravitationalSearchAlgorithm::compute_masses() {
-    auto [min_it, max_it] = std::minmax_element(fitness.begin(), fitness.end());
+    auto [min_it, max_it] = std::ranges::minmax_element(fitness);
     const double min_fit = *min_it;
     const double max_fit = *max_it;
 
@@ -94,19 +94,18 @@ void GravitationalSearchAlgorithm::compute_accelerations(const int current_iter,
     };
 
     if (!is_small_problem) {
-        std::nth_element(sorted_indices.begin(),
-                         sorted_indices.begin() + k_best_count,
-                         sorted_indices.end(), comp);
+        std::ranges::nth_element(sorted_indices,
+                                 sorted_indices.begin() + k_best_count, comp);
     } else {
         // small problem: keep full ordering
-        std::sort(sorted_indices.begin(), sorted_indices.end(), comp);
+        std::ranges::sort(sorted_indices, comp);
     }
 
     for (int i = 0; i < config.n_agents; ++i) {
         const size_t i_offset = idx(i, 0);
         const double m_i = M[i];
 
-        std::fill_n(total_F.begin(), dimensions, 0.0);
+        std::ranges::fill(total_F, 0.0);
 
         for (int k = 0; k < k_best_count; ++k) {
             const int j = sorted_indices[k];
@@ -188,6 +187,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     M.resize(config.n_agents);
     total_F.resize(dimensions);
     sorted_indices.resize(config.n_agents);
+    sorted_fitness.resize(config.n_agents);
 }
 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
@@ -212,17 +212,30 @@ GsaResult GravitationalSearchAlgorithm::optimize() {
     GsaResult result{};
     result.history.reserve(config.max_iter + 1);
 
+    auto record_iteration = [&]() -> GsaIterationInfo {
+        auto& v = sorted_fitness;
+        v = fitness;
+        std::ranges::sort(v);
+        double s = 0, sq = 0;
+        for (double x : v) s += x, sq += x * x;
+        const size_t n = v.size();
+        const double m = s / n;
+        return {global_best_val, config.minimize ? v.front() : v.back(),
+                config.minimize ? v.back() : v.front(), m,
+                (v[(n - 1) / 2] + v[n / 2]) / 2,
+                std::sqrt(std::max(0.0, sq / n - m * m))};
+    };
+
     for (int k = 1; k <= config.max_iter; ++k) {
         evaluate_fitness(global_best_val, global_best_pos);
-        result.history.push_back(global_best_val);
-
+        result.history.push_back(record_iteration());
         compute_masses();
         compute_accelerations(k, gen);
         update_kinematics(gen);
     }
 
     evaluate_fitness(global_best_val, global_best_pos);
-    result.history.push_back(global_best_val);
+    result.history.push_back(record_iteration());
 
     result.best_val = global_best_val;
     result.best_pos = std::move(global_best_pos);

@@ -63,9 +63,13 @@ And accessing the result fields:
 
 ```cpp
 GsaResult res = gsa.optimize();
-std::vector<double> position = res.best_pos;    // best point found
-std::vector<double> history = res.history;     // best value per iteration
+std::vector<double> position = res.best_pos;           // best point found
+std::vector<GsaIterationInfo> history = res.history;  // per-iteration stats
+double last_mean = res.history.back().mean_fitness;   // mean fitness, last iter
 ```
+
+Each `GsaIterationInfo` records for its iteration: `best_so_far`,
+`best_iter`, `worst_iter`, `mean_fitness`, `median_fitness`, and `stddev_fitness`.
 
 API notes
 - `GsaConfig` controls `n_agents`, `max_iter`, `g0`, `alpha`, `minimize`, and `seed`.
