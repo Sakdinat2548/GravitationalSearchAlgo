@@ -5,19 +5,19 @@
 
 #include "gsa.hpp"
 
-double sphere(std::span<const double> x) {
-    double sum = 0.0;
-    for (double val : x) sum += val * val;
-    return sum;
+static double sphere(std::span<const double> x) {
+    double s = 0.0;
+    for (double v : x) s += v * v;
+    return s;
 }
 
-double rosenbrock(std::span<const double> x) {
-    double sum = 0.0;
-    for (size_t i = 0; i < x.size() - 1; ++i) {
-        sum += 100.0 * std::pow(x[i + 1] - std::pow(x[i], 2), 2) +
-               std::pow(x[i] - 1, 2);
+static double rosenbrock(std::span<const double> x) {
+    double s = 0.0;
+    for (size_t i = 0; i + 1 < x.size(); ++i) {
+        const double d = x[i + 1] - x[i] * x[i];
+        s += 100.0 * d * d + (x[i] - 1.0) * (x[i] - 1.0);
     }
-    return sum;
+    return s;
 }
 
 int main() {
