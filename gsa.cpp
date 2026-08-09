@@ -202,7 +202,6 @@ GsaResult GravitationalSearchAlgorithm::optimize() const {
     s.M.resize(config.n_agents);
     s.total_F.resize(dimensions);
     s.sorted_indices.resize(config.n_agents);
-    s.sorted_fitness.resize(config.n_agents);
 
     std::random_device rd;
     random_engine_t gen(config.seed != 0 ? config.seed : rd());
@@ -213,19 +212,24 @@ GsaResult GravitationalSearchAlgorithm::optimize() const {
     std::vector<double> global_best_pos(dimensions);
 
     auto record_iteration = [&]() -> GsaIterationInfo {
-        auto& v = s.sorted_fitness;
-        v = s.fitness;
-        std::ranges::sort(v);
+        const auto& f = s.fitness;
+        const size_t n = f.size();
+        const auto [min_it, max_it] = std::ranges::minmax_element(f);
+        std::iota(s.sorted_indices.begin(), s.sorted_indices.end(), 0);
+        auto comp = [&](int a, int b) {
+            return config.minimize ? f[a] < f[b] : f[a] > f[b];
+        };
+        std::ranges::nth_element(s.sorted_indices, s.sorted_indices.begin() + n / 2,
+                                 comp);
         double sm = 0, sq = 0;
-        for (double x : v) sm += x, sq += x * x;
-        const size_t n = v.size();
+        for (double x : f) sm += x, sq += x * x;
         const double m = sm / n;
+        const double median =
+            (f[s.sorted_indices[(n - 1) / 2]] + f[s.sorted_indices[n / 2]]) / 2;
         return {global_best_val,
-                config.minimize ? v.front() : v.back(),
-                config.minimize ? v.back() : v.front(),
-                m,
-                (v[(n - 1) / 2] + v[n / 2]) / 2,
-                std::sqrt(std::max(0.0, sq / n - m * m))};
+                config.minimize ? *min_it : *max_it,
+                config.minimize ? *max_it : *min_it,
+                m, median, std::sqrt(std::max(0.0, sq / n - m * m))};
     };
 
     GsaResult result{};

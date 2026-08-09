@@ -21,7 +21,8 @@ Run the executable:
 This repository exposes a small C++ API in `gsa.hpp` / `gsa.cpp`.
 The primary entry point is the class `GravitationalSearchAlgorithm`.
 
-Build then run the provided `main.cpp` examples, or use the class directly in your code.
+Build then run the provided `main.cpp`, or use the class directly in your code. See
+`bench/` below for a repeatable performance/convergence harness.
 
 Example: simple usage with scalar (equal) bounds
 
@@ -90,17 +91,19 @@ Default: `100.0`.
 decreasing `alpha` to encourage more exploration early in the run; to make the
 search more conservative, decrease `g0` or increase `alpha`.
 
-## Examples folder
+## Benchmark
 
-An example program is provided in `examples/simple_sphere.cpp` demonstrating usage and two presets. Build it with:
+`bench/bench.cpp` is a repeatable harness exercising three objectives (sphere, rosenbrock,
+Shekel) on fixed configuration and seed. It reports each objective's `best_val`, wall time,
+history size, and a same-seed determinism check. Build it with:
 
 ```bash
-g++.exe -O3 -march=native -flto -std=c++20 examples/simple_sphere.cpp gsa.cpp -o examples/simple_sphere.exe
+g++.exe -O3 -march=native -flto -std=c++20 bench/bench.cpp gsa.cpp -o bench/bench.exe
 ```
 
 Run:
 
 ```bash
-./examples/simple_sphere.exe
+./bench/bench.exe
 ```
 
