@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
-#include <fstream>
 #include <limits>
 #include <numeric>
+#include <random>
 #include <stdexcept>
 
 static constexpr double kEpsilon = 1e-12;
@@ -20,20 +20,6 @@ static inline double rand_uni(random_engine_t& gen, double min,
 inline constexpr size_t GravitationalSearchAlgorithm::idx(
     size_t agent, size_t dim) const noexcept {
     return agent * static_cast<size_t>(dimensions) + dim;
-}
-
-void GravitationalSearchAlgorithm::save_positions_to_file(
-    const std::string& filename) const {
-    std::ofstream file(filename);
-    if (!file.is_open()) return;
-
-    for (int i = 0; i < config.n_agents; ++i) {
-        const size_t offset = idx(i, 0);
-        for (int d = 0; d < dimensions; ++d) {
-            file << X[offset + d] << (d == dimensions - 1 ? "" : " ");
-        }
-        file << "\n";
-    }
 }
 
 void GravitationalSearchAlgorithm::initialize_positions(random_engine_t& gen) {
@@ -103,8 +89,8 @@ void GravitationalSearchAlgorithm::compute_accelerations(const int current_iter,
 
     // Sort/partition agent indices based on fitness (best first)
     std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
-    auto comp = [this, &minimize = config.minimize](int a, int b) {
-        return minimize ? (fitness[a] < fitness[b]) : (fitness[a] > fitness[b]);
+    auto comp = [this](int a, int b) {
+        return config.minimize ? (fitness[a] < fitness[b]) : (fitness[a] > fitness[b]);
     };
 
     if (!is_small_problem) {
@@ -186,10 +172,10 @@ void GravitationalSearchAlgorithm::validate_inputs(
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
     std::vector<double> lower, std::vector<double> upper,
     ObjectiveFunction func, GsaConfig cfg)
-    : min_bounds(std::move(lower)),
+    : config(std::move(cfg)),
+      min_bounds(std::move(lower)),
       max_bounds(std::move(upper)),
-      objective_fn(std::move(func)),
-      config(std::move(cfg)) {
+      objective_fn(std::move(func)) {
     dimensions = static_cast<int>(min_bounds.size());
 
     validate_inputs(min_bounds, max_bounds, config);
@@ -212,27 +198,33 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
           dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
           std::move(func), std::move(cfg)) {}
 
-std::pair<double, std::vector<double>>
-GravitationalSearchAlgorithm::optimize() {
+GsaResult GravitationalSearchAlgorithm::optimize() {
     std::random_device rd;
-    random_engine_t gen(rd());
+    random_engine_t gen(config.seed != 0 ? config.seed : rd());
 
     initialize_positions(gen);
-    // save_positions_to_file("initial_positions.txt");
 
     double global_best_val = config.minimize
                                  ? std::numeric_limits<double>::max()
                                  : std::numeric_limits<double>::lowest();
     std::vector<double> global_best_pos(dimensions);
 
+    GsaResult result{};
+    result.history.reserve(config.max_iter + 1);
+
     for (int k = 1; k <= config.max_iter; ++k) {
         evaluate_fitness(global_best_val, global_best_pos);
+        result.history.push_back(global_best_val);
+
         compute_masses();
         compute_accelerations(k, gen);
         update_kinematics(gen);
     }
 
     evaluate_fitness(global_best_val, global_best_pos);
+    result.history.push_back(global_best_val);
 
-    return {global_best_val, global_best_pos};
+    result.best_val = global_best_val;
+    result.best_pos = std::move(global_best_pos);
+    return result;
 }

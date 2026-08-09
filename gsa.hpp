@@ -2,10 +2,9 @@
 #define GSA_HPP
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
-#include <random>
 #include <span>
-#include <string>
 #include <utility>
 #include <vector>
 
@@ -17,6 +16,13 @@ struct GsaConfig {
     double g0 = 100.0;
     double alpha = 20.0;
     bool minimize = true;
+    uint64_t seed = 0;
+};
+
+struct GsaResult {
+    double best_val;
+    std::vector<double> best_pos;
+    std::vector<double> history;
 };
 
 using ObjectiveFunction = std::function<double(std::span<const double>)>;
@@ -45,12 +51,6 @@ class GravitationalSearchAlgorithm {
 
     /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
     inline constexpr size_t idx(size_t agent, size_t dim) const noexcept;
-
-    /**
-     * Save current particle positions to a whitespace-separated text file.
-     * Each line is one agent; columns correspond to dimensions.
-     */
-    void save_positions_to_file(const std::string& filename) const;
 
     /** Initialize agent positions uniformly at random between bounds. */
     void initialize_positions(random_engine_t& gen);
@@ -83,7 +83,7 @@ class GravitationalSearchAlgorithm {
                                  ObjectiveFunction func,
                                  GsaConfig cfg = GsaConfig{});
 
-    [[nodiscard]] std::pair<double, std::vector<double>> optimize();
+    [[nodiscard]] GsaResult optimize();
 };
 
-#endif  // GSA_HPP`
+#endif  // GSA_HPP

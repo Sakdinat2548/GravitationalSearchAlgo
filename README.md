@@ -33,7 +33,8 @@ double sphere(std::span<const double> x) {
 }
 
 GravitationalSearchAlgorithm gsa(3, -5.0, 5.0, sphere);
-auto [best_val, best_pos] = gsa.optimize();
+auto best = gsa.optimize();
+std::cout << "best value: " << best.best_val << "\n";
 ```
 
 Example: per-dimension bounds and custom configuration
@@ -45,7 +46,7 @@ GravitationalSearchAlgorithm gsa2(
 	sphere,
 	{.n_agents = 50, .max_iter = 1000, .g0 = 10.0, .alpha = 10.0, .minimize = true}
 );
-auto [val2, pos2] = gsa2.optimize();
+auto best2 = gsa2.optimize();
 ```
 
 Example: using a lambda objective
@@ -55,12 +56,21 @@ GravitationalSearchAlgorithm gsa3(2, -65.53, 65.53,
 	[](std::span<const double> x){ return std::sin(x[0]) + std::cos(x[1]); },
 	{.n_agents = 40, .max_iter = 500}
 );
-auto [v, p] = gsa3.optimize();
+auto res3 = gsa3.optimize();
+```
+   
+And accessing the result fields:
+
+```cpp
+GsaResult res = gsa.optimize();
+std::vector<double> position = res.best_pos;    // best point found
+std::vector<double> history = res.history;     // best value per iteration
 ```
 
 API notes
-- `GsaConfig` controls `n_agents`, `max_iter`, `g0`, `alpha`, and whether to `minimize`.
-- The implementation is single-threaded; if you call `optimize()` multiple times concurrently, protect the instance or create separate instances.
+- `GsaConfig` controls `n_agents`, `max_iter`, `g0`, `alpha`, `minimize`, and `seed`.
+- `optimize()` returns a `GsaResult` with `best_val`, `best_pos`, and `history`.
+- The implementation is single-threaded; if you call `optimize()` multiple times concurrently, protect the instance or create separate instances. Calling `optimize()` again on the same instance continues from the previous engine state (positions, velocities), which is intentional and matches the GSA formulation.
 
 Configuration tuning
 
@@ -70,6 +80,7 @@ Configuration tuning
 Default: `100.0`.
 - `alpha` (double): decay rate for `G(t) = g0 * exp(-alpha * t)`. Default: `20`.
 - `minimize` (bool): set `true` to minimize objective, `false` to maximize. Default: `true`.
+- `seed` (uint64_t): RNG seed for reproducible runs; `0` (default) derives a seed from `std::random_device`.
 
 **Tip:** If the solver converges too quickly or gets stuck, try increasing `g0` or
 decreasing `alpha` to encourage more exploration early in the run; to make the

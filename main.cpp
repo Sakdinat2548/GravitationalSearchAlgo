@@ -1,3 +1,4 @@
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -22,14 +23,14 @@ double rosenbrock(std::span<const double> x) {
 int main() {
     // --- Example: Inline equal bounds (3 dimensions, all [-5.0, 5.0]) ---
     // GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, sphere);
-    // auto [val1, pos1] = gsa1.optimize();
+    // auto res1 = gsa1.optimize();
 
     // --- Example: Per-dimension bounds (3 dimensions with unique bounds) ---
     // GravitationalSearchAlgorithm gsa2({-10.0, 0.0, -1.0}, {10.0, 50.0, 1.0}, sphere);
-    // auto [val2, pos2] = gsa2.optimize();
+    // auto res2 = gsa2.optimize();
 
-    // std::cout << "Inline Scalar Bounds Result: " << val1 << "\n";
-    // std::cout << "Inline Vector Bounds Result: " << val2 << "\n";
+    // std::cout << "Inline Scalar Bounds Result: " << res1.best_val << "\n";
+    // std::cout << "Inline Vector Bounds Result: " << res2.best_val << "\n";
 
     // GravitationalSearchAlgorithm gsa3(10, -2.048, 2.048, rosenbrock,
     //                                   {.n_agents = 50,
@@ -37,9 +38,9 @@ int main() {
     //                                    .g0 = 10.0,
     //                                    .alpha = 10.0,
     //                                    .minimize = true});
-    // auto [val3, pos3] = gsa3.optimize();
-    // std::cout << "Rosenbrock Result: " << val3 << "\n";
-    // for (auto& p : pos3) std::cout << p << " ";
+    // auto res3 = gsa3.optimize();
+    // std::cout << "Rosenbrock Result: " << res3.best_val << "\n";
+    // for (auto& p : res3.best_pos) std::cout << p << " ";
     // std::cout << "\n";
 
     // GravitationalSearchAlgorithm gsa4(
@@ -55,9 +56,9 @@ int main() {
     //      .g0 = 10.0,
     //      .alpha = 20.0,
     //      .minimize = true});
-    // auto [val4, pos4] = gsa4.optimize();
-    // std::cout << "Schwefel Result: " << val4 << "\n";
-    // for (auto& p : pos4) std::cout << p << " ";
+    // auto res4 = gsa4.optimize();
+    // std::cout << "Schwefel Result: " << res4.best_val << "\n";
+    // for (auto& p : res4.best_pos) std::cout << p << " ";
     // std::cout << "\n";
 
     GravitationalSearchAlgorithm gsa5(
@@ -90,10 +91,11 @@ int main() {
     const int n_shekel = 30;
     double avg_val = 0.0;
     for (int i = 0; i < n_shekel; ++i) {
-        auto [val5, pos5] = gsa5.optimize();
-        avg_val += val5;
-        std::cout << "Shekel Result "<< i << ": " << val5 << ", Position: ";
-        for (auto& p : pos5) std::cout << p << " ";
+        auto res5 = gsa5.optimize();
+        avg_val += res5.best_val;
+        std::cout << "Shekel Result " << i << ": " << res5.best_val
+                  << ", Position: ";
+        for (auto& p : res5.best_pos) std::cout << p << " ";
         std::cout << "\n";
     }
     std::cout << "Average Shekel Result: "
