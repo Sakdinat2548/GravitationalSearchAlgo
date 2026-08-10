@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <functional>
 #include <span>
-#include <utility>
 #include <vector>
 
 #include "XoshiroCpp.hpp"
