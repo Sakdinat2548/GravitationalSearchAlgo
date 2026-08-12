@@ -138,20 +138,24 @@ search more conservative, decrease `g0` or increase `alpha`.
 ## Tests
 
 `test/` holds a small self-contained framework (`test_framework.hpp` registers and runs
-named tests; `test_common.hpp` shares objectives and invariant helpers). Each `*.cpp`
-defines one test, and CMake registers each as its own CTest entry:
+named tests; `test_common.hpp` shares objectives and invariant helpers). The individual
+tests live in `test/tasks/`, one `*.cpp` per test, and CMake registers each as its own
+CTest entry:
 
-- `test/test_history.cpp` — history size `== max_iter + 1`, monotonic `best_so_far`,
+- `test/tasks/test_history.cpp` — history size `== max_iter + 1`, monotonic `best_so_far`,
   mean/median within `[best_iter, worst_iter]`, finite non-negative `stddev` (both modes).
-- `test/test_stats.cpp` — history stats finite and in-range across objectives.
-- `test/test_determinism.cpp` — same-seed bit-identical results on sphere/rosenbrock/Shekel.
-- `test/test_modes.cpp` — `minimize` true/false and odd agent count (median).
+- `test/tasks/test_stats.cpp` — history stats finite and in-range across objectives.
+- `test/tasks/test_determinism.cpp` — same-seed bit-identical results on sphere/rosenbrock/Shekel.
+- `test/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
+- `test/tasks/test_thread_safety.cpp` — 8 concurrent `optimize()` calls on one instance are
+  bit-identical (verifies `optimize()` is `const`/thread-safe).
 
 Build manually with:
 
 ```bash
-g++.exe -O3 -std=c++20 test/test_main.cpp test/test_history.cpp test/test_stats.cpp \
-    test/test_determinism.cpp test/test_modes.cpp gsa.cpp -o gsa_test.exe
+g++.exe -O3 -std=c++20 test/test_main.cpp test/tasks/test_history.cpp test/tasks/test_stats.cpp \
+    test/tasks/test_determinism.cpp test/tasks/test_modes.cpp test/tasks/test_thread_safety.cpp \
+    gsa.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset default`):

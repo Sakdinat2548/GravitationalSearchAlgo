@@ -14,7 +14,8 @@ CMake test discovery — just a handful of C++ language features working togethe
 | `test_framework.hpp` | The engine: registration + runner (`TEST` macro, `expect`, `run`). |
 | `test_common.hpp` | Shared objectives (sphere/rosenbrock/Shekel) and invariant helpers. |
 | `test_main.cpp` | The only `main()`; calls `gsa_test::run(argc, argv)`. |
-| `test_*.cpp` | One test each, written as `TEST(name) { ... }`. |
+| `tasks/` | One `test_*.cpp` per test, written as `TEST(name) { ... }`. |
+| `TEST.md` | This file. |
 
 ## The big idea: tests register themselves
 
@@ -141,13 +142,14 @@ main() ──► run(argc, argv) ──► loop over registry() ──► call e
 a different test name as `argv[1]`:
 
 ```cmake
-add_test(NAME gsa_history     COMMAND gsa_test history_size)
-add_test(NAME gsa_stats       COMMAND gsa_test history_stats)
-add_test(NAME gsa_determinism COMMAND gsa_test determinism)
-add_test(NAME gsa_modes       COMMAND gsa_test modes)
+add_test(NAME gsa_history         COMMAND gsa_test history_size)
+add_test(NAME gsa_stats           COMMAND gsa_test history_stats)
+add_test(NAME gsa_determinism     COMMAND gsa_test determinism)
+add_test(NAME gsa_modes           COMMAND gsa_test modes)
+add_test(NAME gsa_thread_safety   COMMAND gsa_test thread_safety)
 ```
 
-CTest runs the binary 4 times, each filtered to one test, and treats the exit code as
+CTest runs the binary once per test, each filtered to one test, and treats the exit code as
 pass/fail. Run them with `ctest --preset default`.
 
 ## Why `inline` matters everywhere

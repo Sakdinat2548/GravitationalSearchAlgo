@@ -1,5 +1,5 @@
-#include "test_common.hpp"
-#include "test_framework.hpp"
+#include "../test_common.hpp"
+#include "../test_framework.hpp"
 
 using namespace gsa_test;
 
