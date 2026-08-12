@@ -4,16 +4,60 @@ This project implements a Gravitational Search Algorithm (GSA) in C++.
 
 ## Build
 
-Compile the program with g++ using O3, flto and include the implementation source file:
+Requires [CMake](https://cmake.org) (3.20+) and [Ninja](https://ninja-build.org), both on `PATH`.
+The `default` preset configures a Ninja, Release build in `build/` with
+`-O3 -DNDEBUG` (MSYS2 UCRT64 g++).
+
+### Configure (one time, or after editing `CMakeLists.txt`)
 
 ```bash
-g++.exe -O3 -march=native -flto -std=c++20 main.cpp gsa.cpp -o main.exe
+cmake --preset default
 ```
 
-Run the executable:
+This generates the Ninja build files under `build/`.
+
+### Build
 
 ```bash
-./main.exe
+cmake --build --preset default
+```
+
+Produces `build/main.exe` (API demo) and `build/gsa_test.exe` (invariant/determinism test harness).
+
+### Run
+
+```bash
+./build/main.exe          # 4-example API demo (prints best_val + position)
+./build/gsa_test.exe      # GSA invariants + same-seed determinism checks
+```
+
+### Quick syntax check (warning-free sources)
+
+```bash
+cmake --build --preset default --target check-gsa
+```
+
+### Test (GSA invariants + determinism)
+
+```bash
+ctest --preset default
+```
+
+Runs 5 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
+`gsa_thread_safety`); see `test/` for the sources. Run the binary directly to see per-test
+output, or pass a single test name to run only that one:
+
+```bash
+./build/gsa_test.exe
+./build/gsa_test.exe determinism
+```
+
+### Manual build (no CMake)
+
+Alternatively, compile directly with g++ (O3, C++20, include the implementation source file):
+
+```bash
+g++.exe -O3 -std=c++20 main.cpp gsa.cpp -o main.exe
 ```
 
 ## Usage
@@ -22,7 +66,7 @@ This repository exposes a small C++ API in `gsa.hpp` / `gsa.cpp`.
 The primary entry point is the class `GravitationalSearchAlgorithm`.
 
 Build then run the provided `main.cpp`, or use the class directly in your code. See
-`bench/` below for a repeatable performance/convergence harness.
+`test/` below for the invariant/determinism test harness.
 
 Example: simple usage with scalar (equal) bounds
 
@@ -91,19 +135,31 @@ Default: `100.0`.
 decreasing `alpha` to encourage more exploration early in the run; to make the
 search more conservative, decrease `g0` or increase `alpha`.
 
-## Benchmark
+## Tests
 
-`bench/bench.cpp` is a repeatable harness exercising three objectives (sphere, rosenbrock,
-Shekel) on fixed configuration and seed. It reports each objective's `best_val`, wall time,
-history size, and a same-seed determinism check. Build it with:
+`test/` holds a small self-contained framework (`test_framework.hpp` registers and runs
+named tests; `test_common.hpp` shares objectives and invariant helpers). The individual
+tests live in `test/tasks/`, one `*.cpp` per test, and CMake registers each as its own
+CTest entry:
+
+- `test/tasks/test_history.cpp` — history size `== max_iter + 1`, monotonic `best_so_far`,
+  mean/median within `[best_iter, worst_iter]`, finite non-negative `stddev` (both modes).
+- `test/tasks/test_stats.cpp` — history stats finite and in-range across objectives.
+- `test/tasks/test_determinism.cpp` — same-seed bit-identical results on sphere/rosenbrock/Shekel.
+- `test/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
+- `test/tasks/test_thread_safety.cpp` — 8 concurrent `optimize()` calls on one instance are
+  bit-identical (verifies `optimize()` is `const`/thread-safe).
+
+Build manually with:
 
 ```bash
-g++.exe -O3 -march=native -flto -std=c++20 bench/bench.cpp gsa.cpp -o bench/bench.exe
+g++.exe -O3 -std=c++20 test/test_main.cpp test/tasks/test_history.cpp test/tasks/test_stats.cpp \
+    test/tasks/test_determinism.cpp test/tasks/test_modes.cpp test/tasks/test_thread_safety.cpp \
+    gsa.cpp -o gsa_test.exe
 ```
 
-Run:
+Run (or use `ctest --preset default`):
 
 ```bash
-./bench/bench.exe
+./gsa_test.exe
 ```
-
