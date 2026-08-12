@@ -43,9 +43,9 @@ cmake --build --preset default --target check-gsa
 ctest --preset default
 ```
 
-Runs 4 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`); see
-`test/` for the sources. Run the binary directly to see per-test output, or pass a
-single test name to run only that one:
+Runs 5 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
+`gsa_thread_safety`); see `test/` for the sources. Run the binary directly to see per-test
+output, or pass a single test name to run only that one:
 
 ```bash
 ./build/gsa_test.exe
