@@ -9,10 +9,6 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -march=native -flto")
-endif()
-
 add_library(gsa STATIC gsa.cpp)
 target_include_directories(gsa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_options(gsa PRIVATE -Wall -Wextra)

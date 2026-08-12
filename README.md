@@ -6,7 +6,7 @@ This project implements a Gravitational Search Algorithm (GSA) in C++.
 
 Requires [CMake](https://cmake.org) (3.20+) and [Ninja](https://ninja-build.org), both on `PATH`.
 The `default` preset configures a Ninja, Release build in `build/` with
-`-O3 -march=native -flto -std=c++20` (MSYS2 UCRT64 g++).
+`-O3 -DNDEBUG` (MSYS2 UCRT64 g++).
 
 ### Configure (one time, or after editing `CMakeLists.txt`)
 
@@ -40,10 +40,10 @@ cmake --build --preset default --target check-gsa
 
 ### Manual build (no CMake)
 
-Alternatively, compile directly with g++ (O3, flto, C++20, include the implementation source file):
+Alternatively, compile directly with g++ (O3, C++20, include the implementation source file):
 
 ```bash
-g++.exe -O3 -march=native -flto -std=c++20 main.cpp gsa.cpp -o main.exe
+g++.exe -O3 -std=c++20 main.cpp gsa.cpp -o main.exe
 ```
 
 ## Usage
@@ -128,7 +128,7 @@ Shekel) on fixed configuration and seed. It reports each objective's `best_val`,
 history size, and a same-seed determinism check. Build it with:
 
 ```bash
-g++.exe -O3 -march=native -flto -std=c++20 bench/bench.cpp gsa.cpp -o bench/bench.exe
+g++.exe -O3 -std=c++20 bench/bench.cpp gsa.cpp -o bench/bench.exe
 ```
 
 Run:
