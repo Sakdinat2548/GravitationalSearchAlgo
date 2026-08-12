@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
 endif()
 
 add_library(gsa STATIC gsa.cpp)
@@ -28,7 +28,7 @@ add_executable(gsa_test
 target_link_libraries(gsa_test PRIVATE gsa)
 target_compile_options(gsa_test PRIVATE -Wall -Wextra)
 
-# Fast warning-free syntax check of all sources (mirrors the AGENTS.md lint step).
+# Fast warning-free syntax check of all sources
 set(GSA_SOURCES gsa.cpp main.cpp
     test/test_main.cpp test/tasks/test_history.cpp test/tasks/test_stats.cpp
     test/tasks/test_determinism.cpp test/tasks/test_modes.cpp
