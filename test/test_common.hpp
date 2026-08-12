@@ -12,13 +12,13 @@
 
 namespace gsa_test {
 
-inline double sphere(std::span<const double> x) {
+inline double Sphere(std::span<const double> x) {
   double s = 0.0;
   for (double v : x) s += v * v;
   return s;
 }
 
-inline double rosenbrock(std::span<const double> x) {
+inline double Rosenbrock(std::span<const double> x) {
   double s = 0.0;
   for (size_t i = 0; i + 1 < x.size(); ++i) {
     const double d = x[i + 1] - x[i] * x[i];
@@ -27,7 +27,7 @@ inline double rosenbrock(std::span<const double> x) {
   return s;
 }
 
-inline double shekel(std::span<const double> x) {
+inline double Shekel(std::span<const double> x) {
   static constexpr std::array<std::array<double, 25>, 2> aij = {
       {{-32, -16, 0,   16,  32, -32, -16, 0,   16,  32, -32, -16, 0,
         16,  32,  -32, -16, 0,  16,  32,  -32, -16, 0,  16,  32},
@@ -45,7 +45,7 @@ inline double shekel(std::span<const double> x) {
   return 1.0 / sum;
 }
 
-inline GsaConfig config(bool minimize = true, int n_agents = 50) {
+inline GsaConfig Config(bool minimize = true, int n_agents = 50) {
   return {.n_agents = n_agents,
           .max_iter = 500,
           .g0 = 100.0,
@@ -54,20 +54,20 @@ inline GsaConfig config(bool minimize = true, int n_agents = 50) {
           .seed = 12345};
 }
 
-inline GsaResult optimize(int dims, double lo, double hi,
+inline GsaResult Optimize(int dims, double lo, double hi,
                           double (*fn)(std::span<const double>),
                           const GsaConfig& cfg) {
   GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
-  return gsa.optimize();
+  return gsa.Optimize();
 }
 
 /** Assert per-iteration invariants; returns true if all pass. */
-inline bool check_history(const GsaResult& res, const GsaConfig& cfg,
-                          const char* name) {
+inline bool CheckHistory(const GsaResult& res, const GsaConfig& cfg,
+                         const char* name) {
   bool ok = true;
   const auto report = [&](bool cond, const char* what) {
     ok = ok && cond;
-    if (!cond) expect(false, (std::string(name) + ": " + what).c_str());
+    if (!cond) Expect(false, (std::string(name) + ": " + what).c_str());
   };
 
   report(res.history.size() == static_cast<size_t>(cfg.max_iter) + 1,

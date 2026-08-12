@@ -10,45 +10,47 @@
 static constexpr double kEpsilon = 1e-12;
 
 // Fast uniform random generator using top 53 bits
-static inline double rand_uni(random_engine_t& gen, double min,
-                              double max) noexcept {
+static inline double RandUni(RandomEngine& gen, double min,
+                             double max) noexcept {
   constexpr double scale = 0x1.0p-53;  // 2^-53
   return min + static_cast<double>(gen() >> 11) * scale * (max - min);
 }
 
-inline constexpr size_t GravitationalSearchAlgorithm::idx(
+inline constexpr size_t GravitationalSearchAlgorithm::Idx(
     size_t agent, size_t dim) const noexcept {
   return agent * dimensions + dim;
 }
 
-void GravitationalSearchAlgorithm::initialize_positions(
-    IterationState& s, random_engine_t& gen) const {
+void GravitationalSearchAlgorithm::InitializePositions(
+    IterationState& s, RandomEngine& gen) const {
   for (int i = 0; i < config.n_agents; ++i) {
-    const size_t offset = idx(i, 0);
+    const size_t offset = Idx(i, 0);
     for (size_t d = 0; d < dimensions; ++d) {
-      s.X[offset + d] = rand_uni(gen, min_bounds[d], max_bounds[d]);
+      s.position[offset + d] = RandUni(gen, min_bounds[d], max_bounds[d]);
     }
   }
 }
 
-void GravitationalSearchAlgorithm::evaluate_fitness(
+void GravitationalSearchAlgorithm::EvaluateFitness(
     IterationState& s, double& global_best_val,
     std::vector<double>& global_best_pos) const {
   for (int i = 0; i < config.n_agents; ++i) {
-    const size_t offset = idx(i, 0);
-    const double fitness_value = objective_fn({&s.X[offset], dimensions});
+    const size_t offset = Idx(i, 0);
+    const double fitness_value =
+        objective_fn({&s.position[offset], dimensions});
     s.fitness[i] = fitness_value;
 
     const bool is_better = config.minimize ? (fitness_value < global_best_val)
                                            : (fitness_value > global_best_val);
     if (is_better) {
       global_best_val = fitness_value;
-      global_best_pos.assign(&s.X[offset], &s.X[offset + dimensions]);
+      global_best_pos.assign(&s.position[offset],
+                             &s.position[offset + dimensions]);
     }
   }
 }
 
-void GravitationalSearchAlgorithm::compute_masses(IterationState& s) const {
+void GravitationalSearchAlgorithm::ComputeMasses(IterationState& s) const {
   auto [min_it, max_it] = std::ranges::minmax_element(s.fitness);
   const double min_fit = *min_it;
   const double max_fit = *max_it;
@@ -58,25 +60,26 @@ void GravitationalSearchAlgorithm::compute_masses(IterationState& s) const {
 
   double sum_q = 0.0;
   for (int i = 0; i < config.n_agents; ++i) {
-    s.M[i] = std::max((config.minimize ? (max_fit - s.fitness[i])
-                                       : (s.fitness[i] - min_fit)) *
-                          inv_fit_diff,
-                      0.0);
-    sum_q += s.M[i];
+    s.mass[i] = std::max((config.minimize ? (max_fit - s.fitness[i])
+                                          : (s.fitness[i] - min_fit)) *
+                             inv_fit_diff,
+                         0.0);
+    sum_q += s.mass[i];
   }
   if (sum_q < kEpsilon) sum_q = kEpsilon;
 
   const double inv_sum_q = 1.0 / sum_q;
   for (int i = 0; i < config.n_agents; ++i) {
-    s.M[i] *= inv_sum_q;
+    s.mass[i] *= inv_sum_q;
   }
 }
 
-void GravitationalSearchAlgorithm::compute_accelerations(
-    IterationState& s, int current_iter, random_engine_t& gen) const {
+void GravitationalSearchAlgorithm::ComputeAccelerations(
+    IterationState& s, int current_iter, RandomEngine& gen) const {
   const double inv_max_iter = 1.0 / static_cast<double>(config.max_iter);
-  const double G = config.g0 * std::exp(-config.alpha * inv_max_iter *
-                                        static_cast<double>(current_iter));
+  const double gravitational_const =
+      config.g0 * std::exp(-config.alpha * inv_max_iter *
+                           static_cast<double>(current_iter));
   const double progress = static_cast<double>(current_iter) * inv_max_iter;
 
   const bool is_small_problem = config.n_agents <= 10;
@@ -101,17 +104,17 @@ void GravitationalSearchAlgorithm::compute_accelerations(
   }
 
   for (int i = 0; i < config.n_agents; ++i) {
-    const size_t i_offset = idx(i, 0);
-    const double* x_i = s.X.data() + i_offset;
-    const double m_i = s.M[i];
+    const size_t i_offset = Idx(i, 0);
+    const double* x_i = s.position.data() + i_offset;
+    const double m_i = s.mass[i];
 
-    std::ranges::fill(s.total_F, 0.0);
+    std::ranges::fill(s.total_force, 0.0);
 
     for (int k = 0; k < k_best_count; ++k) {
       const int j = s.sorted_indices[k];
       if (i == j) continue;
 
-      const double* x_j = s.X.data() + idx(j, 0);
+      const double* x_j = s.position.data() + Idx(j, 0);
 
       double r_squared = 0.0;
       for (size_t d = 0; d < dimensions; ++d) {
@@ -119,35 +122,38 @@ void GravitationalSearchAlgorithm::compute_accelerations(
         r_squared += diff * diff;
       }
 
-      const double R = std::sqrt(r_squared);
-      const double force_mag = G * (m_i * s.M[j]) / (R + kEpsilon);
+      const double distance = std::sqrt(r_squared);
+      const double force_mag =
+          gravitational_const * (m_i * s.mass[j]) / (distance + kEpsilon);
 
       for (size_t d = 0; d < dimensions; ++d) {
-        s.total_F[d] += rand_uni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
+        s.total_force[d] +=
+            RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
       }
     }
 
     const double inv_mass = 1.0 / (m_i + kEpsilon);
     for (size_t d = 0; d < dimensions; ++d) {
-      s.A[i_offset + d] = s.total_F[d] * inv_mass;
+      s.acceleration[i_offset + d] = s.total_force[d] * inv_mass;
     }
   }
 }
 
-void GravitationalSearchAlgorithm::update_kinematics(
-    IterationState& s, random_engine_t& gen) const {
+void GravitationalSearchAlgorithm::UpdateKinematics(IterationState& s,
+                                                    RandomEngine& gen) const {
   for (int i = 0; i < config.n_agents; ++i) {
-    const size_t offset = idx(i, 0);
+    const size_t offset = Idx(i, 0);
     for (size_t d = 0; d < dimensions; ++d) {
       const size_t index = offset + d;
-      s.V[index] = rand_uni(gen, 0.0, 1.0) * s.V[index] + s.A[index];
-      s.X[index] =
-          std::clamp(s.X[index] + s.V[index], min_bounds[d], max_bounds[d]);
+      s.velocity[index] =
+          RandUni(gen, 0.0, 1.0) * s.velocity[index] + s.acceleration[index];
+      s.position[index] = std::clamp(s.position[index] + s.velocity[index],
+                                     min_bounds[d], max_bounds[d]);
     }
   }
 }
 
-void GravitationalSearchAlgorithm::validate_inputs(
+void GravitationalSearchAlgorithm::ValidateInputs(
     const std::vector<double>& lower, const std::vector<double>& upper,
     const GsaConfig& cfg) {
   if (lower.empty() || upper.empty()) {
@@ -177,7 +183,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
       objective_fn(std::move(func)) {
   dimensions = min_bounds.size();
 
-  validate_inputs(min_bounds, max_bounds, config);
+  ValidateInputs(min_bounds, max_bounds, config);
 }
 
 GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
@@ -188,19 +194,19 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
           dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
           std::move(func), std::move(cfg)) {}
 
-GsaResult GravitationalSearchAlgorithm::optimize() const {
+GsaResult GravitationalSearchAlgorithm::Optimize() const {
   const size_t total_size = static_cast<size_t>(config.n_agents) * dimensions;
   IterationState s;
-  s.X.resize(total_size);
-  s.V.resize(total_size, 0.0);
-  s.A.resize(total_size, 0.0);
+  s.position.resize(total_size);
+  s.velocity.resize(total_size, 0.0);
+  s.acceleration.resize(total_size, 0.0);
   s.fitness.resize(config.n_agents);
-  s.M.resize(config.n_agents);
-  s.total_F.resize(dimensions);
+  s.mass.resize(config.n_agents);
+  s.total_force.resize(dimensions);
   s.sorted_indices.resize(config.n_agents);
 
   std::random_device rd;
-  random_engine_t gen(config.seed != 0 ? config.seed : rd());
+  RandomEngine gen(config.seed != 0 ? config.seed : rd());
 
   double global_best_val = config.minimize
                                ? std::numeric_limits<double>::max()
@@ -233,17 +239,17 @@ GsaResult GravitationalSearchAlgorithm::optimize() const {
   GsaResult result{};
   result.history.reserve(config.max_iter + 1);
 
-  initialize_positions(s, gen);
+  InitializePositions(s, gen);
 
   for (int k = 1; k <= config.max_iter; ++k) {
-    evaluate_fitness(s, global_best_val, global_best_pos);
+    EvaluateFitness(s, global_best_val, global_best_pos);
     result.history.push_back(record_iteration());
-    compute_masses(s);
-    compute_accelerations(s, k, gen);
-    update_kinematics(s, gen);
+    ComputeMasses(s);
+    ComputeAccelerations(s, k, gen);
+    UpdateKinematics(s, gen);
   }
 
-  evaluate_fitness(s, global_best_val, global_best_pos);
+  EvaluateFitness(s, global_best_val, global_best_pos);
   result.history.push_back(record_iteration());
 
   result.best_val = global_best_val;

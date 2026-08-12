@@ -46,6 +46,17 @@ add_custom_target(check-gsa
     DEPENDS ${GSA_SOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
+# Google-casing naming lint via clang-tidy; check-gsa must stay warning-free too.
+find_program(GSA_CLANG_TIDY clang-tidy)
+if(GSA_CLANG_TIDY)
+  add_custom_target(check-naming
+      COMMAND ${GSA_CLANG_TIDY} gsa.cpp gsa.hpp
+              --extra-arg=-std=c++20 --extra-arg=-I.
+              --extra-arg=-Wno-unknown-pragmas
+      DEPENDS ${GSA_SOURCES}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 enable_testing()
 add_test(NAME gsa_history COMMAND gsa_test history_size)
 add_test(NAME gsa_stats COMMAND gsa_test history_stats)

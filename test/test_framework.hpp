@@ -12,29 +12,29 @@ struct Test {
   bool (*fn)();
 };
 
-inline std::vector<Test>& registry() {
+inline std::vector<Test>& Registry() {
   static std::vector<Test> tests;
   return tests;
 }
 
 struct Registrar {
   Registrar(const char* name, bool (*fn)()) {
-    registry().push_back({name, fn});
+    Registry().push_back({name, fn});
   }
 };
 
 inline int failures = 0;
 
-inline void expect(bool cond, const char* msg) {
+inline void Expect(bool cond, const char* msg) {
   if (!cond) {
     ++failures;
     std::cout << "  FAIL: " << msg << "\n";
   }
 }
 
-inline bool run(int argc, char** argv) {
+inline bool Run(int argc, char** argv) {
   int passed = 0, failed = 0;
-  for (const auto& t : registry()) {
+  for (const auto& t : Registry()) {
     if (argc > 1 && std::string(argv[1]) != t.name) continue;
     failures = 0;
     const bool ok = t.fn();

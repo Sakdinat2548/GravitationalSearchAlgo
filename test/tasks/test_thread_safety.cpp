@@ -7,8 +7,8 @@
 using namespace gsa_test;
 
 TEST(thread_safety) {
-  const auto cfg = config();
-  GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, sphere, cfg);
+  const auto cfg = Config();
+  GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, Sphere, cfg);
 
   const int n_threads = 8;
   std::vector<GsaResult> results(n_threads);
@@ -16,7 +16,7 @@ TEST(thread_safety) {
   threads.reserve(n_threads);
 
   for (int t = 0; t < n_threads; ++t) {
-    threads.emplace_back([&gsa, &results, t] { results[t] = gsa.optimize(); });
+    threads.emplace_back([&gsa, &results, t] { results[t] = gsa.Optimize(); });
   }
   for (auto& th : threads) th.join();
 
@@ -24,7 +24,7 @@ TEST(thread_safety) {
   const double best = results[0].best_val;
   for (const auto& r : results) {
     if (r.best_val != best) {
-      expect(false, "concurrent optimize() results differ");
+      Expect(false, "concurrent Optimize() results differ");
       ok = false;
     }
   }
