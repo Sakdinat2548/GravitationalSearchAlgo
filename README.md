@@ -4,16 +4,46 @@ This project implements a Gravitational Search Algorithm (GSA) in C++.
 
 ## Build
 
-Compile the program with g++ using O3, flto and include the implementation source file:
+Requires [CMake](https://cmake.org) (3.20+) and [Ninja](https://ninja-build.org), both on `PATH`.
+The `default` preset configures a Ninja, Release build in `build/` with
+`-O3 -march=native -flto -std=c++20` (MSYS2 UCRT64 g++).
+
+### Configure (one time, or after editing `CMakeLists.txt`)
+
+```bash
+cmake --preset default
+```
+
+This generates the Ninja build files under `build/`.
+
+### Build
+
+```bash
+cmake --build --preset default
+```
+
+Produces `build/main.exe` (API demo) and `build/bench.exe` (benchmark harness).
+Ninja only recompiles what changed, so repeated builds are incremental and fast.
+
+### Run
+
+```bash
+./build/main.exe      # 4-example API demo (prints best_val + position)
+./build/bench.exe     # sphere / rosenbrock / Shekel benchmark with determinism check
+```
+
+### Quick syntax check (warning-free `gsa.cpp`)
+
+```bash
+cmake --build --preset default --target check-gsa
+```
+
+### Manual build (no CMake)
+
+Alternatively, compile directly with g++ (O3, flto, C++20, include the implementation source file):
 
 ```bash
 g++.exe -O3 -march=native -flto -std=c++20 main.cpp gsa.cpp -o main.exe
-```
-
-Run the executable:
-
-```bash
-./main.exe
 ```
 
 ## Usage

@@ -9,6 +9,7 @@
 *.a
 *.lib
 *.gch
+build/
 
 # Editor/IDE files
 .vscode/
