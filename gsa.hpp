@@ -39,6 +39,18 @@ using ObjectiveFunction = std::function<double(std::span<const double>)>;
 using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
 
 class GravitationalSearchAlgorithm {
+ public:
+  GravitationalSearchAlgorithm(std::vector<double> lower,
+                               std::vector<double> upper,
+                               ObjectiveFunction func,
+                               GsaConfig cfg = GsaConfig{});
+
+  GravitationalSearchAlgorithm(int dims, double lower, double upper,
+                               ObjectiveFunction func,
+                               GsaConfig cfg = GsaConfig{});
+
+  [[nodiscard]] GsaResult Optimize() const;
+
  private:
   /** Per-run working buffers; held by Optimize() so the instance stays const.
    */
@@ -48,18 +60,18 @@ class GravitationalSearchAlgorithm {
     std::vector<int> sorted_indices;
   };
 
-  GsaConfig config{};
-  size_t dimensions{0};
-  std::vector<double> min_bounds;
-  std::vector<double> max_bounds;
-  ObjectiveFunction objective_fn;
+  GsaConfig config_{};
+  size_t dimensions_{0};
+  std::vector<double> min_bounds_;
+  std::vector<double> max_bounds_;
+  ObjectiveFunction objective_fn_;
 
   static void ValidateInputs(const std::vector<double>& lower,
                              const std::vector<double>& upper,
                              const GsaConfig& cfg);
 
   /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
-  inline constexpr size_t Idx(size_t agent, size_t dim) const noexcept;
+  [[nodiscard]] constexpr size_t Idx(size_t agent, size_t dim) const noexcept;
 
   /** Initialize agent positions uniformly at random between bounds. */
   void InitializePositions(IterationState& s, RandomEngine& gen) const;
@@ -81,18 +93,6 @@ class GravitationalSearchAlgorithm {
 
   /** Update velocities, move agents, and clamp positions to bounds. */
   void UpdateKinematics(IterationState& s, RandomEngine& gen) const;
-
- public:
-  GravitationalSearchAlgorithm(std::vector<double> lower,
-                               std::vector<double> upper,
-                               ObjectiveFunction func,
-                               GsaConfig cfg = GsaConfig{});
-
-  GravitationalSearchAlgorithm(int dims, double lower, double upper,
-                               ObjectiveFunction func,
-                               GsaConfig cfg = GsaConfig{});
-
-  [[nodiscard]] GsaResult Optimize() const;
 };
 
 #endif  // GSA_HPP

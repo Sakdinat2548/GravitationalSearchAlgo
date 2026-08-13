@@ -4,7 +4,9 @@
 #include "../test_common.hpp"
 #include "../test_framework.hpp"
 
-using namespace gsa_test;
+using gsa_test::Config;
+using gsa_test::Expect;
+using gsa_test::Sphere;
 
 TEST(thread_safety) {
   const auto cfg = Config();

@@ -14,8 +14,8 @@ static double Sphere(std::span<const double> x) {
 static double Rosenbrock(std::span<const double> x) {
   double s = 0.0;
   for (size_t i = 0; i + 1 < x.size(); ++i) {
-    const double d = x[i + 1] - x[i] * x[i];
-    s += 100.0 * d * d + (x[i] - 1.0) * (x[i] - 1.0);
+    const double d = x[i + 1] - (x[i] * x[i]);
+    s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }
   return s;
 }

@@ -1,7 +1,11 @@
 #include "../test_common.hpp"
 #include "../test_framework.hpp"
 
-using namespace gsa_test;
+using gsa_test::Config;
+using gsa_test::Expect;
+using gsa_test::Rosenbrock;
+using gsa_test::Shekel;
+using gsa_test::Sphere;
 
 static bool Deterministic(int dims, double lo, double hi,
                           double (*fn)(std::span<const double>),

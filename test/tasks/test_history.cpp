@@ -1,7 +1,10 @@
 #include "../test_common.hpp"
 #include "../test_framework.hpp"
 
-using namespace gsa_test;
+using gsa_test::CheckHistory;
+using gsa_test::Config;
+using gsa_test::Optimize;
+using gsa_test::Sphere;
 
 TEST(history_size) {
   bool ok = true;

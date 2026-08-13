@@ -21,14 +21,14 @@ inline double Sphere(std::span<const double> x) {
 inline double Rosenbrock(std::span<const double> x) {
   double s = 0.0;
   for (size_t i = 0; i + 1 < x.size(); ++i) {
-    const double d = x[i + 1] - x[i] * x[i];
-    s += 100.0 * d * d + (x[i] - 1.0) * (x[i] - 1.0);
+    const double d = x[i + 1] - (x[i] * x[i]);
+    s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }
   return s;
 }
 
 inline double Shekel(std::span<const double> x) {
-  static constexpr std::array<std::array<double, 25>, 2> aij = {
+  static constexpr std::array<std::array<double, 25>, 2> kAij = {
       {{-32, -16, 0,   16,  32, -32, -16, 0,   16,  32, -32, -16, 0,
         16,  32,  -32, -16, 0,  16,  32,  -32, -16, 0,  16,  32},
        {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
@@ -37,7 +37,7 @@ inline double Shekel(std::span<const double> x) {
   for (size_t j = 0; j < 25; ++j) {
     double inner = 0.0;
     for (size_t i = 0; i < 2; ++i) {
-      const double d = x[i] - aij[i][j];
+      const double d = x[i] - kAij[i][j];
       inner += d * d * d * d * d * d;
     }
     sum += 1.0 / (j + 1.0 + inner);
