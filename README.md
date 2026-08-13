@@ -37,6 +37,12 @@ Produces `build/main.exe` (API demo) and `build/gsa_test.exe` (invariant/determi
 cmake --build --preset default --target check-gsa
 ```
 
+### Naming lint (Google-casing, see `.clang-tidy`)
+
+```bash
+cmake --build --preset default --target check-naming
+```
+
 ### Test (GSA invariants + determinism)
 
 ```bash
@@ -78,7 +84,7 @@ double sphere(std::span<const double> x) {
 }
 
 GravitationalSearchAlgorithm gsa(3, -5.0, 5.0, sphere);
-auto best = gsa.optimize();
+auto best = gsa.Optimize();
 std::cout << "best value: " << best.best_val << "\n";
 ```
 
@@ -91,7 +97,7 @@ GravitationalSearchAlgorithm gsa2(
 	sphere,
 	{.n_agents = 50, .max_iter = 1000, .g0 = 10.0, .alpha = 10.0, .minimize = true}
 );
-auto best2 = gsa2.optimize();
+auto best2 = gsa2.Optimize();
 ```
 
 Example: using a lambda objective
@@ -101,13 +107,13 @@ GravitationalSearchAlgorithm gsa3(2, -65.53, 65.53,
 	[](std::span<const double> x){ return std::sin(x[0]) + std::cos(x[1]); },
 	{.n_agents = 40, .max_iter = 500}
 );
-auto res3 = gsa3.optimize();
+auto res3 = gsa3.Optimize();
 ```
    
 And accessing the result fields:
 
 ```cpp
-GsaResult res = gsa.optimize();
+GsaResult res = gsa.Optimize();
 std::vector<double> position = res.best_pos;           // best point found
 std::vector<GsaIterationInfo> history = res.history;  // per-iteration stats
 double last_mean = res.history.back().mean_fitness;   // mean fitness, last iter
@@ -118,8 +124,8 @@ Each `GsaIterationInfo` records for its iteration: `best_so_far`,
 
 API notes
 - `GsaConfig` controls `n_agents`, `max_iter`, `g0`, `alpha`, `minimize`, and `seed`.
-- `optimize()` returns a `GsaResult` with `best_val`, `best_pos`, and `history`.
-- `optimize()` is `const` and thread-safe: concurrent calls on the same instance are fine (your objective function must be thread-safe). Each call is an independent run.
+- `Optimize()` returns a `GsaResult` with `best_val`, `best_pos`, and `history`.
+- `Optimize()` is `const` and thread-safe: concurrent calls on the same instance are fine (your objective function must be thread-safe). Each call is an independent run.
 
 Configuration tuning
 
@@ -147,8 +153,8 @@ CTest entry:
 - `test/tasks/test_stats.cpp` — history stats finite and in-range across objectives.
 - `test/tasks/test_determinism.cpp` — same-seed bit-identical results on sphere/rosenbrock/Shekel.
 - `test/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
-- `test/tasks/test_thread_safety.cpp` — 8 concurrent `optimize()` calls on one instance are
-  bit-identical (verifies `optimize()` is `const`/thread-safe).
+- `test/tasks/test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are
+  bit-identical (verifies `Optimize()` is `const`/thread-safe).
 
 Build manually with:
 

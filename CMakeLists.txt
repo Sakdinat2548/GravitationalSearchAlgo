@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
 endif()
 
 add_library(gsa STATIC gsa.cpp)
@@ -28,7 +28,7 @@ add_executable(gsa_test
 target_link_libraries(gsa_test PRIVATE gsa)
 target_compile_options(gsa_test PRIVATE -Wall -Wextra)
 
-# Fast warning-free syntax check of all sources (mirrors the AGENTS.md lint step).
+# Fast warning-free syntax check of all sources
 set(GSA_SOURCES gsa.cpp main.cpp
     test/test_main.cpp test/tasks/test_history.cpp test/tasks/test_stats.cpp
     test/tasks/test_determinism.cpp test/tasks/test_modes.cpp
@@ -45,6 +45,17 @@ add_custom_target(check-gsa
             ${CMAKE_CURRENT_SOURCE_DIR}/test/tasks/test_thread_safety.cpp
     DEPENDS ${GSA_SOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Google-casing naming lint via clang-tidy; check-gsa must stay warning-free too.
+find_program(GSA_CLANG_TIDY clang-tidy)
+if(GSA_CLANG_TIDY)
+  add_custom_target(check-naming
+      COMMAND ${GSA_CLANG_TIDY} gsa.cpp gsa.hpp
+              --extra-arg=-std=c++20 --extra-arg=-I.
+              --extra-arg=-Wno-unknown-pragmas
+      DEPENDS ${GSA_SOURCES}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
 
 enable_testing()
 add_test(NAME gsa_history COMMAND gsa_test history_size)
