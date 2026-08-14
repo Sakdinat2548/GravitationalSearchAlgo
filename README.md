@@ -50,7 +50,7 @@ ctest --preset default
 ```
 
 Runs 5 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
-`gsa_thread_safety`); see `test/` for the sources. Run the binary directly to see per-test
+`gsa_thread_safety`); see `tests/` for the sources. Run the binary directly to see per-test
 output, or pass a single test name to run only that one:
 
 ```bash
@@ -63,21 +63,21 @@ output, or pass a single test name to run only that one:
 Alternatively, compile directly with g++ (O3, C++20, include the implementation source file):
 
 ```bash
-g++.exe -O3 -std=c++20 main.cpp gsa.cpp -o main.exe
+g++.exe -O3 -std=c++20 -Iinclude -Ithird_party examples/main.cpp src/gsa.cpp -o main.exe
 ```
 
 ## Usage
 
-This repository exposes a small C++ API in `gsa.hpp` / `gsa.cpp`.
+This repository exposes a small C++ API in `include/gsa/gsa.hpp` / `src/gsa.cpp`.
 The primary entry point is the class `GravitationalSearchAlgorithm`.
 
-Build then run the provided `main.cpp`, or use the class directly in your code. See
-`test/` below for the invariant/determinism test harness.
+Build then run the provided `examples/main.cpp`, or use the class directly in your code. See
+`tests/` below for the invariant/determinism test harness.
 
 Example: simple usage with scalar (equal) bounds
 
 ```cpp
-#include "gsa.hpp"
+#include "gsa/gsa.hpp"
 
 double sphere(std::span<const double> x) {
 	double s = 0.0; for (double v : x) s += v*v; return s;
@@ -143,25 +143,25 @@ search more conservative, decrease `g0` or increase `alpha`.
 
 ## Tests
 
-`test/` holds a small self-contained framework (`test_framework.hpp` registers and runs
+`tests/` holds a small self-contained framework (`test_framework.hpp` registers and runs
 named tests; `test_common.hpp` shares objectives and invariant helpers). The individual
-tests live in `test/tasks/`, one `*.cpp` per test, and CMake registers each as its own
+tests live in `tests/tasks/`, one `*.cpp` per test, and CMake registers each as its own
 CTest entry:
 
-- `test/tasks/test_history.cpp` — history size `== max_iter + 1`, monotonic `best_so_far`,
+- `tests/tasks/test_history.cpp` — history size `== max_iter + 1`, monotonic `best_so_far`,
   mean/median within `[best_iter, worst_iter]`, finite non-negative `stddev` (both modes).
-- `test/tasks/test_stats.cpp` — history stats finite and in-range across objectives.
-- `test/tasks/test_determinism.cpp` — same-seed bit-identical results on sphere/rosenbrock/Shekel.
-- `test/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
-- `test/tasks/test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are
+- `tests/tasks/test_stats.cpp` — history stats finite and in-range across objectives.
+- `tests/tasks/test_determinism.cpp` — same-seed bit-identical results on sphere/rosenbrock/Shekel.
+- `tests/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
+- `tests/tasks/test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are
   bit-identical (verifies `Optimize()` is `const`/thread-safe).
 
 Build manually with:
 
 ```bash
-g++.exe -O3 -std=c++20 test/test_main.cpp test/tasks/test_history.cpp test/tasks/test_stats.cpp \
-    test/tasks/test_determinism.cpp test/tasks/test_modes.cpp test/tasks/test_thread_safety.cpp \
-    gsa.cpp -o gsa_test.exe
+g++.exe -O3 -std=c++20 -Iinclude -Ithird_party tests/test_main.cpp tests/tasks/test_history.cpp \
+    tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp tests/tasks/test_modes.cpp \
+    tests/tasks/test_thread_safety.cpp src/gsa.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset default`):
