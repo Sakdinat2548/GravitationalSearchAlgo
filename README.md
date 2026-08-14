@@ -22,13 +22,14 @@ This generates the Ninja build files under `build/`.
 cmake --build --preset default
 ```
 
-Produces `build/main.exe` (API demo) and `build/gsa_test.exe` (invariant/determinism test harness).
+Produces `build/examples/main.exe` (API demo) and `build/tests/gsa_test.exe`
+(invariant/determinism test harness).
 
 ### Run
 
 ```bash
-./build/main.exe          # 4-example API demo (prints best_val + position)
-./build/gsa_test.exe      # GSA invariants + same-seed determinism checks
+./build/examples/main.exe      # 4-example API demo (prints best_val + position)
+./build/tests/gsa_test.exe     # GSA invariants + same-seed determinism checks
 ```
 
 ### Quick syntax check (warning-free sources)
@@ -54,8 +55,8 @@ Runs 5 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
 output, or pass a single test name to run only that one:
 
 ```bash
-./build/gsa_test.exe
-./build/gsa_test.exe determinism
+./build/tests/gsa_test.exe
+./build/tests/gsa_test.exe determinism
 ```
 
 ### Manual build (no CMake)

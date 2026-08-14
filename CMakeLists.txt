@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(gsa VERSION 0.1.0 LANGUAGES CXX)
+project(gsa CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,15 +14,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Options
 option(GSA_BUILD_EXAMPLES "Build the API demo (examples/main.cpp)" ON)
 option(GSA_BUILD_TESTS "Build and register the CTest suite" ON)
-option(GSA_BUILD_INSTALL "Generate install/export rules (find_package)" ON)
 
 add_library(gsa STATIC src/gsa.cpp)
 add_library(gsa::gsa ALIAS gsa)
 target_include_directories(
     gsa PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party>
-    $<INSTALL_INTERFACE:include>)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party>)
 target_compile_options(gsa PRIVATE -Wall -Wextra)
 
 # Fast warning-free syntax check of all sources.
@@ -63,31 +61,4 @@ endif()
 if(GSA_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
-endif()
-
-if(GSA_BUILD_INSTALL)
-  include(GNUInstallDirs)
-  include(CMakePackageConfigHelpers)
-
-  install(TARGETS gsa EXPORT gsaTargets
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-  install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-  install(FILES third_party/XoshiroCpp.hpp
-      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-  install(EXPORT gsaTargets
-      NAMESPACE gsa::
-      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gsa)
-
-  configure_package_config_file(
-      ${CMAKE_CURRENT_SOURCE_DIR}/cmake/gsaConfig.cmake.in
-      ${CMAKE_CURRENT_BINARY_DIR}/gsaConfig.cmake
-      INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gsa)
-  write_basic_package_version_file(
-      ${CMAKE_CURRENT_BINARY_DIR}/gsaConfigVersion.cmake
-      VERSION ${PROJECT_VERSION}
-      COMPATIBILITY SameMajorVersion)
-  install(FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/gsaConfig.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/gsaConfigVersion.cmake
-      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gsa)
 endif()
