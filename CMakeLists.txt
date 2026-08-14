@@ -24,22 +24,20 @@ target_include_directories(
 target_compile_options(gsa PRIVATE -Wall -Wextra)
 
 # Fast warning-free syntax check of all sources.
-set(GSA_SOURCES src/gsa.cpp examples/main.cpp
-    tests/test_main.cpp tests/tasks/test_history.cpp tests/tasks/test_stats.cpp
-    tests/tasks/test_determinism.cpp tests/tasks/test_modes.cpp
-    tests/tasks/test_thread_safety.cpp)
+set(GSA_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/gsa.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_history.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_determinism.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_modes.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp)
 add_custom_target(check-gsa
     COMMAND ${CMAKE_CXX_COMPILER} -Wall -Wextra -Werror -std=c++20 -fsyntax-only
             -I${CMAKE_CURRENT_SOURCE_DIR}/include
             -I${CMAKE_CURRENT_SOURCE_DIR}/third_party
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/gsa.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_main.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_history.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_determinism.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_modes.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp
+            ${GSA_SOURCES}
     DEPENDS ${GSA_SOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
