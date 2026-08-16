@@ -19,15 +19,15 @@ static inline double RandUni(RandomEngine& gen, double min,
   return min + (((gen() >> 11) * scale) * (max - min));
 }
 
-constexpr size_t GravitationalSearchAlgorithm::Idx(size_t agent,
-                                                   size_t dim) const noexcept {
-  return (agent * dimensions_) + dim;
+constexpr size_t GravitationalSearchAlgorithm::AgentOffset(
+    size_t agent) const noexcept {
+  return agent * dimensions_;
 }
 
 void GravitationalSearchAlgorithm::InitializePositions(
     IterationState& s, RandomEngine& gen) const {
   for (auto i : iota(0ULL, config_.n_agents)) {
-    const size_t offset{Idx(i, 0)};
+    const size_t offset{AgentOffset(i)};
     for (auto d : iota(0ULL, dimensions_)) {
       s.position[offset + d] = RandUni(gen, min_bounds_[d], max_bounds_[d]);
     }
@@ -38,7 +38,7 @@ void GravitationalSearchAlgorithm::EvaluateFitness(
     IterationState& s, double& global_best_val,
     std::vector<double>& global_best_pos) const {
   for (auto i : iota(0ULL, config_.n_agents)) {
-    const size_t offset{Idx(i, 0)};
+    const size_t offset{AgentOffset(i)};
     const double fitness_value{
         objective_fn_({&s.position[offset], dimensions_})};
     s.fitness[i] = fitness_value;
@@ -108,7 +108,7 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
   }
 
   for (auto i : iota(0ULL, config_.n_agents)) {
-    const size_t i_offset{Idx(i, 0)};
+    const size_t i_offset{AgentOffset(i)};
     const double* x_i{s.position.data() + i_offset};
     const double m_i{s.mass[i]};
 
@@ -118,7 +118,7 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
       const size_t j{s.sorted_indices[k]};
       if (i == j) continue;
 
-      const double* x_j{s.position.data() + Idx(j, 0)};
+      const double* x_j{s.position.data() + AgentOffset(j)};
 
       double r_squared{};
       for (auto d : iota(0ULL, dimensions_)) {
@@ -146,7 +146,7 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
 void GravitationalSearchAlgorithm::UpdateKinematics(IterationState& s,
                                                     RandomEngine& gen) const {
   for (auto i : iota(0ULL, config_.n_agents)) {
-    const size_t offset{Idx(i, 0)};
+    const size_t offset{AgentOffset(i)};
     for (auto d : iota(0ULL, dimensions_)) {
       const size_t index{offset + d};
       s.velocity[index] =

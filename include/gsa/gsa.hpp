@@ -70,8 +70,8 @@ class GravitationalSearchAlgorithm {
                              const std::vector<double>& upper,
                              const GsaConfig& cfg);
 
-  /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
-  [[nodiscard]] constexpr size_t Idx(size_t agent, size_t dim) const noexcept;
+  /** Base 1D offset of agent `agent`'s row (start of its position slice). */
+  [[nodiscard]] constexpr size_t AgentOffset(size_t agent) const noexcept;
 
   /** Initialize agent positions uniformly at random between bounds. */
   void InitializePositions(IterationState& s, RandomEngine& gen) const;
