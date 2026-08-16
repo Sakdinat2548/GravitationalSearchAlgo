@@ -7,7 +7,7 @@ using gsa_test::Optimize;
 using gsa_test::Sphere;
 
 TEST(modes) {
-  bool ok = true;
+  bool ok{true};
 
   const auto mn = Optimize(8, -5.0, 5.0, Sphere, Config(true));
   const auto mx = Optimize(8, -5.0, 5.0, Sphere, Config(false));

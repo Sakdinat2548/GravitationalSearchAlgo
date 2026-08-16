@@ -13,7 +13,7 @@ TEST(thread_safety) {
   const auto cfg = Config();
   GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, Sphere, cfg);
 
-  const int n_threads = 8;
+  constexpr int n_threads{8};
   std::vector<GsaResult> results(n_threads);
   std::vector<std::thread> threads;
   threads.reserve(n_threads);
@@ -23,7 +23,7 @@ TEST(thread_safety) {
   }
   for (auto& th : threads) th.join();
 
-  bool ok = true;
+  bool ok{true};
   const double best = results[0].best_val;
   for (const auto& r : results) {
     if (r.best_val != best) {

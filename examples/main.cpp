@@ -15,7 +15,7 @@ static double Sphere(std::span<const double> x) {
 static double Rosenbrock(std::span<const double> x) {
   double s{};
   for (auto i : std::views::iota(0ULL, x.size() - 1)) {
-    const double d = x[i + 1] - (x[i] * x[i]);
+    const double d{x[i + 1] - (x[i] * x[i])};
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }
   return s;
@@ -24,7 +24,7 @@ static double Rosenbrock(std::span<const double> x) {
 static void PrintResult(const GsaResult& res) {
   std::cout << "best_val = " << res.best_val << "\n  position:";
   for (double p : res.best_pos) std::cout << " " << p;
-  std::cout << "\n";
+  std::cout << "\n-----\n";
 }
 
 int main() {
