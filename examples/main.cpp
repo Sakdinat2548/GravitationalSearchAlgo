@@ -7,13 +7,13 @@
 #include "gsa/gsa.hpp"
 
 static double Sphere(std::span<const double> x) {
-  double s = 0.0;
+  double s{};
   for (double v : x) s += v * v;
   return s;
 }
 
 static double Rosenbrock(std::span<const double> x) {
-  double s = 0.0;
+  double s{};
   for (size_t i : std::views::iota(size_t{0}, x.size() - 1)) {
     const double d = x[i + 1] - (x[i] * x[i]);
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
@@ -51,7 +51,7 @@ int main() {
   GravitationalSearchAlgorithm gsa4(
       30, -500, 500,
       [](std::span<const double> x) {
-        double sum = 0.0;
+        double sum{};
         for (double val : x) sum += -val * std::sin(std::sqrt(std::abs(val)));
         return sum;
       },

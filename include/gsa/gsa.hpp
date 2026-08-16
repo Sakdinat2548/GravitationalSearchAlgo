@@ -15,7 +15,7 @@ struct GsaConfig {
   double g0 = 100.0;
   double alpha = 20.0;
   bool minimize = true;
-  uint64_t seed = 0;
+  uint64_t seed{};
 };
 
 /** Per-iteration snapshot of the agent population. */

@@ -23,7 +23,7 @@ struct Registrar {
   }
 };
 
-inline int failures = 0;
+inline int failures{};
 
 inline void Expect(bool cond, const char* msg) {
   if (!cond) {
@@ -33,8 +33,8 @@ inline void Expect(bool cond, const char* msg) {
 }
 
 inline bool Run(int argc, char** argv) {
-  int passed = 0;
-  int failed = 0;
+  int passed{};
+  int failed{};
   for (const auto& t : Registry()) {
     if (argc > 1 && std::string(argv[1]) != t.name) continue;
     failures = 0;

@@ -14,13 +14,13 @@
 namespace gsa_test {
 
 inline double Sphere(std::span<const double> x) {
-  double s = 0.0;
+  double s{};
   for (double v : x) s += v * v;
   return s;
 }
 
 inline double Rosenbrock(std::span<const double> x) {
-  double s = 0.0;
+  double s{};
   for (size_t i : std::views::iota(size_t{0}, x.size() - 1)) {
     const double d = x[i + 1] - (x[i] * x[i]);
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
@@ -36,7 +36,7 @@ inline double Shekel(std::span<const double> x) {
         0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
   double sum = 1.0 / 500.0;
   for (size_t j : std::views::iota(size_t{0}, size_t{25})) {
-    double inner = 0.0;
+    double inner{};
     for (size_t i : std::views::iota(size_t{0}, size_t{2})) {
       const double d = x[i] - kAij[i][j];
       inner += d * d * d * d * d * d;

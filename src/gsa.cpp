@@ -59,7 +59,7 @@ void GravitationalSearchAlgorithm::ComputeMasses(IterationState& s) const {
   const double fit_diff = std::max(max_fit - min_fit, kEpsilon);
   const double inv_fit_diff = 1.0 / fit_diff;
 
-  double sum_q = 0.0;
+  double sum_q{};
   for (int i : std::views::iota(0, config_.n_agents)) {
     s.mass[i] = std::max((config_.minimize ? (max_fit - s.fitness[i])
                                            : (s.fitness[i] - min_fit)) *
@@ -117,7 +117,7 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
 
       const double* x_j = s.position.data() + Idx(j, 0);
 
-      double r_squared = 0.0;
+      double r_squared{};
       for (size_t d : std::views::iota(size_t{0}, dimensions_)) {
         const double diff = x_i[d] - x_j[d];
         r_squared += diff * diff;
