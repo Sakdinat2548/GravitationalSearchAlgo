@@ -8,12 +8,12 @@
 #include <ranges>
 #include <stdexcept>
 
-static constexpr double kEpsilon = 1e-12;
+static constexpr double kEpsilon{1e-12};
 
 // Fast uniform random generator using top 53 bits
 static inline double RandUni(RandomEngine& gen, double min,
                              double max) noexcept {
-  const double scale = 0x1.0p-53;  // 2^-53
+  const double scale{0x1.0p-53};  // 2^-53
   return min + ((static_cast<double>(gen() >> 11) * scale) * (max - min));
 }
 
