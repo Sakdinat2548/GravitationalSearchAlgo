@@ -10,11 +10,11 @@
 #include "XoshiroCpp.hpp"
 
 struct GsaConfig {
-  int n_agents = 40;
-  int max_iter = 500;
-  double g0 = 100.0;
-  double alpha = 20.0;
-  bool minimize = true;
+  int n_agents{40};
+  int max_iter{500};
+  double g0{100.0};
+  double alpha{20.0};
+  bool minimize{true};
   uint64_t seed{};
 };
 

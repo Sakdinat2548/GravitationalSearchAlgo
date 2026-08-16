@@ -35,9 +35,9 @@ inline double Shekel(std::span<const double> x) {
        {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
         0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
   double sum = 1.0 / 500.0;
-  for (auto j : std::views::iota(0u, 25u)) {
+  for (auto j : std::views::iota(0U, 25U)) {
     double inner{};
-    for (auto i : std::views::iota(0u, 2u)) {
+    for (auto i : std::views::iota(0U, 2U)) {
       const double d = x[i] - kAij[i][j];
       inner += d * d * d * d * d * d;
     }
