@@ -1,4 +1,4 @@
-#include "gsa.hpp"
+#include "gsa/gsa.hpp"
 
 #include <algorithm>
 #include <cmath>

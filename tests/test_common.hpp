@@ -7,7 +7,7 @@
 #include <span>
 #include <string>
 
-#include "../gsa.hpp"
+#include "gsa/gsa.hpp"
 #include "test_framework.hpp"
 
 namespace gsa_test {

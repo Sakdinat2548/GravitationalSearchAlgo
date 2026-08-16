@@ -3,7 +3,7 @@
 #include <span>
 #include <vector>
 
-#include "gsa.hpp"
+#include "gsa/gsa.hpp"
 
 static double Sphere(std::span<const double> x) {
   double s = 0.0;
