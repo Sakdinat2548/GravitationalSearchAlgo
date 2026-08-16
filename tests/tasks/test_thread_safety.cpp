@@ -1,3 +1,4 @@
+#include <ranges>
 #include <thread>
 #include <vector>
 
@@ -17,7 +18,7 @@ TEST(thread_safety) {
   std::vector<std::thread> threads;
   threads.reserve(n_threads);
 
-  for (int t = 0; t < n_threads; ++t) {
+  for (int t : std::views::iota(0, n_threads)) {
     threads.emplace_back([&gsa, &results, t] { results[t] = gsa.Optimize(); });
   }
   for (auto& th : threads) th.join();

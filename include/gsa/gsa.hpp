@@ -43,11 +43,11 @@ class GravitationalSearchAlgorithm {
   GravitationalSearchAlgorithm(std::vector<double> lower,
                                std::vector<double> upper,
                                ObjectiveFunction func,
-                               GsaConfig cfg = GsaConfig{});
+                               GsaConfig cfg = {});
 
   GravitationalSearchAlgorithm(int dims, double lower, double upper,
                                ObjectiveFunction func,
-                               GsaConfig cfg = GsaConfig{});
+                               GsaConfig cfg = {});
 
   [[nodiscard]] GsaResult Optimize() const;
 

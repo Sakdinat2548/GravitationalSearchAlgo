@@ -4,6 +4,7 @@
 #include <array>
 #include <cmath>
 #include <limits>
+#include <ranges>
 #include <span>
 #include <string>
 
@@ -20,7 +21,7 @@ inline double Sphere(std::span<const double> x) {
 
 inline double Rosenbrock(std::span<const double> x) {
   double s = 0.0;
-  for (size_t i = 0; i + 1 < x.size(); ++i) {
+  for (size_t i : std::views::iota(size_t{0}, x.size() - 1)) {
     const double d = x[i + 1] - (x[i] * x[i]);
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }
@@ -34,9 +35,9 @@ inline double Shekel(std::span<const double> x) {
        {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
         0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
   double sum = 1.0 / 500.0;
-  for (size_t j = 0; j < 25; ++j) {
+  for (size_t j : std::views::iota(size_t{0}, size_t{25})) {
     double inner = 0.0;
-    for (size_t i = 0; i < 2; ++i) {
+    for (size_t i : std::views::iota(size_t{0}, size_t{2})) {
       const double d = x[i] - kAij[i][j];
       inner += d * d * d * d * d * d;
     }
