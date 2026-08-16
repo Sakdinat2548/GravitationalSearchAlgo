@@ -7,6 +7,7 @@
 #include <ranges>
 #include <span>
 #include <string>
+#include <string_view>
 
 #include "gsa/gsa.hpp"
 #include "test_framework.hpp"
@@ -64,11 +65,11 @@ inline GsaResult Optimize(int dims, double lo, double hi,
 
 /** Assert per-iteration invariants; returns true if all pass. */
 inline bool CheckHistory(const GsaResult& res, const GsaConfig& cfg,
-                         const char* name) {
+                         std::string_view name) {
   bool ok{true};
-  const auto report = [&](bool cond, const char* what) {
+  const auto report = [&](bool cond, std::string_view what) {
     ok = ok && cond;
-    if (!cond) Expect(false, (std::string(name) + ": " + what).c_str());
+    if (!cond) Expect(false, std::string(name).append(": ").append(what));
   };
 
   report(res.history.size() == cfg.max_iter + 1,

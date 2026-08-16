@@ -88,8 +88,9 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
   const bool is_small_problem{config_.n_agents <= 10};
   const double k_best_fraction =
       config_.n_agents - (progress * (config_.n_agents - 1));
-  const size_t k_best_raw{is_small_problem ? config_.n_agents
-                                           : static_cast<size_t>(k_best_fraction)};
+  const size_t k_best_raw{is_small_problem
+                              ? config_.n_agents
+                              : static_cast<size_t>(k_best_fraction)};
   size_t k_best_count{std::clamp(k_best_raw, size_t{1}, config_.n_agents)};
 
   // Sort/partition agent indices based on fitness (best first)
@@ -126,8 +127,8 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
       }
 
       const double distance{std::sqrt(r_squared)};
-      const double force_mag{
-          gravitational_const * (m_i * s.mass[j]) / (distance + kEpsilon)};
+      const double force_mag{gravitational_const * (m_i * s.mass[j]) /
+                             (distance + kEpsilon)};
 
       for (auto d : iota(0ULL, dimensions_)) {
         s.total_force[d] +=

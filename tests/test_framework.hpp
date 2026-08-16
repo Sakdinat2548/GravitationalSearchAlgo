@@ -2,13 +2,13 @@
 #define GSA_TEST_FRAMEWORK_HPP
 
 #include <iostream>
-#include <string>
+#include <string_view>
 #include <vector>
 
 namespace gsa_test {
 
 struct Test {
-  const char* name;
+  std::string_view name;
   bool (*fn)();
 };
 
@@ -18,14 +18,14 @@ inline std::vector<Test>& Registry() {
 }
 
 struct Registrar {
-  Registrar(const char* name, bool (*fn)()) {
+  Registrar(std::string_view name, bool (*fn)()) {
     Registry().push_back({.name = name, .fn = fn});
   }
 };
 
 inline int failures{};
 
-inline void Expect(bool cond, const char* msg) {
+inline void Expect(bool cond, std::string_view msg) {
   if (!cond) {
     ++failures;
     std::cout << "  FAIL: " << msg << "\n";
@@ -36,7 +36,7 @@ inline bool Run(int argc, char** argv) {
   int passed{};
   int failed{};
   for (const auto& t : Registry()) {
-    if (argc > 1 && std::string(argv[1]) != t.name) continue;
+    if (argc > 1 && std::string_view(argv[1]) != t.name) continue;
     failures = 0;
     const bool ok = t.fn();
     std::cout << (ok ? "[PASS] " : "[FAIL] ") << t.name << "\n";
