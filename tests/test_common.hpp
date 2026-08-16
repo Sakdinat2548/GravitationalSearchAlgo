@@ -46,7 +46,7 @@ inline double Shekel(std::span<const double> x) {
   return 1.0 / sum;
 }
 
-inline GsaConfig Config(bool minimize = true, int n_agents = 50) {
+inline GsaConfig Config(bool minimize = true, size_t n_agents = 50) {
   return {.n_agents = n_agents,
           .max_iter = 500,
           .g0 = 100.0,
@@ -71,7 +71,7 @@ inline bool CheckHistory(const GsaResult& res, const GsaConfig& cfg,
     if (!cond) Expect(false, (std::string(name) + ": " + what).c_str());
   };
 
-  report(res.history.size() == static_cast<size_t>(cfg.max_iter) + 1,
+  report(res.history.size() == cfg.max_iter + 1,
          "history size == max_iter + 1");
 
   double prev_best{cfg.minimize ? std::numeric_limits<double>::max()

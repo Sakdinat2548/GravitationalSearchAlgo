@@ -10,8 +10,8 @@
 #include "XoshiroCpp.hpp"
 
 struct GsaConfig {
-  int n_agents{40};
-  int max_iter{500};
+  size_t n_agents{40};
+  size_t max_iter{500};
   double g0{100.0};
   double alpha{20.0};
   bool minimize{true};
@@ -88,7 +88,7 @@ class GravitationalSearchAlgorithm {
    * Kbest decreases linearly from N to 1 over iterations; `G` is the
    * gravitational constant for the current iteration.
    */
-  void ComputeAccelerations(IterationState& s, int current_iter,
+  void ComputeAccelerations(IterationState& s, size_t current_iter,
                             RandomEngine& gen) const;
 
   /** Update velocities, move agents, and clamp positions to bounds. */
