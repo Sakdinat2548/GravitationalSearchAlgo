@@ -26,7 +26,7 @@ void GravitationalSearchAlgorithm::InitializePositions(
     IterationState& s, RandomEngine& gen) const {
   for (auto i : std::views::iota(0, config_.n_agents)) {
     const size_t offset = Idx(i, 0);
-    for (auto d : std::views::iota(size_t{}, dimensions_)) {
+    for (auto d : std::views::iota(0ULL, dimensions_)) {
       s.position[offset + d] = RandUni(gen, min_bounds_[d], max_bounds_[d]);
     }
   }
@@ -118,7 +118,7 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
       const double* x_j = s.position.data() + Idx(j, 0);
 
       double r_squared{};
-      for (auto d : std::views::iota(size_t{}, dimensions_)) {
+      for (auto d : std::views::iota(0ULL, dimensions_)) {
         const double diff = x_i[d] - x_j[d];
         r_squared += diff * diff;
       }
@@ -127,14 +127,14 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
       const double force_mag =
           gravitational_const * (m_i * s.mass[j]) / (distance + kEpsilon);
 
-      for (auto d : std::views::iota(size_t{}, dimensions_)) {
+      for (auto d : std::views::iota(0ULL, dimensions_)) {
         s.total_force[d] +=
             RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
       }
     }
 
     const double inv_mass = 1.0 / (m_i + kEpsilon);
-    for (auto d : std::views::iota(size_t{}, dimensions_)) {
+    for (auto d : std::views::iota(0ULL, dimensions_)) {
       s.acceleration[i_offset + d] = s.total_force[d] * inv_mass;
     }
   }
@@ -144,7 +144,7 @@ void GravitationalSearchAlgorithm::UpdateKinematics(IterationState& s,
                                                     RandomEngine& gen) const {
   for (auto i : std::views::iota(0, config_.n_agents)) {
     const size_t offset = Idx(i, 0);
-    for (auto d : std::views::iota(size_t{}, dimensions_)) {
+    for (auto d : std::views::iota(0ULL, dimensions_)) {
       const size_t index = offset + d;
       s.velocity[index] =
           (RandUni(gen, 0.0, 1.0) * s.velocity[index]) + s.acceleration[index];
@@ -167,7 +167,7 @@ void GravitationalSearchAlgorithm::ValidateInputs(
   if (cfg.n_agents <= 0 || cfg.max_iter <= 0) {
     throw std::invalid_argument("n_agents and max_iter must be positive");
   }
-  for (auto i : std::views::iota(size_t{}, lower.size())) {
+  for (auto i : std::views::iota(0ULL, lower.size())) {
     if (lower[i] > upper[i]) {
       throw std::invalid_argument(
           "Each lower bound must be <= its upper bound");

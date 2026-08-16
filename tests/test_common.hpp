@@ -21,7 +21,7 @@ inline double Sphere(std::span<const double> x) {
 
 inline double Rosenbrock(std::span<const double> x) {
   double s{};
-  for (auto i : std::views::iota(size_t{}, x.size() - 1)) {
+  for (auto i : std::views::iota(0ULL, x.size() - 1)) {
     const double d = x[i + 1] - (x[i] * x[i]);
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }
