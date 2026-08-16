@@ -57,7 +57,7 @@ class GravitationalSearchAlgorithm {
   struct IterationState {
     std::vector<double> position, velocity, acceleration, fitness, mass,
         total_force;
-    std::vector<int> sorted_indices;
+    std::vector<size_t> sorted_indices;
   };
 
   GsaConfig config_{};
