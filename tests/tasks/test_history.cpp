@@ -7,7 +7,7 @@ using gsa_test::Optimize;
 using gsa_test::Sphere;
 
 TEST(history_size) {
-  bool ok = true;
+  bool ok{true};
 
   for (bool minimize : {true, false}) {
     const auto cfg = Config(minimize);

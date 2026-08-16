@@ -13,14 +13,14 @@ static bool Deterministic(int dims, double lo, double hi,
   GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
   const auto a = gsa.Optimize();
   const auto b = gsa.Optimize();
-  const bool ok =
-      a.best_val == b.best_val && a.history.size() == b.history.size();
+  const bool ok{
+      a.best_val == b.best_val && a.history.size() == b.history.size()};
   if (!ok) Expect(false, "same seed must give identical result");
   return ok;
 }
 
 TEST(determinism) {
-  bool ok = true;
+  bool ok{true};
 
   const auto cfg = Config();
   ok = Deterministic(8, -5.0, 5.0, Sphere, cfg) && ok;

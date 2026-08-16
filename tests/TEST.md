@@ -93,7 +93,7 @@ the test. Nothing else needs to know the test exists.
 ### 5. `expect()` — the assertion
 
 ```cpp
-inline int failures = 0;   // shared counter, also `inline` so it's one global
+inline int failures{};   // shared counter, also `inline` so it's one global
 
 inline void expect(bool cond, const char* msg) {
     if (!cond) { ++failures; std::cout << "  FAIL: " << msg << "\n"; }
@@ -106,7 +106,7 @@ Unlike `assert`, this is **not disabled** in Release (`-DNDEBUG`) — so it alwa
 
 ```cpp
 inline bool run(int argc, char** argv) {
-    int passed = 0, failed = 0;
+    int passed{}, failed{};
     for (const auto& t : registry()) {           // iterate every registered test
         if (argc > 1 && std::string(argv[1]) != t.name) continue;  // optional filter
         failures = 0;                             // reset per test

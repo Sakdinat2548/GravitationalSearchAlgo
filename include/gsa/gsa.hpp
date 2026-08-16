@@ -10,12 +10,12 @@
 #include "XoshiroCpp.hpp"
 
 struct GsaConfig {
-  int n_agents = 40;
-  int max_iter = 500;
-  double g0 = 100.0;
-  double alpha = 20.0;
-  bool minimize = true;
-  uint64_t seed = 0;
+  size_t n_agents{40};
+  size_t max_iter{500};
+  double g0{100.0};
+  double alpha{20.0};
+  bool minimize{true};
+  uint64_t seed{};
 };
 
 /** Per-iteration snapshot of the agent population. */
@@ -43,11 +43,11 @@ class GravitationalSearchAlgorithm {
   GravitationalSearchAlgorithm(std::vector<double> lower,
                                std::vector<double> upper,
                                ObjectiveFunction func,
-                               GsaConfig cfg = GsaConfig{});
+                               GsaConfig cfg = {});
 
   GravitationalSearchAlgorithm(int dims, double lower, double upper,
                                ObjectiveFunction func,
-                               GsaConfig cfg = GsaConfig{});
+                               GsaConfig cfg = {});
 
   [[nodiscard]] GsaResult Optimize() const;
 
@@ -57,11 +57,11 @@ class GravitationalSearchAlgorithm {
   struct IterationState {
     std::vector<double> position, velocity, acceleration, fitness, mass,
         total_force;
-    std::vector<int> sorted_indices;
+    std::vector<size_t> sorted_indices;
   };
 
   GsaConfig config_{};
-  size_t dimensions_{0};
+  size_t dimensions_{};
   std::vector<double> min_bounds_;
   std::vector<double> max_bounds_;
   ObjectiveFunction objective_fn_;
@@ -70,8 +70,8 @@ class GravitationalSearchAlgorithm {
                              const std::vector<double>& upper,
                              const GsaConfig& cfg);
 
-  /** Compute the 1D storage index for agent `agent` and dimension `dim`. */
-  [[nodiscard]] constexpr size_t Idx(size_t agent, size_t dim) const noexcept;
+  /** Base 1D offset of agent `agent`'s row (start of its position slice). */
+  [[nodiscard]] constexpr size_t AgentOffset(size_t agent) const noexcept;
 
   /** Initialize agent positions uniformly at random between bounds. */
   void InitializePositions(IterationState& s, RandomEngine& gen) const;
@@ -88,7 +88,7 @@ class GravitationalSearchAlgorithm {
    * Kbest decreases linearly from N to 1 over iterations; `G` is the
    * gravitational constant for the current iteration.
    */
-  void ComputeAccelerations(IterationState& s, int current_iter,
+  void ComputeAccelerations(IterationState& s, size_t current_iter,
                             RandomEngine& gen) const;
 
   /** Update velocities, move agents, and clamp positions to bounds. */

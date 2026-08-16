@@ -4,8 +4,10 @@
 #include <array>
 #include <cmath>
 #include <limits>
+#include <ranges>
 #include <span>
 #include <string>
+#include <string_view>
 
 #include "gsa/gsa.hpp"
 #include "test_framework.hpp"
@@ -13,15 +15,15 @@
 namespace gsa_test {
 
 inline double Sphere(std::span<const double> x) {
-  double s = 0.0;
+  double s{};
   for (double v : x) s += v * v;
   return s;
 }
 
 inline double Rosenbrock(std::span<const double> x) {
-  double s = 0.0;
-  for (size_t i = 0; i + 1 < x.size(); ++i) {
-    const double d = x[i + 1] - (x[i] * x[i]);
+  double s{};
+  for (auto i : std::views::iota(0ULL, x.size() - 1)) {
+    const double d{x[i + 1] - (x[i] * x[i])};
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }
   return s;
@@ -33,11 +35,11 @@ inline double Shekel(std::span<const double> x) {
         16,  32,  -32, -16, 0,  16,  32,  -32, -16, 0,  16,  32},
        {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
         0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
-  double sum = 1.0 / 500.0;
-  for (size_t j = 0; j < 25; ++j) {
-    double inner = 0.0;
-    for (size_t i = 0; i < 2; ++i) {
-      const double d = x[i] - kAij[i][j];
+  double sum{1.0 / 500.0};
+  for (auto j : std::views::iota(0U, 25U)) {
+    double inner{};
+    for (auto i : std::views::iota(0U, 2U)) {
+      const double d{x[i] - kAij[i][j]};
       inner += d * d * d * d * d * d;
     }
     sum += 1.0 / (j + 1.0 + inner);
@@ -45,7 +47,7 @@ inline double Shekel(std::span<const double> x) {
   return 1.0 / sum;
 }
 
-inline GsaConfig Config(bool minimize = true, int n_agents = 50) {
+inline GsaConfig Config(bool minimize = true, size_t n_agents = 50) {
   return {.n_agents = n_agents,
           .max_iter = 500,
           .g0 = 100.0,
@@ -63,26 +65,26 @@ inline GsaResult Optimize(int dims, double lo, double hi,
 
 /** Assert per-iteration invariants; returns true if all pass. */
 inline bool CheckHistory(const GsaResult& res, const GsaConfig& cfg,
-                         const char* name) {
-  bool ok = true;
-  const auto report = [&](bool cond, const char* what) {
+                         std::string_view name) {
+  bool ok{true};
+  const auto report = [&](bool cond, std::string_view what) {
     ok = ok && cond;
-    if (!cond) Expect(false, (std::string(name) + ": " + what).c_str());
+    if (!cond) Expect(false, std::string(name).append(": ").append(what));
   };
 
-  report(res.history.size() == static_cast<size_t>(cfg.max_iter) + 1,
+  report(res.history.size() == cfg.max_iter + 1,
          "history size == max_iter + 1");
 
-  double prev_best = cfg.minimize ? std::numeric_limits<double>::max()
-                                  : std::numeric_limits<double>::lowest();
+  double prev_best{cfg.minimize ? std::numeric_limits<double>::max()
+                                  : std::numeric_limits<double>::lowest()};
   for (const auto& it : res.history) {
     const bool monotonic = cfg.minimize ? it.best_so_far <= prev_best
                                         : it.best_so_far >= prev_best;
     report(monotonic, "best_so_far monotonic");
     prev_best = it.best_so_far;
 
-    const double lo = cfg.minimize ? it.best_iter : it.worst_iter;
-    const double hi = cfg.minimize ? it.worst_iter : it.best_iter;
+    const double lo{cfg.minimize ? it.best_iter : it.worst_iter};
+    const double hi{cfg.minimize ? it.worst_iter : it.best_iter};
     report(it.mean_fitness >= lo && it.mean_fitness <= hi,
            "mean in [best, worst]");
     report(it.median_fitness >= lo && it.median_fitness <= hi,
