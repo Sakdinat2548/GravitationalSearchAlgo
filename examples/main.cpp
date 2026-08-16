@@ -14,7 +14,7 @@ static double Sphere(std::span<const double> x) {
 
 static double Rosenbrock(std::span<const double> x) {
   double s{};
-  for (size_t i : std::views::iota(size_t{0}, x.size() - 1)) {
+  for (auto i : std::views::iota(size_t{}, x.size() - 1)) {
     const double d = x[i + 1] - (x[i] * x[i]);
     s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
   }

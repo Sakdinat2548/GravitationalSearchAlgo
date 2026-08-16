@@ -18,7 +18,7 @@ TEST(thread_safety) {
   std::vector<std::thread> threads;
   threads.reserve(n_threads);
 
-  for (int t : std::views::iota(0, n_threads)) {
+  for (auto t : std::views::iota(0, n_threads)) {
     threads.emplace_back([&gsa, &results, t] { results[t] = gsa.Optimize(); });
   }
   for (auto& th : threads) th.join();

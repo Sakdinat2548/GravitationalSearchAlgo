@@ -24,9 +24,9 @@ constexpr size_t GravitationalSearchAlgorithm::Idx(size_t agent,
 
 void GravitationalSearchAlgorithm::InitializePositions(
     IterationState& s, RandomEngine& gen) const {
-  for (int i : std::views::iota(0, config_.n_agents)) {
+  for (auto i : std::views::iota(0, config_.n_agents)) {
     const size_t offset = Idx(i, 0);
-    for (size_t d : std::views::iota(size_t{0}, dimensions_)) {
+    for (auto d : std::views::iota(size_t{}, dimensions_)) {
       s.position[offset + d] = RandUni(gen, min_bounds_[d], max_bounds_[d]);
     }
   }
@@ -35,7 +35,7 @@ void GravitationalSearchAlgorithm::InitializePositions(
 void GravitationalSearchAlgorithm::EvaluateFitness(
     IterationState& s, double& global_best_val,
     std::vector<double>& global_best_pos) const {
-  for (int i : std::views::iota(0, config_.n_agents)) {
+  for (auto i : std::views::iota(0, config_.n_agents)) {
     const size_t offset = Idx(i, 0);
     const double fitness_value =
         objective_fn_({&s.position[offset], dimensions_});
@@ -60,7 +60,7 @@ void GravitationalSearchAlgorithm::ComputeMasses(IterationState& s) const {
   const double inv_fit_diff = 1.0 / fit_diff;
 
   double sum_q{};
-  for (int i : std::views::iota(0, config_.n_agents)) {
+  for (auto i : std::views::iota(0, config_.n_agents)) {
     s.mass[i] = std::max((config_.minimize ? (max_fit - s.fitness[i])
                                            : (s.fitness[i] - min_fit)) *
                              inv_fit_diff,
@@ -70,7 +70,7 @@ void GravitationalSearchAlgorithm::ComputeMasses(IterationState& s) const {
   sum_q = std::max(sum_q, kEpsilon);
 
   const double inv_sum_q = 1.0 / sum_q;
-  for (int i : std::views::iota(0, config_.n_agents)) {
+  for (auto i : std::views::iota(0, config_.n_agents)) {
     s.mass[i] *= inv_sum_q;
   }
 }
@@ -104,21 +104,21 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
     std::ranges::sort(s.sorted_indices, comp);
   }
 
-  for (int i : std::views::iota(0, config_.n_agents)) {
+  for (auto i : std::views::iota(0, config_.n_agents)) {
     const size_t i_offset = Idx(i, 0);
     const double* x_i = s.position.data() + i_offset;
     const double m_i = s.mass[i];
 
     std::ranges::fill(s.total_force, 0.0);
 
-    for (int k : std::views::iota(0, k_best_count)) {
+    for (auto k : std::views::iota(0, k_best_count)) {
       const int j = s.sorted_indices[k];
       if (i == j) continue;
 
       const double* x_j = s.position.data() + Idx(j, 0);
 
       double r_squared{};
-      for (size_t d : std::views::iota(size_t{0}, dimensions_)) {
+      for (auto d : std::views::iota(size_t{}, dimensions_)) {
         const double diff = x_i[d] - x_j[d];
         r_squared += diff * diff;
       }
@@ -127,14 +127,14 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
       const double force_mag =
           gravitational_const * (m_i * s.mass[j]) / (distance + kEpsilon);
 
-      for (size_t d : std::views::iota(size_t{0}, dimensions_)) {
+      for (auto d : std::views::iota(size_t{}, dimensions_)) {
         s.total_force[d] +=
             RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
       }
     }
 
     const double inv_mass = 1.0 / (m_i + kEpsilon);
-    for (size_t d : std::views::iota(size_t{0}, dimensions_)) {
+    for (auto d : std::views::iota(size_t{}, dimensions_)) {
       s.acceleration[i_offset + d] = s.total_force[d] * inv_mass;
     }
   }
@@ -142,9 +142,9 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
 
 void GravitationalSearchAlgorithm::UpdateKinematics(IterationState& s,
                                                     RandomEngine& gen) const {
-  for (int i : std::views::iota(0, config_.n_agents)) {
+  for (auto i : std::views::iota(0, config_.n_agents)) {
     const size_t offset = Idx(i, 0);
-    for (size_t d : std::views::iota(size_t{0}, dimensions_)) {
+    for (auto d : std::views::iota(size_t{}, dimensions_)) {
       const size_t index = offset + d;
       s.velocity[index] =
           (RandUni(gen, 0.0, 1.0) * s.velocity[index]) + s.acceleration[index];
@@ -167,7 +167,7 @@ void GravitationalSearchAlgorithm::ValidateInputs(
   if (cfg.n_agents <= 0 || cfg.max_iter <= 0) {
     throw std::invalid_argument("n_agents and max_iter must be positive");
   }
-  for (size_t i : std::views::iota(size_t{0}, lower.size())) {
+  for (auto i : std::views::iota(size_t{}, lower.size())) {
     if (lower[i] > upper[i]) {
       throw std::invalid_argument(
           "Each lower bound must be <= its upper bound");
@@ -246,7 +246,7 @@ GsaResult GravitationalSearchAlgorithm::Optimize() const {
 
   InitializePositions(s, gen);
 
-  for (int k : std::views::iota(1, config_.max_iter + 1)) {
+  for (auto k : std::views::iota(1, config_.max_iter + 1)) {
     EvaluateFitness(s, global_best_val, global_best_pos);
     result.history.push_back(record_iteration());
     ComputeMasses(s);
