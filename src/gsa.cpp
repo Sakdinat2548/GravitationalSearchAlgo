@@ -16,7 +16,7 @@ static constexpr double kEpsilon{1e-12};
 static inline double RandUni(RandomEngine& gen, double min,
                              double max) noexcept {
   const double scale{0x1.0p-53};  // 2^-53
-  return min + ((static_cast<double>(gen() >> 11) * scale) * (max - min));
+  return min + (((gen() >> 11) * scale) * (max - min));
 }
 
 constexpr size_t GravitationalSearchAlgorithm::Idx(size_t agent,
@@ -63,10 +63,11 @@ void GravitationalSearchAlgorithm::ComputeMasses(IterationState& s) const {
 
   double sum_q{};
   for (auto i : iota(0ULL, config_.n_agents)) {
-    s.mass[i] = std::max((config_.minimize ? (max_fit - s.fitness[i])
-                                           : (s.fitness[i] - min_fit)) *
-                             inv_fit_diff,
-                         0.0);
+    s.mass[i] = (config_.minimize ? (max_fit - s.fitness[i])
+                                  : (s.fitness[i] - min_fit)) *
+                inv_fit_diff;
+    // Ensure mass is non-negative
+    s.mass[i] = std::max(s.mass[i], 0.0);
     sum_q += s.mass[i];
   }
   sum_q = std::max(sum_q, kEpsilon);
@@ -79,11 +80,10 @@ void GravitationalSearchAlgorithm::ComputeMasses(IterationState& s) const {
 
 void GravitationalSearchAlgorithm::ComputeAccelerations(
     IterationState& s, size_t current_iter, RandomEngine& gen) const {
-  const double inv_max_iter{1.0 / static_cast<double>(config_.max_iter)};
+  const double inv_max_iter{1.0 / config_.max_iter};
   const double gravitational_const{
-      config_.g0 * std::exp(-config_.alpha * inv_max_iter *
-                            static_cast<double>(current_iter))};
-  const double progress{static_cast<double>(current_iter) * inv_max_iter};
+      config_.g0 * std::exp(-config_.alpha * inv_max_iter * current_iter)};
+  const double progress{current_iter * inv_max_iter};
 
   const bool is_small_problem{config_.n_agents <= 10};
   size_t k_best_count{
@@ -100,12 +100,11 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
     return minimizing ? (f[a] < f[b]) : (f[a] > f[b]);
   };
 
-  if (!is_small_problem) {
+  if (is_small_problem) {
+    std::ranges::sort(s.sorted_indices, comp);
+  } else {
     std::ranges::nth_element(s.sorted_indices,
                              s.sorted_indices.begin() + k_best_count, comp);
-  } else {
-    // small problem: keep full ordering
-    std::ranges::sort(s.sorted_indices, comp);
   }
 
   for (auto i : iota(0ULL, config_.n_agents)) {
