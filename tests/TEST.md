@@ -148,6 +148,8 @@ add_test(NAME gsa_determinism     COMMAND gsa_test determinism)
 add_test(NAME gsa_modes           COMMAND gsa_test modes)
 add_test(NAME gsa_thread_safety   COMMAND gsa_test thread_safety)
 add_test(NAME gsa_median          COMMAND gsa_test median_correctness)
+add_test(NAME gsa_convergence     COMMAND gsa_test convergence)
+add_test(NAME gsa_validation      COMMAND gsa_test validation)
 ```
 
 CTest runs the binary once per test, each filtered to one test, and treats the exit code as

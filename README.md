@@ -50,8 +50,8 @@ cmake --build --preset default --target check-naming
 ctest --preset default
 ```
 
-Runs 6 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
-`gsa_thread_safety`, `gsa_median`); see `tests/` for the sources. Run the binary directly to see per-test
+Runs 8 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
+`gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`); see `tests/` for the sources. Run the binary directly to see per-test
 output, or pass a single test name to run only that one:
 
 ```bash
@@ -161,13 +161,18 @@ CTest entry:
   bit-identical (verifies `Optimize()` is `const`/thread-safe).
 - `tests/tasks/test_median.cpp` — direct unit test of `ComputeFitnessStats`: exact median
   `(n-1)/2` for even/odd populations in both modes, plus a scrambled even array.
+- `tests/tasks/test_convergence.cpp` — fixed-seed sphere run actually converges
+  (`best_val < 0.01`; uses `g0 = 10.0`, since the default `g0 = 100.0` stalls).
+- `tests/tasks/test_validation.cpp` — constructor rejects empty/mismatched bounds,
+  zero agents, zero iterations, and `lower > upper` with `std::invalid_argument`.
 
 Build manually with:
 
 ```bash
 g++.exe -O3 -std=c++20 -Iinclude -Ithird_party tests/test_main.cpp tests/tasks/test_history.cpp \
     tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp tests/tasks/test_modes.cpp \
-    tests/tasks/test_thread_safety.cpp tests/tasks/test_median.cpp -o gsa_test.exe
+    tests/tasks/test_thread_safety.cpp tests/tasks/test_median.cpp tests/tasks/test_convergence.cpp \
+    tests/tasks/test_validation.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset default`):
