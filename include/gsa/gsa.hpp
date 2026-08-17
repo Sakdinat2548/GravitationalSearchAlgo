@@ -45,7 +45,15 @@ struct GsaResult {
 
 using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
 
-constexpr auto kViota = std::views::iota;
+template <typename T>
+constexpr auto Range(T stop) {
+  return std::views::iota(T{}, stop);
+}
+
+template <typename T, typename U>
+constexpr auto Range(T start, U stop) {
+  return std::views::iota(start, stop);
+}
 
 constexpr double kEpsilon{1e-12};
 
@@ -96,7 +104,7 @@ class GravitationalSearchAlgorithm {
 
     InitializePositions(s, gen);
 
-    for (auto k : kViota(1ULL, config_.max_iter + 1)) {
+    for (auto k : Range(1ULL, config_.max_iter + 1)) {
       EvaluateFitness(s, global_best_val, global_best_pos);
       result.history.push_back(RecordIteration(s, global_best_val));
       ComputeMasses(s);
@@ -149,7 +157,7 @@ class GravitationalSearchAlgorithm {
     if (cfg.n_agents == 0 || cfg.max_iter == 0) {
       throw std::invalid_argument("n_agents and max_iter must be positive");
     }
-    for (auto i : kViota(0ULL, lower.size())) {
+    for (auto i : Range(lower.size())) {
       if (lower[i] > upper[i]) {
         throw std::invalid_argument(
             "Each lower bound must be <= its upper bound");
@@ -164,9 +172,9 @@ class GravitationalSearchAlgorithm {
 
   /** Initialize agent positions uniformly at random between bounds. */
   void InitializePositions(IterationState& s, RandomEngine& gen) const {
-    for (auto i : kViota(0ULL, config_.n_agents)) {
+    for (auto i : Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
-      for (auto d : kViota(0ULL, dimensions_)) {
+      for (auto d : Range(dimensions_)) {
         s.position[offset + d] = RandUni(gen, min_bounds_[d], max_bounds_[d]);
       }
     }
@@ -175,7 +183,7 @@ class GravitationalSearchAlgorithm {
   /** Evaluate objective for each agent and update the global best. */
   void EvaluateFitness(IterationState& s, double& global_best_val,
                        std::vector<double>& global_best_pos) const {
-    for (auto i : kViota(0ULL, config_.n_agents)) {
+    for (auto i : Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
       const double fitness_value{
           objective_fn_({&s.position[offset], dimensions_})};
@@ -202,7 +210,7 @@ class GravitationalSearchAlgorithm {
     const double inv_fit_diff{1.0 / fit_diff};
 
     double sum_q{};
-    for (auto i : kViota(0ULL, config_.n_agents)) {
+    for (auto i : Range(config_.n_agents)) {
       s.mass[i] = (config_.minimize ? (max_fit - s.fitness[i])
                                     : (s.fitness[i] - min_fit)) *
                   inv_fit_diff;
@@ -213,7 +221,7 @@ class GravitationalSearchAlgorithm {
     sum_q = std::max(sum_q, kEpsilon);
 
     const double inv_sum_q{1.0 / sum_q};
-    for (auto i : kViota(0ULL, config_.n_agents)) {
+    for (auto i : Range(config_.n_agents)) {
       s.mass[i] *= inv_sum_q;
     }
   }
@@ -252,7 +260,7 @@ class GravitationalSearchAlgorithm {
 
     const std::span<const double> positions{s.position};
 
-    for (auto i : kViota(0ULL, config_.n_agents)) {
+    for (auto i : Range(config_.n_agents)) {
       const size_t i_offset{AgentOffset(i)};
       const std::span<const double> x_i{
           positions.subspan(i_offset, dimensions_)};
@@ -260,7 +268,7 @@ class GravitationalSearchAlgorithm {
 
       std::ranges::fill(s.total_force, 0.0);
 
-      for (auto k : kViota(0ULL, k_best_count)) {
+      for (auto k : Range(k_best_count)) {
         const size_t j{s.sorted_indices[k]};
         if (i == j) continue;
 
@@ -268,7 +276,7 @@ class GravitationalSearchAlgorithm {
             positions.subspan(AgentOffset(j), dimensions_)};
 
         double r_squared{};
-        for (auto d : kViota(0ULL, dimensions_)) {
+        for (auto d : Range(dimensions_)) {
           const double diff{x_i[d] - x_j[d]};
           r_squared += diff * diff;
         }
@@ -277,14 +285,14 @@ class GravitationalSearchAlgorithm {
         const double force_mag{gravitational_const * (m_i * s.mass[j]) /
                                (distance + kEpsilon)};
 
-        for (auto d : kViota(0ULL, dimensions_)) {
+        for (auto d : Range(dimensions_)) {
           s.total_force[d] +=
               RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
         }
       }
 
       const double inv_mass{1.0 / (m_i + kEpsilon)};
-      for (auto d : kViota(0ULL, dimensions_)) {
+      for (auto d : Range(dimensions_)) {
         s.acceleration[i_offset + d] = s.total_force[d] * inv_mass;
       }
     }
@@ -292,9 +300,9 @@ class GravitationalSearchAlgorithm {
 
   /** Update velocities, move agents, and clamp positions to bounds. */
   void UpdateKinematics(IterationState& s, RandomEngine& gen) const {
-    for (auto i : kViota(0ULL, config_.n_agents)) {
+    for (auto i : Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
-      for (auto d : kViota(0ULL, dimensions_)) {
+      for (auto d : Range(dimensions_)) {
         const size_t index{offset + d};
         s.velocity[index] = (RandUni(gen, 0.0, 1.0) * s.velocity[index]) +
                             s.acceleration[index];
