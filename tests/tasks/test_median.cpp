@@ -1,8 +1,8 @@
-#include "../test_common.hpp"
+#include "gsa/stats.hpp"
 #include "../test_framework.hpp"
 
-#include <numeric>
 #include <vector>
+#include <ranges>
 
 TEST(median_correctness) {
   bool ok{true};
