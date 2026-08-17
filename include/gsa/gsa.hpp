@@ -220,8 +220,7 @@ class GravitationalSearchAlgorithm {
 
   /**
    * Compute accelerations using interactions from the K-best agents.
-   * Kbest decreases linearly from N to 1 over iterations; `G` is the
-   * gravitational constant for the current iteration.
+   * Kbest decreases linearly from N to 1 over iterations.
    */
   void ComputeAccelerations(IterationState& s, size_t current_iter,
                             RandomEngine& gen) const {

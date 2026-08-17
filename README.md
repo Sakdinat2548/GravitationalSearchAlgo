@@ -72,8 +72,8 @@ g++.exe -O3 -std=c++20 -Iinclude -Ithird_party src/demo.cpp -o demo.exe
 This repository exposes a header-only C++ library in `include/gsa/gsa.hpp`
 (`include/gsa/stats.hpp` for the fitness-statistics helpers).
 The primary entry point is the class `GravitationalSearchAlgorithm`, templated on
-the objective callable (any invocable of `std::span<const double>`; the class
-name deduces it, so no template arguments are needed at the call site).
+the objective callable (any invocable of `std::span<const double>` returning `double`;
+the class name deduces it, so no template arguments are needed at the call site).
 
 Build then run the provided `src/demo.cpp`, or use the class directly in your code. See
 `tests/` below for the invariant/determinism test harness.
