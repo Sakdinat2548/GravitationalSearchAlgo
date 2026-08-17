@@ -141,9 +141,11 @@ Default: `100.0`.
 - `minimize` (bool): set `true` to minimize objective, `false` to maximize. Default: `true`.
 - `seed` (uint64_t): RNG seed for reproducible runs; `0` (default) derives a seed from `std::random_device`.
 
-**Tip:** If the solver converges too quickly or gets stuck, try increasing `g0` or
-decreasing `alpha` to encourage more exploration early in the run; to make the
-search more conservative, decrease `g0` or increase `alpha`.
+**Tip:** `g0` is scale-dependent — tune it to your bounds. If the solver stalls
+early (all agents collapse onto the initial best), forces are too strong: try
+*decreasing* `g0` or *increasing* `alpha`. If it barely moves, forces are too
+weak: *increase* `g0` or *decrease* `alpha`. For a `[-5, 5]` domain `g0 = 10.0`
+converges cleanly, while the default `g0 = 100.0` overshoots and stalls.
 
 ## Tests
 
