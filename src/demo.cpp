@@ -29,7 +29,7 @@ static void PrintResult(const GsaResult& res) {
 
 int main() {
   // 1. Equal scalar bounds (3 dimensions, all [-5.0, 5.0]), default config.
-  GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, Sphere);
+  GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, Sphere, {.g0 = 10.0});
   std::cout << "Sphere, equal bounds:\n";
   PrintResult(gsa1.Optimize());
 

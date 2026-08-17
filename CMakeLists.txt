@@ -12,28 +12,29 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Options
-option(GSA_BUILD_EXAMPLES "Build the API demo (examples/main.cpp)" ON)
+option(GSA_BUILD_DEMO "Build the API demo (src/demo.cpp)" ON)
 option(GSA_BUILD_TESTS "Build and register the CTest suite" ON)
 
-add_library(gsa STATIC src/gsa.cpp)
+add_library(gsa INTERFACE)
 add_library(gsa::gsa ALIAS gsa)
 target_include_directories(
-    gsa PUBLIC
+    gsa INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party>)
-target_compile_options(gsa PRIVATE -Wall -Wextra)
+target_compile_options(gsa INTERFACE -Wall -Wextra)
 
 # Fast warning-free syntax check of all sources.
 set(GSA_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/gsa.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/demo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_history.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_determinism.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_modes.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_median.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_median.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_convergence.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_validation.cpp)
 add_custom_target(check-gsa
     COMMAND ${CMAKE_CXX_COMPILER} -Wall -Wextra -Werror -std=c++20 -fsyntax-only
             -I${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -46,15 +47,17 @@ add_custom_target(check-gsa
 find_program(GSA_CLANG_TIDY clang-tidy)
 if(GSA_CLANG_TIDY)
   add_custom_target(check-naming
-      COMMAND ${GSA_CLANG_TIDY} src/gsa.cpp
+      COMMAND ${GSA_CLANG_TIDY} include/gsa/gsa.hpp include/gsa/stats.hpp
               -p ${CMAKE_BINARY_DIR}
               --extra-arg=-Wno-unknown-pragmas
-      DEPENDS gsa ${GSA_SOURCES}
+      DEPENDS ${GSA_SOURCES}
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-if(GSA_BUILD_EXAMPLES)
-  add_subdirectory(examples)
+if(GSA_BUILD_DEMO)
+  add_executable(demo src/demo.cpp)
+  target_link_libraries(demo PRIVATE gsa::gsa)
+  target_compile_options(demo PRIVATE -Wall -Wextra)
 endif()
 
 if(GSA_BUILD_TESTS)

@@ -22,13 +22,13 @@ This generates the Ninja build files under `build/`.
 cmake --build --preset default
 ```
 
-Produces `build/examples/main.exe` (API demo) and `build/tests/gsa_test.exe`
+Produces `build/demo.exe` (API demo) and `build/tests/gsa_test.exe`
 (invariant/determinism test harness).
 
 ### Run
 
 ```bash
-./build/examples/main.exe      # 4-example API demo (prints best_val + position)
+./build/demo.exe             # 4-example API demo (prints best_val + position)
 ./build/tests/gsa_test.exe     # GSA invariants + same-seed determinism checks
 ```
 
@@ -50,8 +50,8 @@ cmake --build --preset default --target check-naming
 ctest --preset default
 ```
 
-Runs 5 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
-`gsa_thread_safety`); see `tests/` for the sources. Run the binary directly to see per-test
+Runs 8 CTest tests (`gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
+`gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`); see `tests/` for the sources. Run the binary directly to see per-test
 output, or pass a single test name to run only that one:
 
 ```bash
@@ -61,18 +61,21 @@ output, or pass a single test name to run only that one:
 
 ### Manual build (no CMake)
 
-Alternatively, compile directly with g++ (O3, C++20, include the implementation source file):
+Alternatively, compile directly with g++ (O3, C++20; the library is header-only):
 
 ```bash
-g++.exe -O3 -std=c++20 -Iinclude -Ithird_party examples/main.cpp src/gsa.cpp -o main.exe
+g++.exe -O3 -std=c++20 -Iinclude -Ithird_party src/demo.cpp -o demo.exe
 ```
 
 ## Usage
 
-This repository exposes a small C++ API in `include/gsa/gsa.hpp` / `src/gsa.cpp`.
-The primary entry point is the class `GravitationalSearchAlgorithm`.
+This repository exposes a header-only C++ library in `include/gsa/gsa.hpp`
+(`include/gsa/stats.hpp` for the fitness-statistics helpers).
+The primary entry point is the class `GravitationalSearchAlgorithm`, templated on
+the objective callable (any invocable of `std::span<const double>` returning `double`;
+the class name deduces it, so no template arguments are needed at the call site).
 
-Build then run the provided `examples/main.cpp`, or use the class directly in your code. See
+Build then run the provided `src/demo.cpp`, or use the class directly in your code. See
 `tests/` below for the invariant/determinism test harness.
 
 Example: simple usage with scalar (equal) bounds
@@ -138,9 +141,11 @@ Default: `100.0`.
 - `minimize` (bool): set `true` to minimize objective, `false` to maximize. Default: `true`.
 - `seed` (uint64_t): RNG seed for reproducible runs; `0` (default) derives a seed from `std::random_device`.
 
-**Tip:** If the solver converges too quickly or gets stuck, try increasing `g0` or
-decreasing `alpha` to encourage more exploration early in the run; to make the
-search more conservative, decrease `g0` or increase `alpha`.
+**Tip:** `g0` is scale-dependent — tune it to your bounds. If the solver stalls
+early (all agents collapse onto the initial best), forces are too strong: try
+*decreasing* `g0` or *increasing* `alpha`. If it barely moves, forces are too
+weak: *increase* `g0` or *decrease* `alpha`. For a `[-5, 5]` domain `g0 = 10.0`
+converges cleanly, while the default `g0 = 100.0` overshoots and stalls.
 
 ## Tests
 
@@ -156,15 +161,20 @@ CTest entry:
 - `tests/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
 - `tests/tasks/test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are
   bit-identical (verifies `Optimize()` is `const`/thread-safe).
-- `tests/tasks/test_median.cpp` — exact median via a counter-based objective (population
-  `0..n-1`, reference median `(n-1)/2`) for even/odd counts in both modes.
+- `tests/tasks/test_median.cpp` — direct unit test of `ComputeFitnessStats`: exact median
+  `(n-1)/2` for even/odd populations in both modes, plus a scrambled even array.
+- `tests/tasks/test_convergence.cpp` — fixed-seed sphere run actually converges
+  (`best_val < 0.01`; uses `g0 = 10.0`, since the default `g0 = 100.0` stalls).
+- `tests/tasks/test_validation.cpp` — constructor rejects empty/mismatched bounds,
+  zero agents, zero iterations, and `lower > upper` with `std::invalid_argument`.
 
 Build manually with:
 
 ```bash
 g++.exe -O3 -std=c++20 -Iinclude -Ithird_party tests/test_main.cpp tests/tasks/test_history.cpp \
     tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp tests/tasks/test_modes.cpp \
-    tests/tasks/test_thread_safety.cpp tests/tasks/test_median.cpp src/gsa.cpp -o gsa_test.exe
+    tests/tasks/test_thread_safety.cpp tests/tasks/test_median.cpp tests/tasks/test_convergence.cpp \
+    tests/tasks/test_validation.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset default`):
