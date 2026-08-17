@@ -105,7 +105,7 @@ Checks: >
 # Turn all the warnings from the checks above into errors.
 WarningsAsErrors: "*"
 
-HeaderFilterRegex: "(^|/)(include/gsa|tests)/?.*\\.h$"
+HeaderFilterRegex: "(^|/)(include/gsa|tests)/?.*\\.(h|hpp)$"
 ExcludeHeaderFilterRegex: ".*XoshiroCpp\\.hpp"
 
 CheckOptions:
