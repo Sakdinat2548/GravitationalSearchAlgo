@@ -32,7 +32,8 @@ set(GSA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_determinism.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_modes.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_median.cpp)
 add_custom_target(check-gsa
     COMMAND ${CMAKE_CXX_COMPILER} -Wall -Wextra -Werror -std=c++20 -fsyntax-only
             -I${CMAKE_CURRENT_SOURCE_DIR}/include

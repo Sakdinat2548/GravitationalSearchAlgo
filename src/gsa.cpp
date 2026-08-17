@@ -225,8 +225,16 @@ GsaResult GravitationalSearchAlgorithm::Optimize() const {
     auto comp = [&](size_t a, size_t b) {
       return config_.minimize ? f[a] < f[b] : f[a] > f[b];
     };
-    std::ranges::nth_element(s.sorted_indices, s.sorted_indices.begin() + n / 2,
+    const size_t mid{n / 2};
+    std::ranges::nth_element(s.sorted_indices, s.sorted_indices.begin() + mid,
                              comp);
+    const double hi{f[s.sorted_indices[mid]]};
+    double median{hi};
+    if (n % 2 == 0) {
+      std::ranges::nth_element(s.sorted_indices,
+                               s.sorted_indices.begin() + mid - 1, comp);
+      median = (f[s.sorted_indices[mid - 1]] + hi) / 2;
+    }
     double sm{};
     double sq{};
     for (double x : f) {
@@ -234,8 +242,6 @@ GsaResult GravitationalSearchAlgorithm::Optimize() const {
       sq += x * x;
     }
     const double m{sm / n};
-    const double median{
-        (f[s.sorted_indices[(n - 1) / 2]] + f[s.sorted_indices[n / 2]]) / 2};
     return {.best_so_far = global_best_val,
             .best_iter = config_.minimize ? *min_it : *max_it,
             .worst_iter = config_.minimize ? *max_it : *min_it,

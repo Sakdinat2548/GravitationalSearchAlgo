@@ -156,13 +156,15 @@ CTest entry:
 - `tests/tasks/test_modes.cpp` — `minimize` true/false and odd agent count (median).
 - `tests/tasks/test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are
   bit-identical (verifies `Optimize()` is `const`/thread-safe).
+- `tests/tasks/test_median.cpp` — exact median via a counter-based objective (population
+  `0..n-1`, reference median `(n-1)/2`) for even/odd counts in both modes.
 
 Build manually with:
 
 ```bash
 g++.exe -O3 -std=c++20 -Iinclude -Ithird_party tests/test_main.cpp tests/tasks/test_history.cpp \
     tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp tests/tasks/test_modes.cpp \
-    tests/tasks/test_thread_safety.cpp src/gsa.cpp -o gsa_test.exe
+    tests/tasks/test_thread_safety.cpp tests/tasks/test_median.cpp src/gsa.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset default`):
