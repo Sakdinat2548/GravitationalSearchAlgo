@@ -251,9 +251,7 @@ class GravitationalSearchAlgorithm {
       return BetterFit(s.fitness[a], s.fitness[b], config_.minimize);
     };
 
-    if (is_small_problem) {
-      std::ranges::sort(s.sorted_indices, comp);
-    } else if (k_best_count < config_.n_agents) {
+    if (k_best_count < config_.n_agents) {
       std::ranges::nth_element(s.sorted_indices,
                                s.sorted_indices.begin() + k_best_count, comp);
     }
