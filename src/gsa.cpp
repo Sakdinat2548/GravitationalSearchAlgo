@@ -24,6 +24,16 @@ constexpr size_t GravitationalSearchAlgorithm::AgentOffset(
   return agent * dimensions_;
 }
 
+GravitationalSearchAlgorithm::IterationState::IterationState(size_t n_agents,
+                                                             size_t dims)
+    : position(n_agents * dims),
+      velocity(n_agents * dims, 0.0),
+      acceleration(n_agents * dims, 0.0),
+      fitness(n_agents),
+      mass(n_agents),
+      total_force(dims),
+      sorted_indices(n_agents) {}
+
 void GravitationalSearchAlgorithm::InitializePositions(
     IterationState& s, RandomEngine& gen) const {
   for (auto i : kViota(0ULL, config_.n_agents)) {
@@ -95,9 +105,8 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
 
   // Sort/partition agent indices based on fitness (best first)
   std::iota(s.sorted_indices.begin(), s.sorted_indices.end(), 0);
-  auto comp = [minimizing = config_.minimize, &f = s.fitness](size_t a,
-                                                              size_t b) {
-    return minimizing ? (f[a] < f[b]) : (f[a] > f[b]);
+  auto comp = [&](size_t a, size_t b) {
+    return BetterFit(s.fitness[a], s.fitness[b], config_.minimize);
   };
 
   if (is_small_problem) {
@@ -202,15 +211,7 @@ GravitationalSearchAlgorithm::GravitationalSearchAlgorithm(
           std::move(func), std::move(cfg)) {}
 
 GsaResult GravitationalSearchAlgorithm::Optimize() const {
-  const size_t total_size{config_.n_agents * dimensions_};
-  IterationState s;
-  s.position.resize(total_size);
-  s.velocity.resize(total_size, 0.0);
-  s.acceleration.resize(total_size, 0.0);
-  s.fitness.resize(config_.n_agents);
-  s.mass.resize(config_.n_agents);
-  s.total_force.resize(dimensions_);
-  s.sorted_indices.resize(config_.n_agents);
+  IterationState s{config_.n_agents, dimensions_};
 
   std::random_device rd;
   RandomEngine gen(config_.seed != 0 ? config_.seed : rd());
@@ -221,36 +222,14 @@ GsaResult GravitationalSearchAlgorithm::Optimize() const {
   std::vector<double> global_best_pos(dimensions_);
 
   auto record_iteration = [&]() -> GsaIterationInfo {
-    const auto& f = s.fitness;
-    const size_t n{f.size()};
-    const auto [min_it, max_it] = std::ranges::minmax_element(f);
-    std::iota(s.sorted_indices.begin(), s.sorted_indices.end(), 0);
-    auto comp = [&](size_t a, size_t b) {
-      return config_.minimize ? f[a] < f[b] : f[a] > f[b];
-    };
-    const size_t mid{n / 2};
-    std::ranges::nth_element(s.sorted_indices, s.sorted_indices.begin() + mid,
-                             comp);
-    const double hi{f[s.sorted_indices[mid]]};
-    double median{hi};
-    if (n % 2 == 0) {
-      std::ranges::nth_element(s.sorted_indices,
-                               s.sorted_indices.begin() + mid - 1, comp);
-      median = (f[s.sorted_indices[mid - 1]] + hi) / 2;
-    }
-    double sm{};
-    double sq{};
-    for (double x : f) {
-      sm += x;
-      sq += x * x;
-    }
-    const double m{sm / n};
+    const FitnessStats stats{
+        ComputeFitnessStats(s.fitness, config_.minimize, s.sorted_indices)};
     return {.best_so_far = global_best_val,
-            .best_iter = config_.minimize ? *min_it : *max_it,
-            .worst_iter = config_.minimize ? *max_it : *min_it,
-            .mean_fitness = m,
-            .median_fitness = median,
-            .stddev_fitness = std::sqrt(std::max(0.0, sq / n - m * m))};
+            .best_iter = stats.best,
+            .worst_iter = stats.worst,
+            .mean_fitness = stats.mean,
+            .median_fitness = stats.median,
+            .stddev_fitness = stats.stddev};
   };
 
   GsaResult result{};

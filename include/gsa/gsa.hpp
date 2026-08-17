@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "XoshiroCpp.hpp"
+#include "gsa/stats.hpp"
 
 struct GsaConfig {
   size_t n_agents{40};
@@ -58,6 +59,8 @@ class GravitationalSearchAlgorithm {
     std::vector<double> position, velocity, acceleration, fitness, mass,
         total_force;
     std::vector<size_t> sorted_indices;
+
+    explicit IterationState(size_t n_agents, size_t dims);
   };
 
   GsaConfig config_{};
