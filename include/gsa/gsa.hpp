@@ -245,7 +245,7 @@ class GravitationalSearchAlgorithm {
 
     if (is_small_problem) {
       std::ranges::sort(s.sorted_indices, comp);
-    } else {
+    } else if (k_best_count < config_.n_agents) {
       std::ranges::nth_element(s.sorted_indices,
                                s.sorted_indices.begin() + k_best_count, comp);
     }
