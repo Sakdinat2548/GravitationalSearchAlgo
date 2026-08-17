@@ -13,7 +13,7 @@ CMake test discovery — just a handful of C++ language features working togethe
 |------|------|
 | `test_framework.hpp` | The engine: registration + runner (`TEST` macro, `expect`, `run`). |
 | `test_common.hpp` | Shared objectives (sphere/rosenbrock/Shekel) and invariant helpers. |
-| `test_main.cpp` | The only `main()`; calls `gsa_test::run(argc, argv)`. |
+| `test_main.cpp` | The only `main()`; calls `gsa_test::Run(argc, argv)`. |
 | `tasks/` | One `test_*.cpp` per test, written as `TEST(name) { ... }`. |
 | `TEST.md` | This file. |
 
@@ -30,17 +30,17 @@ finally runs, the list is already full.
 
 ```cpp
 struct Test {
-    const char* name;   // e.g. "history_size"
-    bool (*fn)();       // pointer to a function returning bool (true = passed)
+    std::string_view name;  // e.g. "history_size"
+    bool (*fn)();           // pointer to a function returning bool (true = passed)
 };
 ```
 
 Just a pair: a name + a function pointer to the test body.
 
-### 2. `registry()` — the one shared list
+### 2. `Registry()` — the one shared list
 
 ```cpp
-inline std::vector<Test>& registry() {
+inline std::vector<Test>& Registry() {
     static std::vector<Test> tests;   // created once, on first call
     return tests;                     // returned by reference
 }
@@ -58,8 +58,8 @@ inline std::vector<Test>& registry() {
 
 ```cpp
 struct Registrar {
-    Registrar(const char* name, bool (*fn)()) {
-        registry().push_back({name, fn});
+    Registrar(std::string_view name, bool (*fn)()) {
+        Registry().push_back({.name = name, .fn = fn});
     }
 };
 ```
@@ -90,25 +90,25 @@ static bool test_history_size() { ... }                             // the body
 Line 2 is the key: it defines a `static` object whose constructor (at startup) registers
 the test. Nothing else needs to know the test exists.
 
-### 5. `expect()` — the assertion
+### 5. `Expect()` — the assertion
 
 ```cpp
 inline int failures{};   // shared counter, also `inline` so it's one global
 
-inline void expect(bool cond, const char* msg) {
+inline void Expect(bool cond, std::string_view msg) {
     if (!cond) { ++failures; std::cout << "  FAIL: " << msg << "\n"; }
 }
 ```
 
 Unlike `assert`, this is **not disabled** in Release (`-DNDEBUG`) — so it always runs.
 
-### 6. `run()` — the dispatcher
+### 6. `Run()` — the dispatcher
 
 ```cpp
-inline bool run(int argc, char** argv) {
+inline bool Run(int argc, char** argv) {
     int passed{}, failed{};
-    for (const auto& t : registry()) {           // iterate every registered test
-        if (argc > 1 && std::string(argv[1]) != t.name) continue;  // optional filter
+    for (const auto& t : Registry()) {           // iterate every registered test
+        if (argc > 1 && std::string_view(argv[1]) != t.name) continue;  // optional filter
         failures = 0;                             // reset per test
         const bool ok = t.fn();                   // call the test body
         std::cout << (ok ? "[PASS] " : "[FAIL] ") << t.name << "\n";
@@ -130,10 +130,10 @@ inline bool run(int argc, char** argv) {
 ```
 program start
    │
-   ├─ static Registrar objects construct  ──►  registry() gets {name, fn} entries
+   ├─ static Registrar objects construct  ──►  Registry() gets {name, fn} entries
    │   (one per TEST, across all .cpp files)       (vector is now populated)
    ▼
-main() ──► run(argc, argv) ──► loop over registry() ──► call each test ──► exit code
+main() ──► Run(argc, argv) ──► loop over Registry() ──► call each test ──► exit code
 ```
 
 ## How CTest uses it
@@ -147,6 +147,7 @@ add_test(NAME gsa_stats           COMMAND gsa_test history_stats)
 add_test(NAME gsa_determinism     COMMAND gsa_test determinism)
 add_test(NAME gsa_modes           COMMAND gsa_test modes)
 add_test(NAME gsa_thread_safety   COMMAND gsa_test thread_safety)
+add_test(NAME gsa_median          COMMAND gsa_test median_correctness)
 ```
 
 CTest runs the binary once per test, each filtered to one test, and treats the exit code as
@@ -154,7 +155,7 @@ pass/fail. Run them with `ctest --preset default`.
 
 ## Why `inline` matters everywhere
 
-The `inline` keywords on `registry()`, `failures`, `expect()`, `run()`, and the
+The `inline` keywords on `Registry()`, `failures`, `Expect()`, `Run()`, and the
 `test_common.hpp` helpers are what let a header be included by many `.cpp` files while
 guaranteeing there is **one** function / **one** `failures` / **one** registry vector
 program-wide. Omit `inline` and you get linker "multiple definition" errors.
