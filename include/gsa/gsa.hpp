@@ -12,6 +12,7 @@
 #include <ranges>
 #include <span>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 #include "XoshiroCpp.hpp"
@@ -55,7 +56,9 @@ inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
 }
 
 template <typename Fn>
-  requires std::invocable<Fn, std::span<const double>>
+  requires std::invocable<Fn, std::span<const double>> &&
+           std::convertible_to<
+               std::invoke_result_t<Fn, std::span<const double>>, double>
 class GravitationalSearchAlgorithm {
  public:
   GravitationalSearchAlgorithm(std::vector<double> lower,
@@ -178,8 +181,9 @@ class GravitationalSearchAlgorithm {
           objective_fn_({&s.position[offset], dimensions_})};
       s.fitness[i] = fitness_value;
 
-      const bool is_better{config_.minimize ? (fitness_value < global_best_val)
-                                            : (fitness_value > global_best_val)};
+      const bool is_better{config_.minimize
+                               ? (fitness_value < global_best_val)
+                               : (fitness_value > global_best_val)};
       if (is_better) {
         global_best_val = fitness_value;
         global_best_pos.assign(&s.position[offset],
@@ -293,17 +297,17 @@ class GravitationalSearchAlgorithm {
       const size_t offset{AgentOffset(i)};
       for (auto d : kViota(0ULL, dimensions_)) {
         const size_t index{offset + d};
-        s.velocity[index] =
-            (RandUni(gen, 0.0, 1.0) * s.velocity[index]) +
-            s.acceleration[index];
+        s.velocity[index] = (RandUni(gen, 0.0, 1.0) * s.velocity[index]) +
+                            s.acceleration[index];
         s.position[index] = std::clamp(s.position[index] + s.velocity[index],
                                        min_bounds_[d], max_bounds_[d]);
       }
     }
   }
 
-  [[nodiscard]] GsaIterationInfo RecordIteration(
-      IterationState& s, double global_best_val) const {
+  /** Record iteration statistics for history. */
+  [[nodiscard]] GsaIterationInfo RecordIteration(IterationState& s,
+                                                 double global_best_val) const {
     const FitnessStats stats{
         ComputeFitnessStats(s.fitness, config_.minimize, s.sorted_indices)};
     return {.best_so_far = global_best_val,
