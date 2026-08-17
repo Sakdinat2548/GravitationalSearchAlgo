@@ -6,7 +6,6 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
-#include <functional>
 #include <limits>
 #include <numeric>
 #include <random>
@@ -43,8 +42,6 @@ struct GsaResult {
   std::vector<GsaIterationInfo> history;
 };
 
-using ObjectiveFunction = std::function<double(std::span<const double>)>;
-
 using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
 
 constexpr auto kViota = std::views::iota;
@@ -57,7 +54,7 @@ inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
   return min + (((gen() >> 11) * scale) * (max - min));
 }
 
-template <typename Fn = ObjectiveFunction>
+template <typename Fn>
   requires std::invocable<Fn, std::span<const double>>
 class GravitationalSearchAlgorithm {
  public:
