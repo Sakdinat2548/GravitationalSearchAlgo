@@ -107,9 +107,11 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
                              s.sorted_indices.begin() + k_best_count, comp);
   }
 
+  const std::span<const double> positions{s.position};
+
   for (auto i : kViota(0ULL, config_.n_agents)) {
     const size_t i_offset{AgentOffset(i)};
-    const double* x_i{s.position.data() + i_offset};
+    const std::span<const double> x_i{positions.subspan(i_offset, dimensions_)};
     const double m_i{s.mass[i]};
 
     std::ranges::fill(s.total_force, 0.0);
@@ -118,7 +120,8 @@ void GravitationalSearchAlgorithm::ComputeAccelerations(
       const size_t j{s.sorted_indices[k]};
       if (i == j) continue;
 
-      const double* x_j{s.position.data() + AgentOffset(j)};
+      const std::span<const double> x_j{
+          positions.subspan(AgentOffset(j), dimensions_)};
 
       double r_squared{};
       for (auto d : kViota(0ULL, dimensions_)) {
