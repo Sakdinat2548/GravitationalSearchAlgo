@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <ranges>
@@ -21,8 +22,13 @@ static double Rosenbrock(std::span<const double> x) {
   return s;
 }
 
-static void PrintResult(const GsaResult& res) {
-  std::cout << "best_val = " << res.best_val << "\n  position:";
+static void PrintResult(const GsaResult& res,
+                        std::chrono::steady_clock::time_point start) {
+  const double ms{std::chrono::duration<double, std::milli>(
+                      std::chrono::steady_clock::now() - start)
+                      .count()};
+  std::cout << "best_val = " << res.best_val << "  (" << ms << " ms)"
+            << "\n  position:";
   for (double p : res.best_pos) std::cout << " " << p;
   std::cout << "\n-----\n";
 }
@@ -31,21 +37,24 @@ int main() {
   // 1. Equal scalar bounds (3 dimensions, all [-5.0, 5.0]), default config.
   GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, Sphere, {.g0 = 10.0});
   std::cout << "Sphere, equal bounds:\n";
-  PrintResult(gsa1.Optimize());
+  const auto start1{std::chrono::steady_clock::now()};
+  PrintResult(gsa1.Optimize(), start1);
 
   // 2. Per-dimension bounds (3 dimensions with unique ranges)
   GravitationalSearchAlgorithm gsa2(
       {-10.0, 0.0, -1.0}, {10.0, 50.0, 1.0}, Sphere,
       {.n_agents = 50, .max_iter = 1000, .g0 = 10.0, .alpha = 10.0});
   std::cout << "Sphere, per-dim bounds:\n";
-  PrintResult(gsa2.Optimize());
+  const auto start2{std::chrono::steady_clock::now()};
+  PrintResult(gsa2.Optimize(), start2);
 
   // 3. Rosenbrock with tuned settings
   GravitationalSearchAlgorithm gsa3(
       10, -2.048, 2.048, Rosenbrock,
       {.n_agents = 50, .max_iter = 5000, .g0 = 10.0, .alpha = 10.0});
   std::cout << "Rosenbrock, custom config:\n";
-  PrintResult(gsa3.Optimize());
+  const auto start3{std::chrono::steady_clock::now()};
+  PrintResult(gsa3.Optimize(), start3);
 
   // 4. Lambda objective (Schwefel)
   GravitationalSearchAlgorithm gsa4(
@@ -57,7 +66,8 @@ int main() {
       },
       {.n_agents = 100, .max_iter = 1000, .g0 = 10.0, .alpha = 20.0});
   std::cout << "schwefel, lambda objective:\n";
-  PrintResult(gsa4.Optimize());
+  const auto start4{std::chrono::steady_clock::now()};
+  PrintResult(gsa4.Optimize(), start4);
 
   return 0;
 }
