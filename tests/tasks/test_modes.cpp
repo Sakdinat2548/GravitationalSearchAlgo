@@ -20,5 +20,10 @@ TEST(modes) {
   const auto res = Optimize(8, -5.0, 5.0, Sphere, odd);
   ok = CheckHistory(res, odd, "odd") && ok;
 
+  // small population (n_agents <= 10) takes the is_small_problem path.
+  const auto small = Config(true, 3);
+  const auto res_small = Optimize(8, -5.0, 5.0, Sphere, small);
+  ok = CheckHistory(res_small, small, "small") && ok;
+
   return ok;
 }
