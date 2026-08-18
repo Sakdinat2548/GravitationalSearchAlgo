@@ -57,12 +57,6 @@ constexpr auto Range(T start, U stop) {
 
 constexpr double kEpsilon{1e-12};
 
-constexpr size_t PoolSizeD(size_t n, size_t d) {
-  return (3 * n * d) + (2 * n) + d;
-}
-static_assert(PoolSizeD(8, 5) == 141);
-static_assert((8 * 5) + (8 * 5) + (8 * 5) + 8 + 8 + 5 == PoolSizeD(8, 5));
-
 // Fast uniform random generator using top 53 bits
 inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
   const double scale{0x1.0p-53};  // 2^-53
@@ -137,7 +131,7 @@ class GravitationalSearchAlgorithm {
     std::span<size_t> sorted_indices;
 
     IterationState(size_t n_agents, size_t dims)
-        : arena_d(PoolSizeD(n_agents, dims), 0.0),
+        : arena_d((3 * n_agents * dims) + (2 * n_agents) + dims, 0.0),
           arena_i(n_agents),
           position(arena_d.data(), n_agents * dims),
           velocity(arena_d.data() + (n_agents * dims), n_agents * dims),
