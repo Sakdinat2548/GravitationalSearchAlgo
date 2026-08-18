@@ -5,7 +5,6 @@
 #include <cmath>
 #include <numeric>
 #include <span>
-#include <vector>
 
 struct FitnessStats {
   double best;
