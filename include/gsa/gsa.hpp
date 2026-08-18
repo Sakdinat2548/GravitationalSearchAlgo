@@ -134,15 +134,15 @@ class GravitationalSearchAlgorithm {
     IterationState(size_t n_agents, size_t dims)
         : arena_d(std::make_unique_for_overwrite<double[]>(
               (3 * n_agents * dims) + (2 * n_agents) + dims)),
-          arena_i(std::make_unique_for_overwrite<size_t[]>(n_agents)),
-          position(arena_d.get(), n_agents * dims),
-          velocity(arena_d.get() + (n_agents * dims), n_agents * dims),
-          acceleration(arena_d.get() + (2 * n_agents * dims), n_agents * dims),
-          fitness(arena_d.get() + (3 * n_agents * dims), n_agents),
-          mass(arena_d.get() + (3 * n_agents * dims) + n_agents, n_agents),
-          total_force(arena_d.get() + (3 * n_agents * dims) + (2 * n_agents),
-                      dims),
-          sorted_indices(arena_i.get(), n_agents) {
+          arena_i(std::make_unique_for_overwrite<size_t[]>(n_agents)) {
+      double* const base{arena_d.get()};
+      position = {base, n_agents * dims};
+      velocity = {base + (n_agents * dims), n_agents * dims};
+      acceleration = {base + (2 * n_agents * dims), n_agents * dims};
+      fitness = {base + (3 * n_agents * dims), n_agents};
+      mass = {base + (3 * n_agents * dims) + n_agents, n_agents};
+      total_force = {base + (3 * n_agents * dims) + (2 * n_agents), dims};
+      sorted_indices = {arena_i.get(), n_agents};
       std::ranges::fill(velocity, 0.0);
       std::ranges::fill(acceleration, 0.0);
     }
