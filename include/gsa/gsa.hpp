@@ -204,8 +204,9 @@ class GravitationalSearchAlgorithm {
                                : (fitness_value > global_best_val)};
       if (is_better) {
         global_best_val = fitness_value;
-        global_best_pos.assign(&s.position[offset],
-                               &s.position[offset + dimensions_]);
+        const std::span<const double> row{
+            s.position.subspan(offset, dimensions_)};
+        global_best_pos.assign(row.begin(), row.end());
       }
     }
   }
