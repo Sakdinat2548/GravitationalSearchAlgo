@@ -214,7 +214,6 @@ class GravitationalSearchAlgorithm {
       s.mass[i] = (config_.minimize ? (max_fit - s.fitness[i])
                                     : (s.fitness[i] - min_fit)) *
                   inv_fit_diff;
-      // Ensure mass is non-negative
       s.mass[i] = std::max(s.mass[i], 0.0);
       sum_q += s.mass[i];
     }
@@ -237,15 +236,12 @@ class GravitationalSearchAlgorithm {
         config_.g0 * std::exp(-config_.alpha * inv_max_iter * current_iter)};
     const double progress{current_iter * inv_max_iter};
 
-    const bool is_small_problem{config_.n_agents <= 10};
     const double k_best_fraction =
         config_.n_agents - (progress * (config_.n_agents - 1));
-    const size_t k_best_raw{is_small_problem
-                                ? config_.n_agents
-                                : static_cast<size_t>(k_best_fraction)};
+    const size_t k_best_raw{static_cast<size_t>(k_best_fraction)};
     size_t k_best_count{std::clamp(k_best_raw, size_t{1}, config_.n_agents)};
 
-    // Sort/partition agent indices based on fitness (best first)
+    // Partition agent indices based on fitness (best first)
     std::iota(s.sorted_indices.begin(), s.sorted_indices.end(), 0);
     auto comp = [&](size_t a, size_t b) {
       return BetterFit(s.fitness[a], s.fitness[b], config_.minimize);
