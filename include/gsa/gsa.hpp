@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <memory>
 #include <numeric>
 #include <random>
 #include <ranges>
@@ -124,25 +125,27 @@ class GravitationalSearchAlgorithm {
   /** Per-run working buffers; held by Optimize() so the instance stays const.
    */
   struct IterationState {
-    std::vector<double> arena_d;
-    std::vector<size_t> arena_i;
+    std::unique_ptr<double[]> arena_d;
+    std::unique_ptr<size_t[]> arena_i;
     std::span<double> position, velocity, acceleration, fitness, mass,
         total_force;
     std::span<size_t> sorted_indices;
 
     IterationState(size_t n_agents, size_t dims)
-        : arena_d((3 * n_agents * dims) + (2 * n_agents) + dims, 0.0),
-          arena_i(n_agents),
-          position(arena_d.data(), n_agents * dims),
-          velocity(arena_d.data() + (n_agents * dims), n_agents * dims),
-          acceleration(arena_d.data() + (2 * n_agents * dims),
-                       n_agents * dims),
-          fitness(arena_d.data() + (3 * n_agents * dims), n_agents),
-          mass(arena_d.data() + (3 * n_agents * dims) + n_agents, n_agents),
-          total_force(arena_d.data() + (3 * n_agents * dims) +
-                          (2 * n_agents),
+        : arena_d(std::make_unique<double[]>((3 * n_agents * dims) +
+                                             (2 * n_agents) + dims)),
+          arena_i(std::make_unique<size_t[]>(n_agents)),
+          position(arena_d.get(), n_agents * dims),
+          velocity(arena_d.get() + (n_agents * dims), n_agents * dims),
+          acceleration(arena_d.get() + (2 * n_agents * dims), n_agents * dims),
+          fitness(arena_d.get() + (3 * n_agents * dims), n_agents),
+          mass(arena_d.get() + (3 * n_agents * dims) + n_agents, n_agents),
+          total_force(arena_d.get() + (3 * n_agents * dims) + (2 * n_agents),
                       dims),
-          sorted_indices(arena_i.data(), n_agents) {}
+          sorted_indices(arena_i.get(), n_agents) {
+      std::ranges::fill(velocity, 0.0);
+      std::ranges::fill(acceleration, 0.0);
+    }
 
     IterationState(const IterationState&) = delete;
     IterationState& operator=(const IterationState&) = delete;
