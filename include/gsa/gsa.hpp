@@ -196,7 +196,7 @@ class GravitationalSearchAlgorithm {
     for (auto i : Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
       const double fitness_value{
-          objective_fn_({&s.position[offset], dimensions_})};
+          objective_fn_(s.position.subspan(offset, dimensions_))};
       s.fitness[i] = fitness_value;
 
       const bool is_better{config_.minimize
@@ -262,12 +262,10 @@ class GravitationalSearchAlgorithm {
                                s.sorted_indices.begin() + k_best_count, comp);
     }
 
-    const std::span<const double> positions{s.position};
-
     for (auto i : Range(config_.n_agents)) {
       const size_t i_offset{AgentOffset(i)};
       const std::span<const double> x_i{
-          positions.subspan(i_offset, dimensions_)};
+          s.position.subspan(i_offset, dimensions_)};
       const double m_i{s.mass[i]};
 
       std::ranges::fill(s.total_force, 0.0);
@@ -277,7 +275,7 @@ class GravitationalSearchAlgorithm {
         if (i == j) continue;
 
         const std::span<const double> x_j{
-            positions.subspan(AgentOffset(j), dimensions_)};
+            s.position.subspan(AgentOffset(j), dimensions_)};
 
         double r_squared{};
         for (auto d : Range(dimensions_)) {
