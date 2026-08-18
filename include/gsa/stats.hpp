@@ -21,7 +21,7 @@ inline bool BetterFit(double a, double b, bool minimize) {
 
 [[nodiscard]] inline FitnessStats ComputeFitnessStats(
     std::span<const double> fitness, bool minimize,
-    std::vector<size_t>& sorted_indices) {
+    std::span<size_t> sorted_indices) {
   const size_t n{fitness.size()};
   const auto [min_it, max_it] = std::ranges::minmax_element(fitness);
   std::iota(sorted_indices.begin(), sorted_indices.end(), 0);

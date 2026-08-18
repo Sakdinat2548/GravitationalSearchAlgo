@@ -57,6 +57,12 @@ constexpr auto Range(T start, U stop) {
 
 constexpr double kEpsilon{1e-12};
 
+constexpr size_t PoolSizeD(size_t n, size_t d) {
+  return (3 * n * d) + (2 * n) + d;
+}
+static_assert(PoolSizeD(8, 5) == 141);
+static_assert((8 * 5) + (8 * 5) + (8 * 5) + 8 + 8 + 5 == PoolSizeD(8, 5));
+
 // Fast uniform random generator using top 53 bits
 inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
   const double scale{0x1.0p-53};  // 2^-53
@@ -124,18 +130,28 @@ class GravitationalSearchAlgorithm {
   /** Per-run working buffers; held by Optimize() so the instance stays const.
    */
   struct IterationState {
-    std::vector<double> position, velocity, acceleration, fitness, mass,
+    std::vector<double> arena_d;
+    std::vector<size_t> arena_i;
+    std::span<double> position, velocity, acceleration, fitness, mass,
         total_force;
-    std::vector<size_t> sorted_indices;
+    std::span<size_t> sorted_indices;
 
-    explicit IterationState(size_t n_agents, size_t dims)
-        : position(n_agents * dims),
-          velocity(n_agents * dims, 0.0),
-          acceleration(n_agents * dims, 0.0),
-          fitness(n_agents),
-          mass(n_agents),
-          total_force(dims),
-          sorted_indices(n_agents) {}
+    IterationState(size_t n_agents, size_t dims)
+        : arena_d(PoolSizeD(n_agents, dims), 0.0),
+          arena_i(n_agents),
+          position(arena_d.data(), n_agents * dims),
+          velocity(arena_d.data() + (n_agents * dims), n_agents * dims),
+          acceleration(arena_d.data() + (2 * n_agents * dims),
+                       n_agents * dims),
+          fitness(arena_d.data() + (3 * n_agents * dims), n_agents),
+          mass(arena_d.data() + (3 * n_agents * dims) + n_agents, n_agents),
+          total_force(arena_d.data() + (3 * n_agents * dims) +
+                          (2 * n_agents),
+                      dims),
+          sorted_indices(arena_i.data(), n_agents) {}
+
+    IterationState(const IterationState&) = delete;
+    IterationState& operator=(const IterationState&) = delete;
   };
 
   GsaConfig config_{};
