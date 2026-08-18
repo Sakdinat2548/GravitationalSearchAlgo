@@ -132,9 +132,9 @@ class GravitationalSearchAlgorithm {
     std::span<size_t> sorted_indices;
 
     IterationState(size_t n_agents, size_t dims)
-        : arena_d(std::make_unique<double[]>((3 * n_agents * dims) +
-                                             (2 * n_agents) + dims)),
-          arena_i(std::make_unique<size_t[]>(n_agents)),
+        : arena_d(std::make_unique_for_overwrite<double[]>(
+              (3 * n_agents * dims) + (2 * n_agents) + dims)),
+          arena_i(std::make_unique_for_overwrite<size_t[]>(n_agents)),
           position(arena_d.get(), n_agents * dims),
           velocity(arena_d.get() + (n_agents * dims), n_agents * dims),
           acceleration(arena_d.get() + (2 * n_agents * dims), n_agents * dims),
