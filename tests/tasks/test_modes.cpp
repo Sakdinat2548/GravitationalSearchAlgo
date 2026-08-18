@@ -20,10 +20,23 @@ TEST(modes) {
   const auto res = Optimize(8, -5.0, 5.0, Sphere, odd);
   ok = CheckHistory(res, odd, "odd") && ok;
 
-  // small population (n_agents <= 10) takes the is_small_problem path.
+  // small population exercises the k-best clamp.
   const auto small = Config(true, 3);
   const auto res_small = Optimize(8, -5.0, 5.0, Sphere, small);
   ok = CheckHistory(res_small, small, "small") && ok;
+
+  // boundary configs for the arena layout: single agent, 1D, and both.
+  const auto single = Config(true, 1);
+  const auto res_single = Optimize(8, -5.0, 5.0, Sphere, single);
+  ok = CheckHistory(res_single, single, "single") && ok;
+
+  const auto dim1 = Config(true);
+  const auto res_dim1 = Optimize(1, -5.0, 5.0, Sphere, dim1);
+  ok = CheckHistory(res_dim1, dim1, "dim1") && ok;
+
+  const auto single_dim1 = Config(true, 1);
+  const auto res_single_dim1 = Optimize(1, -5.0, 5.0, Sphere, single_dim1);
+  ok = CheckHistory(res_single_dim1, single_dim1, "single_dim1") && ok;
 
   return ok;
 }

@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <memory>
 #include <numeric>
 #include <random>
 #include <ranges>
@@ -45,12 +46,12 @@ struct GsaResult {
 
 using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
 
-template <typename T>
+template <std::integral T>
 constexpr auto Range(T stop) {
   return std::views::iota(T{}, stop);
 }
 
-template <typename T, typename U>
+template <std::integral T, std::integral U>
 constexpr auto Range(T start, U stop) {
   return std::views::iota(start, stop);
 }
@@ -124,18 +125,30 @@ class GravitationalSearchAlgorithm {
   /** Per-run working buffers; held by Optimize() so the instance stays const.
    */
   struct IterationState {
-    std::vector<double> position, velocity, acceleration, fitness, mass,
+    std::unique_ptr<double[]> arena_d;
+    std::unique_ptr<size_t[]> arena_i;
+    std::span<double> position, velocity, acceleration, fitness, mass,
         total_force;
-    std::vector<size_t> sorted_indices;
+    std::span<size_t> sorted_indices;
 
-    explicit IterationState(size_t n_agents, size_t dims)
-        : position(n_agents * dims),
-          velocity(n_agents * dims, 0.0),
-          acceleration(n_agents * dims, 0.0),
-          fitness(n_agents),
-          mass(n_agents),
-          total_force(dims),
-          sorted_indices(n_agents) {}
+    IterationState(size_t n_agents, size_t dims)
+        : arena_d(std::make_unique_for_overwrite<double[]>(
+              (3 * n_agents * dims) + (2 * n_agents) + dims)),
+          arena_i(std::make_unique_for_overwrite<size_t[]>(n_agents)) {
+      double* const base{arena_d.get()};
+      position = {base, n_agents * dims};
+      velocity = {base + (n_agents * dims), n_agents * dims};
+      acceleration = {base + (2 * n_agents * dims), n_agents * dims};
+      fitness = {base + (3 * n_agents * dims), n_agents};
+      mass = {base + (3 * n_agents * dims) + n_agents, n_agents};
+      total_force = {base + (3 * n_agents * dims) + (2 * n_agents), dims};
+      sorted_indices = {arena_i.get(), n_agents};
+      std::ranges::fill(velocity, 0.0);
+      std::ranges::fill(acceleration, 0.0);
+    }
+
+    IterationState(const IterationState&) = delete;
+    IterationState& operator=(const IterationState&) = delete;
   };
 
   GsaConfig config_{};
@@ -186,7 +199,7 @@ class GravitationalSearchAlgorithm {
     for (auto i : Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
       const double fitness_value{
-          objective_fn_({&s.position[offset], dimensions_})};
+          objective_fn_(s.position.subspan(offset, dimensions_))};
       s.fitness[i] = fitness_value;
 
       const bool is_better{config_.minimize
@@ -194,8 +207,9 @@ class GravitationalSearchAlgorithm {
                                : (fitness_value > global_best_val)};
       if (is_better) {
         global_best_val = fitness_value;
-        global_best_pos.assign(&s.position[offset],
-                               &s.position[offset + dimensions_]);
+        const std::span<const double> row{
+            s.position.subspan(offset, dimensions_)};
+        global_best_pos.assign(row.begin(), row.end());
       }
     }
   }
@@ -252,12 +266,10 @@ class GravitationalSearchAlgorithm {
                                s.sorted_indices.begin() + k_best_count, comp);
     }
 
-    const std::span<const double> positions{s.position};
-
     for (auto i : Range(config_.n_agents)) {
       const size_t i_offset{AgentOffset(i)};
       const std::span<const double> x_i{
-          positions.subspan(i_offset, dimensions_)};
+          s.position.subspan(i_offset, dimensions_)};
       const double m_i{s.mass[i]};
 
       std::ranges::fill(s.total_force, 0.0);
@@ -267,7 +279,7 @@ class GravitationalSearchAlgorithm {
         if (i == j) continue;
 
         const std::span<const double> x_j{
-            positions.subspan(AgentOffset(j), dimensions_)};
+            s.position.subspan(AgentOffset(j), dimensions_)};
 
         double r_squared{};
         for (auto d : Range(dimensions_)) {
