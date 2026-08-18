@@ -46,12 +46,12 @@ struct GsaResult {
 
 using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
 
-template <typename T>
+template <std::integral T>
 constexpr auto Range(T stop) {
   return std::views::iota(T{}, stop);
 }
 
-template <typename T, typename U>
+template <std::integral T, std::integral U>
 constexpr auto Range(T start, U stop) {
   return std::views::iota(start, stop);
 }
