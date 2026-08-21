@@ -1,5 +1,6 @@
 #include <chrono>
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <ranges>
 #include <span>
@@ -68,6 +69,28 @@ int main() {
   std::cout << "schwefel, lambda objective:\n";
   const auto start4{std::chrono::steady_clock::now()};
   PrintResult(gsa4.Optimize(), start4);
+
+  // 5. JSON config file example
+  std::cout << "Sphere, JSON config file:\n";
+  const std::string json_config = R"({
+    "n_agents": 40,
+    "max_iter": 500,
+    "g0": 10.0,
+    "alpha": 20.0,
+    "minimize": true,
+    "seed": 12345
+  })";
+  std::ofstream("config.json") << json_config;
+  GravitationalSearchAlgorithm gsa5(3, -5.0, 5.0, Sphere, "config.json");
+  const auto start5{std::chrono::steady_clock::now()};
+  PrintResult(gsa5.Optimize(), start5);
+
+  // 6. Runtime config mutation
+  std::cout << "Runtime config mutation:\n";
+  GravitationalSearchAlgorithm gsa6(3, -5.0, 5.0, Sphere);
+  gsa6.SetG0(5.0).SetAlpha(5.0).SetNAgents(20);
+  const auto start6{std::chrono::steady_clock::now()};
+  PrintResult(gsa6.Optimize(), start6);
 
   return 0;
 }

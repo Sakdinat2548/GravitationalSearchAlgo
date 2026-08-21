@@ -6,6 +6,7 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
+#include <fstream>
 #include <limits>
 #include <memory>
 #include <numeric>
@@ -13,11 +14,13 @@
 #include <ranges>
 #include <span>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
 #include <vector>
 
 #include "XoshiroCpp.hpp"
 #include "gsa/stats.hpp"
+#include <nlohmann/json.hpp>
 
 struct GsaConfig {
   size_t n_agents{40};
@@ -26,6 +29,38 @@ struct GsaConfig {
   double alpha{20.0};
   bool minimize{true};
   uint64_t seed{};
+
+  static GsaConfig FromJsonFile(const std::string& path) {
+    std::ifstream file(path);
+    if (!file) throw std::invalid_argument("Cannot open config file: " + path);
+    nlohmann::json j;
+    file >> j;
+    return FromJson(j);
+  }
+
+  static GsaConfig FromJsonString(const std::string& json_str) {
+    nlohmann::json j = nlohmann::json::parse(json_str);
+    return FromJson(j);
+  }
+
+  static GsaConfig FromJson(const nlohmann::json& j) {
+    GsaConfig cfg;
+    if (j.contains("n_agents")) cfg.n_agents = j["n_agents"].get<size_t>();
+    if (j.contains("max_iter")) cfg.max_iter = j["max_iter"].get<size_t>();
+    if (j.contains("g0")) cfg.g0 = j["g0"].get<double>();
+    if (j.contains("alpha")) cfg.alpha = j["alpha"].get<double>();
+    if (j.contains("minimize")) cfg.minimize = j["minimize"].get<bool>();
+    if (j.contains("seed")) cfg.seed = j["seed"].get<uint64_t>();
+    return cfg;
+  }
+
+  // Runtime config mutators
+  GsaConfig& SetNAgents(size_t v) { n_agents = v; return *this; }
+  GsaConfig& SetMaxIter(size_t v) { max_iter = v; return *this; }
+  GsaConfig& SetG0(double v) { g0 = v; return *this; }
+  GsaConfig& SetAlpha(double v) { alpha = v; return *this; }
+  GsaConfig& SetMinimize(bool v) { minimize = v; return *this; }
+  GsaConfig& SetSeed(uint64_t v) { seed = v; return *this; }
 };
 
 /** Per-iteration snapshot of the agent population. */
@@ -81,13 +116,72 @@ class GravitationalSearchAlgorithm {
     ValidateInputs(min_bounds_, max_bounds_, config_);
   }
 
-  GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
-                               GsaConfig cfg = {})
+GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
+                                GsaConfig cfg = {})
       : GravitationalSearchAlgorithm(
             dims > 0 ? std::vector<double>(dims, lower)
                      : throw std::invalid_argument("dims must be positive"),
             dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
             std::move(func), std::move(cfg)) {}
+
+  // JSON config constructors
+  GravitationalSearchAlgorithm(std::vector<double> lower,
+                               std::vector<double> upper, Fn func,
+                               const std::string& json_config_file)
+      : GravitationalSearchAlgorithm(std::move(lower), std::move(upper),
+                                     std::move(func),
+                                     GsaConfig::FromJsonFile(json_config_file)) {}
+
+  GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
+                               const std::string& json_config_file)
+      : GravitationalSearchAlgorithm(
+            dims > 0 ? std::vector<double>(dims, lower)
+                     : throw std::invalid_argument("dims must be positive"),
+            dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
+            std::move(func),
+            GsaConfig::FromJsonFile(json_config_file)) {}
+
+GravitationalSearchAlgorithm(std::vector<double> lower,
+                               std::vector<double> upper, Fn func,
+                               const std::string& json_config, [[maybe_unused]] bool from_string)
+      : GravitationalSearchAlgorithm(std::move(lower), std::move(upper),
+                                     std::move(func),
+                                     GsaConfig::FromJsonString(json_config)) {}
+
+  GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
+                               const std::string& json_config, [[maybe_unused]] bool from_string)
+      : GravitationalSearchAlgorithm(
+            dims > 0 ? std::vector<double>(dims, lower)
+                     : throw std::invalid_argument("dims must be positive"),
+            dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
+            std::move(func),
+            GsaConfig::FromJsonString(json_config)) {}
+
+  // Runtime config mutators
+  GravitationalSearchAlgorithm& SetNAgents(size_t v) {
+    config_.n_agents = v;
+    return *this;
+  }
+  GravitationalSearchAlgorithm& SetMaxIter(size_t v) {
+    config_.max_iter = v;
+    return *this;
+  }
+  GravitationalSearchAlgorithm& SetG0(double v) {
+    config_.g0 = v;
+    return *this;
+  }
+  GravitationalSearchAlgorithm& SetAlpha(double v) {
+    config_.alpha = v;
+    return *this;
+  }
+  GravitationalSearchAlgorithm& SetMinimize(bool v) {
+    config_.minimize = v;
+    return *this;
+  }
+  GravitationalSearchAlgorithm& SetSeed(uint64_t v) {
+    config_.seed = v;
+    return *this;
+  }
 
   [[nodiscard]] GsaResult Optimize() const {
     IterationState s{config_.n_agents, dimensions_};

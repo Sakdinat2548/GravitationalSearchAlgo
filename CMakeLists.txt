@@ -11,6 +11,14 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Include Conan toolchain if available (for nlohmann_json)
+if(EXISTS "${CMAKE_BINARY_DIR}/conan_toolchain.cmake")
+  include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
+endif()
+
+# Find nlohmann_json via Conan
+find_package(nlohmann_json 3.11.2 CONFIG REQUIRED)
+
 # Options
 option(GSA_BUILD_DEMO "Build the API demo (src/demo.cpp)" ON)
 option(GSA_BUILD_TESTS "Build and register the CTest suite" ON)
@@ -21,6 +29,7 @@ target_include_directories(
     gsa INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party>)
+target_link_libraries(gsa INTERFACE nlohmann_json::nlohmann_json)
 target_compile_options(gsa INTERFACE -Wall -Wextra)
 
 # Fast warning-free syntax check of all sources.
@@ -35,10 +44,20 @@ set(GSA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_median.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_convergence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_validation.cpp)
+
+# Get nlohmann_json include directory from the config variable
+if(NOT nlohmann_json_INCLUDE_DIRS_RELEASE)
+    message(WARNING "nlohmann_json_INCLUDE_DIRS_RELEASE not set")
+    set(_nlohmann_include "")
+else()
+    set(_nlohmann_include -I${nlohmann_json_INCLUDE_DIRS_RELEASE})
+endif()
+
 add_custom_target(check-gsa
     COMMAND ${CMAKE_CXX_COMPILER} -Wall -Wextra -Werror -std=c++20 -fsyntax-only
             -I${CMAKE_CURRENT_SOURCE_DIR}/include
             -I${CMAKE_CURRENT_SOURCE_DIR}/third_party
+            ${_nlohmann_include}
             ${GSA_SOURCES}
     DEPENDS ${GSA_SOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
