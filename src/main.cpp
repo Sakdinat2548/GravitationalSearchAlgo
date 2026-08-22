@@ -2,8 +2,6 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <ranges>
-#include <span>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -11,15 +9,16 @@
 
 #include "gsa/gsa.hpp"
 #include "gsa/json_io.hpp"
+#include "objective.hpp"
 
 namespace clr {
 
-inline constexpr const char* kReset{"\033[0m"};
-inline constexpr const char* kRed{"\033[31m"};
-inline constexpr const char* kGreen{"\033[32m"};
-inline constexpr const char* kYellow{"\033[33m"};
-inline constexpr const char* kCyan{"\033[36m"};
-inline constexpr const char* kDim{"\033[2m"};
+constexpr const char* kReset{"\033[0m"};
+constexpr const char* kRed{"\033[31m"};
+constexpr const char* kGreen{"\033[32m"};
+constexpr const char* kYellow{"\033[33m"};
+constexpr const char* kCyan{"\033[36m"};
+constexpr const char* kDim{"\033[2m"};
 
 }  // namespace clr
 
@@ -87,15 +86,6 @@ static void PrintResult(const gsa::GsaResult& res,
   std::cout << "\n" << clr::kDim << "-----" << clr::kReset << "\n";
 }
 
-static double Rosenbrock(std::span<const double> x) {
-  double s{};
-  for (auto i : std::views::iota(0ULL, x.size() - 1)) {
-    const double d{x[i + 1] - (x[i] * x[i])};
-    s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
-  }
-  return s;
-}
-
 int main() {
   EnableColors();
   WriteConfig("config.json");
@@ -104,14 +94,14 @@ int main() {
   gsa::GsaConfig cfg;
   gsa::Bounds bounds;
   gsa::GravitationalSearchAlgorithm gsa{1, std::vector<double>{-1.0},
-                                        std::vector<double>{1.0}, Rosenbrock};
+                                        std::vector<double>{1.0}, objective::Fn};
   try {
     nlohmann::json j;
     std::ifstream("config.json") >> j;
     cfg = gsa::LoadConfigFromJson(j);
     bounds = gsa::LoadBoundsFromJson(j);
     gsa = gsa::GravitationalSearchAlgorithm(bounds.dimensions, bounds.lower,
-                                            bounds.upper, Rosenbrock, cfg);
+                                            bounds.upper, objective::Fn, cfg);
   } catch (const std::exception& e) {
     std::cout << clr::kRed << "Invalid config: " << e.what() << clr::kReset
               << "\n";
@@ -138,7 +128,7 @@ int main() {
         gsa::Bounds b2{gsa::LoadBoundsFromJson(j2)};
         cfg = cfg2;
         gsa = gsa::GravitationalSearchAlgorithm(b2.dimensions, b2.lower,
-                                                b2.upper, Rosenbrock, cfg);
+                                                b2.upper, objective::Fn, cfg);
         std::cout << clr::kDim << "-----" << clr::kReset << "\n";
         PrintConfigFile("config.json");
       } catch (const std::exception& e) {
