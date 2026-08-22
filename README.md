@@ -69,6 +69,11 @@ Produces:
 ./build/Release/tests/gsa_test.exe  # Full test suite (8 tests)
 ```
 
+`main.exe` reads `config.json` (created on first run if missing) and waits for
+input: press **`r`** to reload the file and re-run with a fresh instance — no
+recompile needed; press **`q`** to quit. It prints both the raw file and the
+effective settings in use (omitted fields fall back to defaults).
+
 ### Quick Syntax Check (warning-free sources)
 
 ```bash
@@ -87,7 +92,7 @@ cmake --build --preset conan-release --target check-naming
 ctest --preset conan-release
 ```
 
-Runs 8 CTest tests: `gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`, `gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`. See `tests/` for sources. Run the binary directly to see per-test output, or pass a single test name to run only that one:
+Runs 10 CTest tests: `gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`, `gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`, `gsa_json_io_config`, `gsa_json_io_bounds`. See `tests/` for sources. Run the binary directly to see per-test output, or pass a single test name to run only that one:
 
 ```bash
 ./build/Release/tests/gsa_test.exe

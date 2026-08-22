@@ -13,6 +13,17 @@ namespace gsa {
 
 namespace detail {
 
+// Normalize nlohmann's exception types so every loader failure surfaces
+// as std::invalid_argument.
+template <typename Fn>
+inline auto Guard(Fn&& fn) -> decltype(fn()) {
+  try {
+    return fn();
+  } catch (const nlohmann::json::exception& e) {
+    throw std::invalid_argument(e.what());
+  }
+}
+
 // Reject semantically invalid values that slipped through type parsing.
 inline void ValidateConfig(const GsaConfig& cfg) {
   if (cfg.n_agents == 0) {
@@ -66,61 +77,68 @@ struct Bounds {
 
 // Load GsaConfig from nlohmann::json object
 inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
-  GsaConfig cfg;
-  if (j.contains("n_agents")) cfg.n_agents = j["n_agents"].get<size_t>();
-  if (j.contains("max_iter")) cfg.max_iter = j["max_iter"].get<size_t>();
-  if (j.contains("g0")) cfg.g0 = j["g0"].get<double>();
-  if (j.contains("alpha")) cfg.alpha = j["alpha"].get<double>();
-  if (j.contains("minimize")) cfg.minimize = j["minimize"].get<bool>();
-  if (j.contains("seed")) cfg.seed = j["seed"].get<uint64_t>();
-  detail::ValidateConfig(cfg);
-  return cfg;
+  return detail::Guard([&] {
+    GsaConfig cfg;
+    if (j.contains("n_agents")) cfg.n_agents = j["n_agents"].get<size_t>();
+    if (j.contains("max_iter")) cfg.max_iter = j["max_iter"].get<size_t>();
+    if (j.contains("g0")) cfg.g0 = j["g0"].get<double>();
+    if (j.contains("alpha")) cfg.alpha = j["alpha"].get<double>();
+    if (j.contains("minimize")) cfg.minimize = j["minimize"].get<bool>();
+    if (j.contains("seed")) cfg.seed = j["seed"].get<uint64_t>();
+    detail::ValidateConfig(cfg);
+    return cfg;
+  });
 }
 
 // Load problem dimensions and bounds from a JSON object.
 // "lower"/"upper" may be scalars or per-dimension arrays.
 inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
-  if (!j.contains("lower") || !j.contains("upper")) {
-    throw std::invalid_argument(R"(config requires both "lower" and "upper")");
-  }
-
-  size_t dims{0};
-  if (j.contains("dimensions")) {
-    dims = j["dimensions"].get<size_t>();
-    if (dims == 0) {
-      throw std::invalid_argument(R"(("dimensions" must be > 0))");
+  return detail::Guard([&] {
+    if (!j.contains("lower") || !j.contains("upper")) {
+      throw std::invalid_argument(R"(config requires both "lower" and "upper")");
     }
-  }
 
-  Bounds b;
-  b.lower = detail::ParseBoundsSide("lower", j.at("lower"), dims);
-  b.upper = detail::ParseBoundsSide("upper", j.at("upper"), dims);
-  if (b.lower.size() != b.upper.size()) {
-    throw std::invalid_argument(
-        R"(("lower" and "upper" must have the same length))");
-  }
-  b.dimensions = b.lower.size();
-  for (auto i : Range(b.dimensions)) {
-    if (b.lower[i] > b.upper[i]) {
+    size_t dims{0};
+    if (j.contains("dimensions")) {
+      dims = j["dimensions"].get<size_t>();
+      if (dims == 0) {
+        throw std::invalid_argument(R"(("dimensions" must be > 0))");
+      }
+    }
+
+    Bounds b;
+    b.lower = detail::ParseBoundsSide("lower", j.at("lower"), dims);
+    b.upper = detail::ParseBoundsSide("upper", j.at("upper"), dims);
+    if (b.lower.size() != b.upper.size()) {
       throw std::invalid_argument(
-          R"((each lower bound must be <= its upper bound))");
+          R"(("lower" and "upper" must have the same length))");
     }
-  }
-  return b;
+    b.dimensions = b.lower.size();
+    for (auto i : Range(b.dimensions)) {
+      if (b.lower[i] > b.upper[i]) {
+        throw std::invalid_argument(
+            R"((each lower bound must be <= its upper bound))");
+      }
+    }
+    return b;
+  });
 }
 
 // Load GsaConfig from JSON file
 inline GsaConfig LoadConfigFromFile(const std::string& path) {
   std::ifstream file(path);
   if (!file) throw std::invalid_argument("Cannot open config file: " + path);
-  nlohmann::json j;
-  file >> j;
-  return LoadConfigFromJson(j);
+  return detail::Guard([&] {
+    nlohmann::json j;
+    file >> j;
+    return LoadConfigFromJson(j);
+  });
 }
 
 // Load GsaConfig from JSON string
 inline GsaConfig LoadConfigFromString(const std::string& json_str) {
-  return LoadConfigFromJson(nlohmann::json::parse(json_str));
+  return detail::Guard(
+      [&] { return LoadConfigFromJson(nlohmann::json::parse(json_str)); });
 }
 
 }  // namespace gsa

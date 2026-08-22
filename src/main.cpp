@@ -9,8 +9,8 @@
 #include <windows.h>
 #endif
 
-#include "gsa/json_io.hpp"
 #include "gsa/gsa.hpp"
+#include "gsa/json_io.hpp"
 
 namespace clr {
 
@@ -35,18 +35,17 @@ static void EnableColors() {
 
 static void WriteConfig(const std::string& path) {
   if (std::filesystem::exists(path)) return;
-  const std::string json = R"({
-    "dimensions": 10,
-    "lower": -2.048,
-    "upper": 2.048,
-    "n_agents": 50,
-    "max_iter": 5000,
-    "g0": 10.0,
-    "alpha": 10.0,
-    "minimize": true,
-    "seed": 0
-  })";
-  std::ofstream(path) << json;
+  nlohmann::json j;
+  j["dimensions"] = 10;
+  j["lower"] = -2.048;
+  j["upper"] = 2.048;
+  j["n_agents"] = 50;
+  j["max_iter"] = 5000;
+  j["g0"] = 10.0;
+  j["alpha"] = 10.0;
+  j["minimize"] = true;
+  j["seed"] = 0;
+  std::ofstream(path) << j.dump(2) << "\n";
 }
 
 static void PrintConfigFile(const std::string& path) {
@@ -71,7 +70,7 @@ static void PrintRunningState(const Gsa& gsa) {
             << "  seed=" << cfg.seed << (cfg.seed == 0 ? " (random)" : "")
             << "\n  lower=[";
   for (double v : lower) std::cout << v << ' ';
-  std::cout << "] upper=[";
+  std::cout << "]\n  upper=[";
   for (double v : upper) std::cout << v << ' ';
   std::cout << ']' << clr::kReset << "\n";
 }
@@ -113,7 +112,6 @@ int main() {
     bounds = gsa::LoadBoundsFromJson(j);
     gsa = gsa::GravitationalSearchAlgorithm(bounds.dimensions, bounds.lower,
                                             bounds.upper, Rosenbrock, cfg);
-    PrintRunningState(gsa);
   } catch (const std::exception& e) {
     std::cout << clr::kRed << "Invalid config: " << e.what() << clr::kReset
               << "\n";
@@ -121,6 +119,7 @@ int main() {
   }
 
   while (true) {
+    PrintRunningState(gsa);
     std::cout << "Run (current config):\n";
     const auto start{std::chrono::steady_clock::now()};
     PrintResult(gsa.Optimize(), start);
@@ -142,7 +141,6 @@ int main() {
                                                 b2.upper, Rosenbrock, cfg);
         std::cout << clr::kDim << "-----" << clr::kReset << "\n";
         PrintConfigFile("config.json");
-        PrintRunningState(gsa);
       } catch (const std::exception& e) {
         std::cout << clr::kRed
                   << "Reload failed, keeping previous config: " << e.what()
