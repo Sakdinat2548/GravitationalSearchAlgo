@@ -68,7 +68,8 @@ int main() {
     std::cin >> cmd;
     if (cmd == 'q') break;
     if (cmd == 'r') {
-      std::cout << "Reloading config from file...\n";
+      std::cout << "Reloading config from file...";
+      std::cout << "\n-----\n";
       cfg = gsa::LoadConfigFromFile("config.json");
       gsa = gsa::GravitationalSearchAlgorithm(10, -2.048, 2.048, Rosenbrock, cfg);
       PrintConfigFile("config.json");

@@ -12,6 +12,7 @@
 build/
 CMakeUserPresets.json
 config.json
+compile_commands.json
 
 # Editor/IDE files
 .vscode/
