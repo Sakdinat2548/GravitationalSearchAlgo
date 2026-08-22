@@ -15,13 +15,12 @@ TEST(thread_safety) {
 
   constexpr int n_threads{8};
   std::vector<gsa::GsaResult> results(n_threads);
-  std::vector<std::thread> threads;
+  std::vector<std::jthread> threads;
   threads.reserve(n_threads);
 
   for (auto t : std::views::iota(0, n_threads)) {
     threads.emplace_back([&gsa, &results, t] { results[t] = gsa.Optimize(); });
   }
-  for (auto& th : threads) th.join();
 
   bool ok{true};
   const double best = results[0].best_val;

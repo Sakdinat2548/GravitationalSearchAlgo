@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <string_view>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -13,12 +14,12 @@
 
 namespace clr {
 
-constexpr const char* kReset{"\033[0m"};
-constexpr const char* kRed{"\033[31m"};
-constexpr const char* kGreen{"\033[32m"};
-constexpr const char* kYellow{"\033[33m"};
-constexpr const char* kCyan{"\033[36m"};
-constexpr const char* kDim{"\033[2m"};
+constexpr std::string_view kReset{"\033[0m"};
+constexpr std::string_view kRed{"\033[31m"};
+constexpr std::string_view kGreen{"\033[32m"};
+constexpr std::string_view kYellow{"\033[33m"};
+constexpr std::string_view kCyan{"\033[36m"};
+constexpr std::string_view kDim{"\033[2m"};
 
 }  // namespace clr
 
