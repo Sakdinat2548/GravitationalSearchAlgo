@@ -26,30 +26,30 @@ TEST(validation) {
 
   ok = ExpectThrows("empty bounds",
                     [] {
-                      GravitationalSearchAlgorithm gsa(std::vector<double>{},
-                                                       std::vector<double>{1.0},
-                                                       Sphere);
+                      gsa::GravitationalSearchAlgorithm gsa(std::vector<double>{},
+                                                            std::vector<double>{1.0},
+                                                            Sphere);
                     }) &&
        ok;
   ok = ExpectThrows("bound size mismatch",
                     [] {
-                      GravitationalSearchAlgorithm gsa(std::vector<double>{1.0},
-                                                       std::vector<double>{1.0,
-                                                                           2.0},
-                                                       Sphere);
+                      gsa::GravitationalSearchAlgorithm gsa(std::vector<double>{1.0},
+                                                            std::vector<double>{1.0,
+                                                                            2.0},
+                                                            Sphere);
                     }) &&
        ok;
   ok = ExpectThrows("zero agents",
                     [] {
-                      GravitationalSearchAlgorithm gsa(std::vector<double>{-5.0},
-                                                       std::vector<double>{5.0},
-                                                       Sphere,
-                                                       Config(true, 0));
+                      gsa::GravitationalSearchAlgorithm gsa(std::vector<double>{-5.0},
+                                                            std::vector<double>{5.0},
+                                                            Sphere,
+                                                            Config(true, 0));
                     }) &&
        ok;
   ok = ExpectThrows("zero iterations",
                     [] {
-                      GravitationalSearchAlgorithm gsa(
+                      gsa::GravitationalSearchAlgorithm gsa(
                           std::vector<double>{-5.0}, std::vector<double>{5.0},
                           Sphere,
                           {.n_agents = 50,
@@ -62,9 +62,9 @@ TEST(validation) {
        ok;
   ok = ExpectThrows("lower above upper",
                     [] {
-                      GravitationalSearchAlgorithm gsa(std::vector<double>{5.0},
-                                                       std::vector<double>{1.0},
-                                                       Sphere);
+                      gsa::GravitationalSearchAlgorithm gsa(std::vector<double>{5.0},
+                                                            std::vector<double>{1.0},
+                                                            Sphere);
                     }) &&
        ok;
 

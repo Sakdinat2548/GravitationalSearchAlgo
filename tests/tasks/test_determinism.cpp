@@ -9,8 +9,8 @@ using gsa_test::Sphere;
 
 static bool Deterministic(int dims, double lo, double hi,
                           double (*fn)(std::span<const double>),
-                          const GsaConfig& cfg) {
-  GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
+                          const gsa::GsaConfig& cfg) {
+  gsa::GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
   const auto a = gsa.Optimize();
   const auto b = gsa.Optimize();
   const bool ok{
@@ -21,11 +21,11 @@ static bool Deterministic(int dims, double lo, double hi,
 
 static bool ChurnDeterministic(int dims, double lo, double hi,
                                double (*fn)(std::span<const double>),
-                               const GsaConfig& cfg, int runs = 16) {
+                               const gsa::GsaConfig& cfg, int runs = 16) {
   bool ok{true};
   double first{};
   for (int r = 0; r < runs; ++r) {
-    GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
+    gsa::GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
     const auto res = gsa.Optimize();
     if (r == 0) {
       first = res.best_val;

@@ -34,7 +34,7 @@ inline double Shekel(std::span<const double> x) {
       {{-32, -16, 0,   16,  32, -32, -16, 0,   16,  32, -32, -16, 0,
         16,  32,  -32, -16, 0,  16,  32,  -32, -16, 0,  16,  32},
        {-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0,  0, 0,
-        0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
+         0,   0,   16,  16,  16,  16,  16,  32,  32,  32,  32, 32}}};
   double sum{1.0 / 500.0};
   for (auto j : std::views::iota(0U, 25U)) {
     double inner{};
@@ -47,7 +47,7 @@ inline double Shekel(std::span<const double> x) {
   return 1.0 / sum;
 }
 
-inline GsaConfig Config(bool minimize = true, size_t n_agents = 50) {
+inline gsa::GsaConfig Config(bool minimize = true, size_t n_agents = 50) {
   return {.n_agents = n_agents,
           .max_iter = 500,
           .g0 = 100.0,
@@ -56,15 +56,15 @@ inline GsaConfig Config(bool minimize = true, size_t n_agents = 50) {
           .seed = 12345};
 }
 
-inline GsaResult Optimize(int dims, double lo, double hi,
-                          double (*fn)(std::span<const double>),
-                          const GsaConfig& cfg) {
-  GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
+inline gsa::GsaResult Optimize(int dims, double lo, double hi,
+                           double (*fn)(std::span<const double>),
+                           const gsa::GsaConfig& cfg) {
+  gsa::GravitationalSearchAlgorithm gsa(dims, lo, hi, fn, cfg);
   return gsa.Optimize();
 }
 
 /** Assert per-iteration invariants; returns true if all pass. */
-inline bool CheckHistory(const GsaResult& res, const GsaConfig& cfg,
+inline bool CheckHistory(const gsa::GsaResult& res, const gsa::GsaConfig& cfg,
                          std::string_view name) {
   bool ok{true};
   const auto report = [&](bool cond, std::string_view what) {

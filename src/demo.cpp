@@ -22,7 +22,7 @@ static double Rosenbrock(std::span<const double> x) {
   return s;
 }
 
-static void PrintResult(const GsaResult& res,
+static void PrintResult(const gsa::GsaResult& res,
                         std::chrono::steady_clock::time_point start) {
   const double ms{std::chrono::duration<double, std::milli>(
                       std::chrono::steady_clock::now() - start)
@@ -35,13 +35,13 @@ static void PrintResult(const GsaResult& res,
 
 int main() {
   // 1. Equal scalar bounds (3 dimensions, all [-5.0, 5.0]), default config.
-  GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, Sphere, {.g0 = 10.0});
+  gsa::GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, Sphere, {.g0 = 10.0});
   std::cout << "Sphere, equal bounds:\n";
   const auto start1{std::chrono::steady_clock::now()};
   PrintResult(gsa1.Optimize(), start1);
 
   // 2. Per-dimension bounds (3 dimensions with unique ranges)
-  GravitationalSearchAlgorithm gsa2(
+  gsa::GravitationalSearchAlgorithm gsa2(
       {-10.0, 0.0, -1.0}, {10.0, 50.0, 1.0}, Sphere,
       {.n_agents = 50, .max_iter = 1000, .g0 = 10.0, .alpha = 10.0});
   std::cout << "Sphere, per-dim bounds:\n";
@@ -49,7 +49,7 @@ int main() {
   PrintResult(gsa2.Optimize(), start2);
 
   // 3. Rosenbrock with tuned settings
-  GravitationalSearchAlgorithm gsa3(
+  gsa::GravitationalSearchAlgorithm gsa3(
       10, -2.048, 2.048, Rosenbrock,
       {.n_agents = 50, .max_iter = 5000, .g0 = 10.0, .alpha = 10.0});
   std::cout << "Rosenbrock, custom config:\n";
@@ -57,7 +57,7 @@ int main() {
   PrintResult(gsa3.Optimize(), start3);
 
   // 4. Lambda objective (Schwefel)
-  GravitationalSearchAlgorithm gsa4(
+  gsa::GravitationalSearchAlgorithm gsa4(
       30, -500, 500,
       [](std::span<const double> x) {
         double sum{};

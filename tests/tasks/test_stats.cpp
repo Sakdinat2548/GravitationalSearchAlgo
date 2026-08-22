@@ -6,7 +6,7 @@ using gsa_test::Optimize;
 using gsa_test::Shekel;
 using gsa_test::Sphere;
 
-static bool AllStatsFinite(const GsaResult& res) {
+static bool AllStatsFinite(const gsa::GsaResult& res) {
   bool ok{true};
   for (const auto& it : res.history) {
     ok = ok && it.stddev_fitness >= 0.0 && std::isfinite(it.stddev_fitness);
