@@ -12,14 +12,15 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include Conan toolchain if available (for nlohmann_json)
-if(EXISTS "${CMAKE_BINARY_DIR}/conan_toolchain.cmake")
+if(EXISTS "${CMAKE_BINARY_DIR}/generators/conan_toolchain.cmake")
+  include(${CMAKE_BINARY_DIR}/generators/conan_toolchain.cmake)
+elseif(EXISTS "${CMAKE_BINARY_DIR}/conan_toolchain.cmake")
   include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
 endif()
 
-# Find nlohmann_json via Conan
 find_package(nlohmann_json 3.11.2 CONFIG REQUIRED)
+find_package(xoshiro-cpp 1.1 CONFIG REQUIRED)
 
-# Options
 option(GSA_BUILD_DEMO "Build the API demo (src/demo.cpp)" ON)
 option(GSA_BUILD_TESTS "Build and register the CTest suite" ON)
 
@@ -27,12 +28,10 @@ add_library(gsa INTERFACE)
 add_library(gsa::gsa ALIAS gsa)
 target_include_directories(
     gsa INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party>)
-target_link_libraries(gsa INTERFACE nlohmann_json::nlohmann_json)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_link_libraries(gsa INTERFACE nlohmann_json::nlohmann_json xoshiro-cpp::xoshiro-cpp)
 target_compile_options(gsa INTERFACE -Wall -Wextra)
 
-# Fast warning-free syntax check of all sources.
 set(GSA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/demo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_main.cpp
@@ -45,24 +44,15 @@ set(GSA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_convergence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_validation.cpp)
 
-# Get nlohmann_json include directory from the config variable
-if(NOT nlohmann_json_INCLUDE_DIRS_RELEASE)
-    message(WARNING "nlohmann_json_INCLUDE_DIRS_RELEASE not set")
-    set(_nlohmann_include "")
-else()
-    set(_nlohmann_include -I${nlohmann_json_INCLUDE_DIRS_RELEASE})
-endif()
-
 add_custom_target(check-gsa
     COMMAND ${CMAKE_CXX_COMPILER} -Wall -Wextra -Werror -std=c++20 -fsyntax-only
             -I${CMAKE_CURRENT_SOURCE_DIR}/include
-            -I${CMAKE_CURRENT_SOURCE_DIR}/third_party
-            ${_nlohmann_include}
+            -I${nlohmann_json_INCLUDE_DIRS_RELEASE}
+            -I${xoshiro-cpp_INCLUDE_DIRS_RELEASE}
             ${GSA_SOURCES}
     DEPENDS ${GSA_SOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Google-casing naming lint via clang-tidy; check-gsa must stay warning-free too.
 find_program(GSA_CLANG_TIDY clang-tidy)
 if(GSA_CLANG_TIDY)
   add_custom_target(check-naming
@@ -79,7 +69,6 @@ if(GSA_BUILD_DEMO)
   target_compile_options(demo PRIVATE -Wall -Wextra)
 endif()
 
-# JSON config + runtime mutation example
 if(GSA_BUILD_DEMO)
   add_executable(main src/main.cpp)
   target_link_libraries(main PRIVATE gsa::gsa nlohmann_json::nlohmann_json)

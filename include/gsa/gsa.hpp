@@ -16,7 +16,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "XoshiroCpp.hpp"
+#include <xoshiro-cpp/XoshiroCpp.hpp>
 #include "gsa/stats.hpp"
 
 struct GsaConfig {

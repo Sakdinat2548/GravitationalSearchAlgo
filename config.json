@@ -1,8 +1,0 @@
-{
-    "n_agents": 40,
-    "max_iter": 500,
-    "g0": 10.0,
-    "alpha": 20.0,
-    "minimize": true,
-    "seed": 12345
-  }
