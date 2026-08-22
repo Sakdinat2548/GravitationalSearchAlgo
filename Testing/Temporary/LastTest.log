@@ -1,0 +1,131 @@
+Start testing: Aug 22 12:31 SE Asia Standard Time
+----------------------------------------------------------
+1/8 Testing: gsa_history
+1/8 Test: gsa_history
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "history_size"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_history" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] history_size
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_history" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_history" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/8 Testing: gsa_stats
+2/8 Test: gsa_stats
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "history_stats"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_stats" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] history_stats
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_stats" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_stats" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/8 Testing: gsa_determinism
+3/8 Test: gsa_determinism
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "determinism"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_determinism" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] determinism
+<end of output>
+Test time =   0.74 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_determinism" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_determinism" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/8 Testing: gsa_modes
+4/8 Test: gsa_modes
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "modes"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_modes" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] modes
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_modes" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_modes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/8 Testing: gsa_thread_safety
+5/8 Test: gsa_thread_safety
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "thread_safety"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_thread_safety" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] thread_safety
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_thread_safety" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_thread_safety" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/8 Testing: gsa_median
+6/8 Test: gsa_median
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "median_correctness"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_median" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] median_correctness
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_median" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_median" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/8 Testing: gsa_convergence
+7/8 Test: gsa_convergence
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "convergence"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_convergence" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] convergence
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_convergence" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_convergence" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/8 Testing: gsa_validation
+8/8 Test: gsa_validation
+Command: "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/gsa_test.exe" "validation"
+Directory: C:/Users/kluis/Code/GravitationalSearchAlgo/tests
+"gsa_validation" start time: Aug 22 12:31 SE Asia Standard Time
+Output:
+----------------------------------------------------------
+[PASS] validation
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"gsa_validation" end time: Aug 22 12:31 SE Asia Standard Time
+"gsa_validation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 22 12:31 SE Asia Standard Time

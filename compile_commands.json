@@ -1,0 +1,68 @@
+[
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\demo.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\demo.dir\\src\\demo.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\src\\demo.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/src/demo.cpp",
+  "output": "CMakeFiles/demo.dir/src/demo.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\main.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\main.dir\\src\\main.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\src\\main.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/src/main.cpp",
+  "output": "CMakeFiles/main.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\test_main.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\test_main.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/test_main.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/test_main.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_history.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_history.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_history.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_history.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_stats.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_stats.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_stats.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_stats.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_determinism.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_determinism.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_determinism.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_determinism.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_modes.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_modes.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_modes.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_modes.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_thread_safety.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_thread_safety.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_thread_safety.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_thread_safety.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_median.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_median.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_median.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_median.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_convergence.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_convergence.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_convergence.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_convergence.cpp.obj"
+},
+{
+  "directory": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles\\gsa_test.dir\\includes_CXX.rsp -m64 -O3 -DNDEBUG -std=c++20 -Wall -Wextra -o CMakeFiles\\gsa_test.dir\\tasks\\test_validation.cpp.obj -c C:\\Users\\kluis\\Code\\GravitationalSearchAlgo\\tests\\tasks\\test_validation.cpp",
+  "file": "C:/Users/kluis/Code/GravitationalSearchAlgo/tests/tasks/test_validation.cpp",
+  "output": "tests/CMakeFiles/gsa_test.dir/tasks/test_validation.cpp.obj"
+}
+]

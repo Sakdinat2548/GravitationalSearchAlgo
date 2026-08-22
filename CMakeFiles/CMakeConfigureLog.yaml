@@ -1,0 +1,2899 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineSystem.cmake:218 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Windows - 10.0.26200 - AMD64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeMinGWFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "mingw32-make.exe"
+    candidate_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+      - "/REGISTRY-NOTFOUND/bin/"
+      - "c:/MinGW/bin/"
+      - "/MinGW/bin/"
+      - "/REGISTRY-NOTFOUND/MinGW/bin/"
+    searched_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/mingw32-make.exe.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/mingw32-make.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/mingw32-make.exe.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/mingw32-make.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/mingw32-make.exe.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/mingw32-make.exe"
+      - "C:/Program Files/PowerShell/7/mingw32-make.exe.com"
+      - "C:/Program Files/PowerShell/7/mingw32-make.exe"
+      - "C:/msys64/ucrt64/bin/mingw32-make.exe.com"
+    found: "C:/msys64/ucrt64/bin/mingw32-make.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompiler.cmake:115 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:71 (_cmake_find_compiler_path)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "g++"
+    candidate_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/g++.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/g++.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/g++"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/g++.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/g++.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/g++"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/g++.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/g++.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/g++"
+      - "C:/Program Files/PowerShell/7/g++.com"
+      - "C:/Program Files/PowerShell/7/g++.exe"
+      - "C:/Program Files/PowerShell/7/g++"
+      - "C:/msys64/ucrt64/bin/g++.com"
+    found: "C:/msys64/ucrt64/bin/g++.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerId.cmake:501 (find_file)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerId.cmake:538 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCXXCompilerId.cpp.in"
+    candidate_directories:
+      - "C:/msys64/ucrt64/share/cmake/Modules/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/"
+    found: "C:/msys64/ucrt64/share/cmake/Modules/CMakeCXXCompilerId.cpp.in"
+    search_context:
+      CMAKE_INCLUDE_PATH:
+        - "C:/Users/kluis/.conan2/p/nlohm1bed1ddc0a2fa/p/include"
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: C:/msys64/ucrt64/bin/g++.exe 
+      Build flags: -m64
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
+      
+      The CXX compiler identification is GNU, found in:
+        C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/4.4.2/CompilerIdCXX/a.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ar"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/ar.com"
+    found: "C:/msys64/ucrt64/bin/ar.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RANLIB"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ranlib"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/ranlib.com"
+    found: "C:/msys64/ucrt64/bin/ranlib.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_STRIP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "strip"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/strip.com"
+    found: "C:/msys64/ucrt64/bin/strip.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ld"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/ld.com"
+    found: "C:/msys64/ucrt64/bin/ld.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_NM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "nm"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/nm.com"
+    found: "C:/msys64/ucrt64/bin/nm.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJDUMP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objdump"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/objdump.com"
+    found: "C:/msys64/ucrt64/bin/objdump.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJCOPY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objcopy"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/objcopy.com"
+    found: "C:/msys64/ucrt64/bin/objcopy.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_READELF"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "readelf"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/readelf.com"
+    found: "C:/msys64/ucrt64/bin/readelf.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_DLLTOOL"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "dlltool"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/dlltool.com"
+    found: "C:/msys64/ucrt64/bin/dlltool.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_ADDR2LINE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "addr2line"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/addr2line.com"
+    found: "C:/msys64/ucrt64/bin/addr2line.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_TAPI"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "tapi"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/tapi.com"
+      - "C:/msys64/ucrt64/bin/tapi.exe"
+      - "C:/msys64/ucrt64/bin/tapi"
+      - "C:/Program Files/PowerShell/7/tapi.com"
+      - "C:/Program Files/PowerShell/7/tapi.exe"
+      - "C:/Program Files/PowerShell/7/tapi"
+      - "C:/Python313/Scripts/tapi.com"
+      - "C:/Python313/Scripts/tapi.exe"
+      - "C:/Python313/Scripts/tapi"
+      - "C:/Python313/tapi.com"
+      - "C:/Python313/tapi.exe"
+      - "C:/Python313/tapi"
+      - "C:/Windows/System32/tapi.com"
+      - "C:/Windows/System32/tapi.exe"
+      - "C:/Windows/System32/tapi"
+      - "C:/Windows/tapi.com"
+      - "C:/Windows/tapi.exe"
+      - "C:/Windows/tapi"
+      - "C:/Windows/System32/wbem/tapi.com"
+      - "C:/Windows/System32/wbem/tapi.exe"
+      - "C:/Windows/System32/wbem/tapi"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/tapi.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/tapi.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/tapi"
+      - "C:/Windows/System32/OpenSSH/tapi.com"
+      - "C:/Windows/System32/OpenSSH/tapi.exe"
+      - "C:/Windows/System32/OpenSSH/tapi"
+      - "C:/Program Files/Git/cmd/tapi.com"
+      - "C:/Program Files/Git/cmd/tapi.exe"
+      - "C:/Program Files/Git/cmd/tapi"
+      - "C:/Program Files/Neovim/bin/tapi.com"
+      - "C:/Program Files/Neovim/bin/tapi.exe"
+      - "C:/Program Files/Neovim/bin/tapi"
+      - "C:/Users/kluis/AppData/Local/nvm/tapi.com"
+      - "C:/Users/kluis/AppData/Local/nvm/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/tapi"
+      - "C:/nvm4w/nodejs/tapi.com"
+      - "C:/nvm4w/nodejs/tapi.exe"
+      - "C:/nvm4w/nodejs/tapi"
+      - "C:/ProgramData/chocolatey/bin/tapi.com"
+      - "C:/ProgramData/chocolatey/bin/tapi.exe"
+      - "C:/ProgramData/chocolatey/bin/tapi"
+      - "C:/Program Files/nodejs/tapi.com"
+      - "C:/Program Files/nodejs/tapi.exe"
+      - "C:/Program Files/nodejs/tapi"
+      - "C:/Program Files/starship/bin/tapi.com"
+      - "C:/Program Files/starship/bin/tapi.exe"
+      - "C:/Program Files/starship/bin/tapi"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/tapi.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/tapi"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/tapi.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/tapi"
+      - "C:/Users/kluis/AppData/Roaming/npm/tapi.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/tapi.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/tapi"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/tapi.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/tapi"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/tapi.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/tapi"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/tapi.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/tapi"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/tapi.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/tapi.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/tapi"
+    found: false
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-FindBinUtils.cmake:18 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_AR"
+    description: "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ar-16.2"
+      - "gcc-ar-16"
+      - "gcc-ar16"
+      - "gcc-ar"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/gcc-ar-16.2.com"
+      - "C:/msys64/ucrt64/bin/gcc-ar-16.2.exe"
+      - "C:/msys64/ucrt64/bin/gcc-ar-16.2"
+      - "C:/Program Files/PowerShell/7/gcc-ar-16.2.com"
+      - "C:/Program Files/PowerShell/7/gcc-ar-16.2.exe"
+      - "C:/Program Files/PowerShell/7/gcc-ar-16.2"
+      - "C:/Python313/Scripts/gcc-ar-16.2.com"
+      - "C:/Python313/Scripts/gcc-ar-16.2.exe"
+      - "C:/Python313/Scripts/gcc-ar-16.2"
+      - "C:/Python313/gcc-ar-16.2.com"
+      - "C:/Python313/gcc-ar-16.2.exe"
+      - "C:/Python313/gcc-ar-16.2"
+      - "C:/Windows/System32/gcc-ar-16.2.com"
+      - "C:/Windows/System32/gcc-ar-16.2.exe"
+      - "C:/Windows/System32/gcc-ar-16.2"
+      - "C:/Windows/gcc-ar-16.2.com"
+      - "C:/Windows/gcc-ar-16.2.exe"
+      - "C:/Windows/gcc-ar-16.2"
+      - "C:/Windows/System32/wbem/gcc-ar-16.2.com"
+      - "C:/Windows/System32/wbem/gcc-ar-16.2.exe"
+      - "C:/Windows/System32/wbem/gcc-ar-16.2"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-16.2.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-16.2.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-16.2"
+      - "C:/Windows/System32/OpenSSH/gcc-ar-16.2.com"
+      - "C:/Windows/System32/OpenSSH/gcc-ar-16.2.exe"
+      - "C:/Windows/System32/OpenSSH/gcc-ar-16.2"
+      - "C:/Program Files/Git/cmd/gcc-ar-16.2.com"
+      - "C:/Program Files/Git/cmd/gcc-ar-16.2.exe"
+      - "C:/Program Files/Git/cmd/gcc-ar-16.2"
+      - "C:/Program Files/Neovim/bin/gcc-ar-16.2.com"
+      - "C:/Program Files/Neovim/bin/gcc-ar-16.2.exe"
+      - "C:/Program Files/Neovim/bin/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar-16.2"
+      - "C:/nvm4w/nodejs/gcc-ar-16.2.com"
+      - "C:/nvm4w/nodejs/gcc-ar-16.2.exe"
+      - "C:/nvm4w/nodejs/gcc-ar-16.2"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar-16.2.com"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar-16.2.exe"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar-16.2"
+      - "C:/Program Files/nodejs/gcc-ar-16.2.com"
+      - "C:/Program Files/nodejs/gcc-ar-16.2.exe"
+      - "C:/Program Files/nodejs/gcc-ar-16.2"
+      - "C:/Program Files/starship/bin/gcc-ar-16.2.com"
+      - "C:/Program Files/starship/bin/gcc-ar-16.2.exe"
+      - "C:/Program Files/starship/bin/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar-16.2"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar-16.2.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar-16.2"
+      - "C:/msys64/ucrt64/bin/gcc-ar-16.com"
+      - "C:/msys64/ucrt64/bin/gcc-ar-16.exe"
+      - "C:/msys64/ucrt64/bin/gcc-ar-16"
+      - "C:/Program Files/PowerShell/7/gcc-ar-16.com"
+      - "C:/Program Files/PowerShell/7/gcc-ar-16.exe"
+      - "C:/Program Files/PowerShell/7/gcc-ar-16"
+      - "C:/Python313/Scripts/gcc-ar-16.com"
+      - "C:/Python313/Scripts/gcc-ar-16.exe"
+      - "C:/Python313/Scripts/gcc-ar-16"
+      - "C:/Python313/gcc-ar-16.com"
+      - "C:/Python313/gcc-ar-16.exe"
+      - "C:/Python313/gcc-ar-16"
+      - "C:/Windows/System32/gcc-ar-16.com"
+      - "C:/Windows/System32/gcc-ar-16.exe"
+      - "C:/Windows/System32/gcc-ar-16"
+      - "C:/Windows/gcc-ar-16.com"
+      - "C:/Windows/gcc-ar-16.exe"
+      - "C:/Windows/gcc-ar-16"
+      - "C:/Windows/System32/wbem/gcc-ar-16.com"
+      - "C:/Windows/System32/wbem/gcc-ar-16.exe"
+      - "C:/Windows/System32/wbem/gcc-ar-16"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-16.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-16.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-16"
+      - "C:/Windows/System32/OpenSSH/gcc-ar-16.com"
+      - "C:/Windows/System32/OpenSSH/gcc-ar-16.exe"
+      - "C:/Windows/System32/OpenSSH/gcc-ar-16"
+      - "C:/Program Files/Git/cmd/gcc-ar-16.com"
+      - "C:/Program Files/Git/cmd/gcc-ar-16.exe"
+      - "C:/Program Files/Git/cmd/gcc-ar-16"
+      - "C:/Program Files/Neovim/bin/gcc-ar-16.com"
+      - "C:/Program Files/Neovim/bin/gcc-ar-16.exe"
+      - "C:/Program Files/Neovim/bin/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar-16"
+      - "C:/nvm4w/nodejs/gcc-ar-16.com"
+      - "C:/nvm4w/nodejs/gcc-ar-16.exe"
+      - "C:/nvm4w/nodejs/gcc-ar-16"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar-16.com"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar-16.exe"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar-16"
+      - "C:/Program Files/nodejs/gcc-ar-16.com"
+      - "C:/Program Files/nodejs/gcc-ar-16.exe"
+      - "C:/Program Files/nodejs/gcc-ar-16"
+      - "C:/Program Files/starship/bin/gcc-ar-16.com"
+      - "C:/Program Files/starship/bin/gcc-ar-16.exe"
+      - "C:/Program Files/starship/bin/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar-16"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar-16.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar-16.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar-16"
+      - "C:/msys64/ucrt64/bin/gcc-ar16.com"
+      - "C:/msys64/ucrt64/bin/gcc-ar16.exe"
+      - "C:/msys64/ucrt64/bin/gcc-ar16"
+      - "C:/Program Files/PowerShell/7/gcc-ar16.com"
+      - "C:/Program Files/PowerShell/7/gcc-ar16.exe"
+      - "C:/Program Files/PowerShell/7/gcc-ar16"
+      - "C:/Python313/Scripts/gcc-ar16.com"
+      - "C:/Python313/Scripts/gcc-ar16.exe"
+      - "C:/Python313/Scripts/gcc-ar16"
+      - "C:/Python313/gcc-ar16.com"
+      - "C:/Python313/gcc-ar16.exe"
+      - "C:/Python313/gcc-ar16"
+      - "C:/Windows/System32/gcc-ar16.com"
+      - "C:/Windows/System32/gcc-ar16.exe"
+      - "C:/Windows/System32/gcc-ar16"
+      - "C:/Windows/gcc-ar16.com"
+      - "C:/Windows/gcc-ar16.exe"
+      - "C:/Windows/gcc-ar16"
+      - "C:/Windows/System32/wbem/gcc-ar16.com"
+      - "C:/Windows/System32/wbem/gcc-ar16.exe"
+      - "C:/Windows/System32/wbem/gcc-ar16"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar16.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar16.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ar16"
+      - "C:/Windows/System32/OpenSSH/gcc-ar16.com"
+      - "C:/Windows/System32/OpenSSH/gcc-ar16.exe"
+      - "C:/Windows/System32/OpenSSH/gcc-ar16"
+      - "C:/Program Files/Git/cmd/gcc-ar16.com"
+      - "C:/Program Files/Git/cmd/gcc-ar16.exe"
+      - "C:/Program Files/Git/cmd/gcc-ar16"
+      - "C:/Program Files/Neovim/bin/gcc-ar16.com"
+      - "C:/Program Files/Neovim/bin/gcc-ar16.exe"
+      - "C:/Program Files/Neovim/bin/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ar16"
+      - "C:/nvm4w/nodejs/gcc-ar16.com"
+      - "C:/nvm4w/nodejs/gcc-ar16.exe"
+      - "C:/nvm4w/nodejs/gcc-ar16"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar16.com"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar16.exe"
+      - "C:/ProgramData/chocolatey/bin/gcc-ar16"
+      - "C:/Program Files/nodejs/gcc-ar16.com"
+      - "C:/Program Files/nodejs/gcc-ar16.exe"
+      - "C:/Program Files/nodejs/gcc-ar16"
+      - "C:/Program Files/starship/bin/gcc-ar16.com"
+      - "C:/Program Files/starship/bin/gcc-ar16.exe"
+      - "C:/Program Files/starship/bin/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ar16"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ar16"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar16.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar16.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ar16"
+      - "C:/msys64/ucrt64/bin/gcc-ar.com"
+    found: "C:/msys64/ucrt64/bin/gcc-ar.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-FindBinUtils.cmake:30 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_RANLIB"
+    description: "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ranlib-16.2"
+      - "gcc-ranlib-16"
+      - "gcc-ranlib16"
+      - "gcc-ranlib"
+    candidate_directories:
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+    searched_directories:
+      - "C:/msys64/ucrt64/bin/gcc-ranlib-16.2.com"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib-16.2.exe"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib-16.2"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib-16.2.com"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib-16.2.exe"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib-16.2"
+      - "C:/Python313/Scripts/gcc-ranlib-16.2.com"
+      - "C:/Python313/Scripts/gcc-ranlib-16.2.exe"
+      - "C:/Python313/Scripts/gcc-ranlib-16.2"
+      - "C:/Python313/gcc-ranlib-16.2.com"
+      - "C:/Python313/gcc-ranlib-16.2.exe"
+      - "C:/Python313/gcc-ranlib-16.2"
+      - "C:/Windows/System32/gcc-ranlib-16.2.com"
+      - "C:/Windows/System32/gcc-ranlib-16.2.exe"
+      - "C:/Windows/System32/gcc-ranlib-16.2"
+      - "C:/Windows/gcc-ranlib-16.2.com"
+      - "C:/Windows/gcc-ranlib-16.2.exe"
+      - "C:/Windows/gcc-ranlib-16.2"
+      - "C:/Windows/System32/wbem/gcc-ranlib-16.2.com"
+      - "C:/Windows/System32/wbem/gcc-ranlib-16.2.exe"
+      - "C:/Windows/System32/wbem/gcc-ranlib-16.2"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-16.2.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-16.2.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-16.2"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib-16.2.com"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib-16.2.exe"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib-16.2"
+      - "C:/Program Files/Git/cmd/gcc-ranlib-16.2.com"
+      - "C:/Program Files/Git/cmd/gcc-ranlib-16.2.exe"
+      - "C:/Program Files/Git/cmd/gcc-ranlib-16.2"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib-16.2.com"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib-16.2.exe"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib-16.2"
+      - "C:/nvm4w/nodejs/gcc-ranlib-16.2.com"
+      - "C:/nvm4w/nodejs/gcc-ranlib-16.2.exe"
+      - "C:/nvm4w/nodejs/gcc-ranlib-16.2"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib-16.2.com"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib-16.2.exe"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib-16.2"
+      - "C:/Program Files/nodejs/gcc-ranlib-16.2.com"
+      - "C:/Program Files/nodejs/gcc-ranlib-16.2.exe"
+      - "C:/Program Files/nodejs/gcc-ranlib-16.2"
+      - "C:/Program Files/starship/bin/gcc-ranlib-16.2.com"
+      - "C:/Program Files/starship/bin/gcc-ranlib-16.2.exe"
+      - "C:/Program Files/starship/bin/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib-16.2"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib-16.2.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib-16.2.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib-16.2"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib-16.com"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib-16.exe"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib-16"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib-16.com"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib-16.exe"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib-16"
+      - "C:/Python313/Scripts/gcc-ranlib-16.com"
+      - "C:/Python313/Scripts/gcc-ranlib-16.exe"
+      - "C:/Python313/Scripts/gcc-ranlib-16"
+      - "C:/Python313/gcc-ranlib-16.com"
+      - "C:/Python313/gcc-ranlib-16.exe"
+      - "C:/Python313/gcc-ranlib-16"
+      - "C:/Windows/System32/gcc-ranlib-16.com"
+      - "C:/Windows/System32/gcc-ranlib-16.exe"
+      - "C:/Windows/System32/gcc-ranlib-16"
+      - "C:/Windows/gcc-ranlib-16.com"
+      - "C:/Windows/gcc-ranlib-16.exe"
+      - "C:/Windows/gcc-ranlib-16"
+      - "C:/Windows/System32/wbem/gcc-ranlib-16.com"
+      - "C:/Windows/System32/wbem/gcc-ranlib-16.exe"
+      - "C:/Windows/System32/wbem/gcc-ranlib-16"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-16.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-16.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-16"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib-16.com"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib-16.exe"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib-16"
+      - "C:/Program Files/Git/cmd/gcc-ranlib-16.com"
+      - "C:/Program Files/Git/cmd/gcc-ranlib-16.exe"
+      - "C:/Program Files/Git/cmd/gcc-ranlib-16"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib-16.com"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib-16.exe"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib-16"
+      - "C:/nvm4w/nodejs/gcc-ranlib-16.com"
+      - "C:/nvm4w/nodejs/gcc-ranlib-16.exe"
+      - "C:/nvm4w/nodejs/gcc-ranlib-16"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib-16.com"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib-16.exe"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib-16"
+      - "C:/Program Files/nodejs/gcc-ranlib-16.com"
+      - "C:/Program Files/nodejs/gcc-ranlib-16.exe"
+      - "C:/Program Files/nodejs/gcc-ranlib-16"
+      - "C:/Program Files/starship/bin/gcc-ranlib-16.com"
+      - "C:/Program Files/starship/bin/gcc-ranlib-16.exe"
+      - "C:/Program Files/starship/bin/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib-16"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib-16.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib-16.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib-16"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib16.com"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib16.exe"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib16"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib16.com"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib16.exe"
+      - "C:/Program Files/PowerShell/7/gcc-ranlib16"
+      - "C:/Python313/Scripts/gcc-ranlib16.com"
+      - "C:/Python313/Scripts/gcc-ranlib16.exe"
+      - "C:/Python313/Scripts/gcc-ranlib16"
+      - "C:/Python313/gcc-ranlib16.com"
+      - "C:/Python313/gcc-ranlib16.exe"
+      - "C:/Python313/gcc-ranlib16"
+      - "C:/Windows/System32/gcc-ranlib16.com"
+      - "C:/Windows/System32/gcc-ranlib16.exe"
+      - "C:/Windows/System32/gcc-ranlib16"
+      - "C:/Windows/gcc-ranlib16.com"
+      - "C:/Windows/gcc-ranlib16.exe"
+      - "C:/Windows/gcc-ranlib16"
+      - "C:/Windows/System32/wbem/gcc-ranlib16.com"
+      - "C:/Windows/System32/wbem/gcc-ranlib16.exe"
+      - "C:/Windows/System32/wbem/gcc-ranlib16"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib16.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib16.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib16"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib16.com"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib16.exe"
+      - "C:/Windows/System32/OpenSSH/gcc-ranlib16"
+      - "C:/Program Files/Git/cmd/gcc-ranlib16.com"
+      - "C:/Program Files/Git/cmd/gcc-ranlib16.exe"
+      - "C:/Program Files/Git/cmd/gcc-ranlib16"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib16.com"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib16.exe"
+      - "C:/Program Files/Neovim/bin/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/nvm/gcc-ranlib16"
+      - "C:/nvm4w/nodejs/gcc-ranlib16.com"
+      - "C:/nvm4w/nodejs/gcc-ranlib16.exe"
+      - "C:/nvm4w/nodejs/gcc-ranlib16"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib16.com"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib16.exe"
+      - "C:/ProgramData/chocolatey/bin/gcc-ranlib16"
+      - "C:/Program Files/nodejs/gcc-ranlib16.com"
+      - "C:/Program Files/nodejs/gcc-ranlib16.exe"
+      - "C:/Program Files/nodejs/gcc-ranlib16"
+      - "C:/Program Files/starship/bin/gcc-ranlib16.com"
+      - "C:/Program Files/starship/bin/gcc-ranlib16.exe"
+      - "C:/Program Files/starship/bin/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Roaming/npm/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/gcc-ranlib16"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib16.com"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib16.exe"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/gcc-ranlib16"
+      - "C:/msys64/ucrt64/bin/gcc-ranlib.com"
+    found: "C:/msys64/ucrt64/bin/gcc-ranlib.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineRCCompiler.cmake:40 (find_program)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU.cmake:169 (enable_language)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX.cmake:2 (__windows_compiler_gnu)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeCXXInformation.cmake:48 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RC_COMPILER"
+    description: "RC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "windres"
+      - "windres"
+    candidate_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/msys64/ucrt64/sbin/"
+      - "C:/msys64/ucrt64/"
+      - "C:/Program Files (x86)/gsa/bin/"
+      - "C:/Program Files (x86)/gsa/sbin/"
+      - "C:/Program Files (x86)/gsa/"
+    searched_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/windres.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/windres.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/windres"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/windres.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/windres.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/windres"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/windres.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/windres.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/windres"
+      - "C:/Program Files/PowerShell/7/windres.com"
+      - "C:/Program Files/PowerShell/7/windres.exe"
+      - "C:/Program Files/PowerShell/7/windres"
+      - "C:/msys64/ucrt64/bin/windres.com"
+    found: "C:/msys64/ucrt64/bin/windres.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/gsa"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/msys64/ucrt64"
+        - "C:/Program Files (x86)/gsa"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:123 (try_compile)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd"
+      binary: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-m64"
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_EXE_LINKER_FLAGS: "-m64"
+      CMAKE_MODULE_PATH: "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: false
+      stdout: |
+        Change Dir: 'C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd'
+        
+        Run Build Command(s): C:/msys64/ucrt64/bin/cmake.exe -E env VERBOSE=1 C:/msys64/ucrt64/bin/mingw32-make.exe -f Makefile cmTC_d4b50/fast
+        C:/msys64/ucrt64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_d4b50.dir\\build.make CMakeFiles/cmTC_d4b50.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd'
+        Building CXX object CMakeFiles/cmTC_d4b50.dir/CMakeCXXCompilerABI.cpp.obj
+        C:\\msys64\\ucrt64\\bin\\g++.exe   -m64  -std=c++20   -v -o CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj -c C:\\msys64\\ucrt64\\share\\cmake\\Modules\\CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=C:\\msys64\\ucrt64\\bin\\g++.exe
+        Target: x86_64-w64-mingw32
+        Configured with: ../gcc-16.2.0/configure --prefix=/ucrt64 --with-sysroot=/ucrt64 --with-build-sysroot=D:/M/msys64/ucrt64 --with-local-prefix=/local --with-native-system-header-dir=/include --libexecdir=/ucrt64/lib --enable-bootstrap --enable-checking=release --with-arch=nocona --with-tune=generic --enable-mingw-wildcard --enable-languages=c,c++,ada,fortran,lto,objc,obj-c++,jit --enable-shared --enable-static --enable-libatomic --enable-threads=posix --enable-tls --enable-graphite --enable-fully-dynamic-string --enable-libstdcxx-backtrace=yes --enable-libstdcxx-filesystem-ts --enable-libstdcxx-time --disable-libstdcxx-pch --enable-libgomp --disable-libssp --disable-multilib --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-libiconv --with-system-zlib --with-gmp=/ucrt64 --with-mpfr=/ucrt64 --with-mpc=/ucrt64 --with-isl=/ucrt64 --with-pkgversion='Rev3, Built by MSYS2 project' --with-bugurl=https://github.com/msys2/MINGW-packages/issues --with-gnu-as --with-gnu-ld --with-libstdcxx-zoneinfo=yes --disable-libstdcxx-debug --enable-lto --enable-plugin --with-boot-ldflags=-static-libstdc++ --with-stage1-ldflags=-static-libstdc++
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 16.2.0 (Rev3, Built by MSYS2 project) 
+        COLLECT_GCC_OPTIONS='-m64' '-std=c++20' '-v' '-o' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'CMakeFiles\\cmTC_d4b50.dir\\'
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/cc1plus.exe -quiet -v -iprefix C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/ -isysroot C:/msys64/ucrt64/bin/../../ucrt64 -D_REENTRANT C:\\msys64\\ucrt64\\share\\cmake\\Modules\\CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles\\cmTC_d4b50.dir\\ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -m64 -mtune=generic -march=nocona -std=c++20 -version -o C:\\Users\\kluis\\AppData\\Local\\Temp\\ccJJoQpf.s
+        GNU C++20 (Rev3, Built by MSYS2 project) version 16.2.0 (x86_64-w64-mingw32)
+        	compiled by GNU C version 16.2.0, GMP version 6.3.0, MPFR version 4.2.2, MPC version 1.4.1, isl version isl-0.28-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/include"
+        ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0"
+        ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/x86_64-w64-mingw32"
+        ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/backward"
+        ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/include"
+        ignoring nonexistent directory "C:/msys64/ucrt64/bin/../../ucrt64/local/include"
+        ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed"
+        ignoring nonexistent directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/x86_64-w64-mingw32
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/backward
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed
+         C:/msys64/ucrt64/bin/../../ucrt64/include
+        End of search list.
+        Compiler executable checksum: 65e9ecbaf27bf5dd79794e6f0ffce751
+        COLLECT_GCC_OPTIONS='-m64' '-std=c++20' '-v' '-o' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'CMakeFiles\\cmTC_d4b50.dir\\'
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/as.exe -v --64 -o CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj C:\\Users\\kluis\\AppData\\Local\\Temp\\ccJJoQpf.s
+        GNU assembler version 2.47 (x86_64-w64-mingw32) using BFD version (GNU Binutils) 2.47.20260726
+        COMPILER_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/;C:/msys64/ucrt64/bin/../lib/gcc/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/
+        LIBRARY_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/;C:/msys64/ucrt64/bin/../lib/gcc/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/;C:/msys64/ucrt64/bin/../../ucrt64/lib/../lib/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../;C:/msys64/ucrt64/bin/../../ucrt64/lib/
+        COLLECT_GCC_OPTIONS='-m64' '-std=c++20' '-v' '-o' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_d4b50.exe
+        C:\\msys64\\ucrt64\\bin\\cmake.exe -E cmake_link_script CMakeFiles\\cmTC_d4b50.dir\\link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=C:\\msys64\\ucrt64\\bin\\g++.exe
+        COLLECT_LTO_WRAPPER=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe
+        Target: x86_64-w64-mingw32
+        Configured with: ../gcc-16.2.0/configure --prefix=/ucrt64 --with-sysroot=/ucrt64 --with-build-sysroot=D:/M/msys64/ucrt64 --with-local-prefix=/local --with-native-system-header-dir=/include --libexecdir=/ucrt64/lib --enable-bootstrap --enable-checking=release --with-arch=nocona --with-tune=generic --enable-mingw-wildcard --enable-languages=c,c++,ada,fortran,lto,objc,obj-c++,jit --enable-shared --enable-static --enable-libatomic --enable-threads=posix --enable-tls --enable-graphite --enable-fully-dynamic-string --enable-libstdcxx-backtrace=yes --enable-libstdcxx-filesystem-ts --enable-libstdcxx-time --disable-libstdcxx-pch --enable-libgomp --disable-libssp --disable-multilib --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-libiconv --with-system-zlib --with-gmp=/ucrt64 --with-mpfr=/ucrt64 --with-mpc=/ucrt64 --with-isl=/ucrt64 --with-pkgversion='Rev3, Built by MSYS2 project' --with-bugurl=https://github.com/msys2/MINGW-packages/issues --with-gnu-as --with-gnu-ld --with-libstdcxx-zoneinfo=yes --disable-libstdcxx-debug --enable-lto --enable-plugin --with-boot-ldflags=-static-libstdc++ --with-stage1-ldflags=-static-libstdc++
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 16.2.0 (Rev3, Built by MSYS2 project) 
+        COMPILER_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/;C:/msys64/ucrt64/bin/../lib/gcc/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/
+        LIBRARY_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/;C:/msys64/ucrt64/bin/../lib/gcc/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/;C:/msys64/ucrt64/bin/../../ucrt64/lib/../lib/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/;C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../;C:/msys64/ucrt64/bin/../../ucrt64/lib/
+        COLLECT_GCC_OPTIONS='-m64' '-v' '-o' 'cmTC_d4b50.exe' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'cmTC_d4b50.'
+         C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/collect2.exe -plugin C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll -plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 --sysroot=C:/msys64/ucrt64/bin/../../ucrt64 -m i386pep -Bdynamic -o cmTC_d4b50.exe C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0 -LC:/msys64/ucrt64/bin/../lib/gcc -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib -LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../.. -LC:/msys64/ucrt64/bin/../../ucrt64/lib -v --whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a --no-whole-archive --out-implib libcmTC_d4b50.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o
+        collect2 version 16.2.0
+        C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe -plugin C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll -plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 --sysroot=C:/msys64/ucrt64/bin/../../ucrt64 -m i386pep -Bdynamic -o cmTC_d4b50.exe C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0 -LC:/msys64/ucrt64/bin/../lib/gcc -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib -LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../.. -LC:/msys64/ucrt64/bin/../../ucrt64/lib -v --whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a --no-whole-archive --out-implib libcmTC_d4b50.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o
+        GNU ld (GNU Binutils) 2.47.20260726
+        COLLECT_GCC_OPTIONS='-m64' '-v' '-o' 'cmTC_d4b50.exe' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'cmTC_d4b50.'
+        C:\\msys64\\ucrt64\\bin\\cmake.exe -E rm -f CMakeFiles\\cmTC_d4b50.dir/objects.a
+        C:\\msys64\\ucrt64\\bin\\ar.exe qc CMakeFiles\\cmTC_d4b50.dir/objects.a @CMakeFiles\\cmTC_d4b50.dir\\objects1.rsp
+        C:\\msys64\\ucrt64\\bin\\g++.exe -m64  -m64 -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a -Wl,--no-whole-archive -o cmTC_d4b50.exe -Wl,--out-implib,libcmTC_d4b50.dll.a -Wl,--major-image-version,0,--minor-image-version,0
+        mingw32-make[1]: Leaving directory 'C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (message)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0]
+          add: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/x86_64-w64-mingw32]
+          add: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/backward]
+          add: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include]
+          add: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed]
+          add: [C:/msys64/ucrt64/bin/../../ucrt64/include]
+        end of search list found
+        collapse include dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0] ==> [C:/msys64/ucrt64/include/c++/16.2.0]
+        collapse include dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/x86_64-w64-mingw32] ==> [C:/msys64/ucrt64/include/c++/16.2.0/x86_64-w64-mingw32]
+        collapse include dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/backward] ==> [C:/msys64/ucrt64/include/c++/16.2.0/backward]
+        collapse include dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include] ==> [C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include]
+        collapse include dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed] ==> [C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed]
+        collapse include dir [C:/msys64/ucrt64/bin/../../ucrt64/include] ==> [C:/msys64/ucrt64/include]
+        implicit include dirs: [C:/msys64/ucrt64/include/c++/16.2.0;C:/msys64/ucrt64/include/c++/16.2.0/x86_64-w64-mingw32;C:/msys64/ucrt64/include/c++/16.2.0/backward;C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include;C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed;C:/msys64/ucrt64/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:291 (message)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|wild|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|wild))("|,| |$)]
+        ignore line: [Change Dir: 'C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd']
+        ignore line: []
+        ignore line: [Run Build Command(s): C:/msys64/ucrt64/bin/cmake.exe -E env VERBOSE=1 C:/msys64/ucrt64/bin/mingw32-make.exe -f Makefile cmTC_d4b50/fast]
+        ignore line: [C:/msys64/ucrt64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_d4b50.dir\\build.make CMakeFiles/cmTC_d4b50.dir/build]
+        ignore line: [mingw32-make[1]: Entering directory 'C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/CMakeScratch/TryCompile-fbl7bd']
+        ignore line: [Building CXX object CMakeFiles/cmTC_d4b50.dir/CMakeCXXCompilerABI.cpp.obj]
+        ignore line: [C:\\msys64\\ucrt64\\bin\\g++.exe   -m64  -std=c++20   -v -o CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj -c C:\\msys64\\ucrt64\\share\\cmake\\Modules\\CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=C:\\msys64\\ucrt64\\bin\\g++.exe]
+        ignore line: [Target: x86_64-w64-mingw32]
+        ignore line: [Configured with: ../gcc-16.2.0/configure --prefix=/ucrt64 --with-sysroot=/ucrt64 --with-build-sysroot=D:/M/msys64/ucrt64 --with-local-prefix=/local --with-native-system-header-dir=/include --libexecdir=/ucrt64/lib --enable-bootstrap --enable-checking=release --with-arch=nocona --with-tune=generic --enable-mingw-wildcard --enable-languages=c,c++,ada,fortran,lto,objc,obj-c++,jit --enable-shared --enable-static --enable-libatomic --enable-threads=posix --enable-tls --enable-graphite --enable-fully-dynamic-string --enable-libstdcxx-backtrace=yes --enable-libstdcxx-filesystem-ts --enable-libstdcxx-time --disable-libstdcxx-pch --enable-libgomp --disable-libssp --disable-multilib --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-libiconv --with-system-zlib --with-gmp=/ucrt64 --with-mpfr=/ucrt64 --with-mpc=/ucrt64 --with-isl=/ucrt64 --with-pkgversion='Rev3, Built by MSYS2 project' --with-bugurl=https://github.com/msys2/MINGW-packages/issues --with-gnu-as --with-gnu-ld --with-libstdcxx-zoneinfo=yes --disable-libstdcxx-debug --enable-lto --enable-plugin --with-boot-ldflags=-static-libstdc++ --with-stage1-ldflags=-static-libstdc++]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 16.2.0 (Rev3  Built by MSYS2 project) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-m64' '-std=c++20' '-v' '-o' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'CMakeFiles\\cmTC_d4b50.dir\\']
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/cc1plus.exe -quiet -v -iprefix C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/ -isysroot C:/msys64/ucrt64/bin/../../ucrt64 -D_REENTRANT C:\\msys64\\ucrt64\\share\\cmake\\Modules\\CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles\\cmTC_d4b50.dir\\ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -m64 -mtune=generic -march=nocona -std=c++20 -version -o C:\\Users\\kluis\\AppData\\Local\\Temp\\ccJJoQpf.s]
+        ignore line: [GNU C++20 (Rev3  Built by MSYS2 project) version 16.2.0 (x86_64-w64-mingw32)]
+        ignore line: [	compiled by GNU C version 16.2.0  GMP version 6.3.0  MPFR version 4.2.2  MPC version 1.4.1  isl version isl-0.28-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/include"]
+        ignore line: [ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0"]
+        ignore line: [ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/x86_64-w64-mingw32"]
+        ignore line: [ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/backward"]
+        ignore line: [ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/include"]
+        ignore line: [ignoring nonexistent directory "C:/msys64/ucrt64/bin/../../ucrt64/local/include"]
+        ignore line: [ignoring duplicate directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed"]
+        ignore line: [ignoring nonexistent directory "C:/msys64/ucrt64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0]
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/x86_64-w64-mingw32]
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../include/c++/16.2.0/backward]
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include]
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed]
+        ignore line: [ C:/msys64/ucrt64/bin/../../ucrt64/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: 65e9ecbaf27bf5dd79794e6f0ffce751]
+        ignore line: [COLLECT_GCC_OPTIONS='-m64' '-std=c++20' '-v' '-o' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'CMakeFiles\\cmTC_d4b50.dir\\']
+        ignore line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/as.exe -v --64 -o CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj C:\\Users\\kluis\\AppData\\Local\\Temp\\ccJJoQpf.s]
+        ignore line: [GNU assembler version 2.47 (x86_64-w64-mingw32) using BFD version (GNU Binutils) 2.47.20260726]
+        ignore line: [COMPILER_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/]
+        ignore line: [LIBRARY_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../../ucrt64/lib/../lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../]
+        ignore line: [C:/msys64/ucrt64/bin/../../ucrt64/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-m64' '-std=c++20' '-v' '-o' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'CMakeFiles\\cmTC_d4b50.dir\\CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_d4b50.exe]
+        ignore line: [C:\\msys64\\ucrt64\\bin\\cmake.exe -E cmake_link_script CMakeFiles\\cmTC_d4b50.dir\\link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=C:\\msys64\\ucrt64\\bin\\g++.exe]
+        ignore line: [COLLECT_LTO_WRAPPER=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe]
+        ignore line: [Target: x86_64-w64-mingw32]
+        ignore line: [Configured with: ../gcc-16.2.0/configure --prefix=/ucrt64 --with-sysroot=/ucrt64 --with-build-sysroot=D:/M/msys64/ucrt64 --with-local-prefix=/local --with-native-system-header-dir=/include --libexecdir=/ucrt64/lib --enable-bootstrap --enable-checking=release --with-arch=nocona --with-tune=generic --enable-mingw-wildcard --enable-languages=c,c++,ada,fortran,lto,objc,obj-c++,jit --enable-shared --enable-static --enable-libatomic --enable-threads=posix --enable-tls --enable-graphite --enable-fully-dynamic-string --enable-libstdcxx-backtrace=yes --enable-libstdcxx-filesystem-ts --enable-libstdcxx-time --disable-libstdcxx-pch --enable-libgomp --disable-libssp --disable-multilib --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-libiconv --with-system-zlib --with-gmp=/ucrt64 --with-mpfr=/ucrt64 --with-mpc=/ucrt64 --with-isl=/ucrt64 --with-pkgversion='Rev3, Built by MSYS2 project' --with-bugurl=https://github.com/msys2/MINGW-packages/issues --with-gnu-as --with-gnu-ld --with-libstdcxx-zoneinfo=yes --disable-libstdcxx-debug --enable-lto --enable-plugin --with-boot-ldflags=-static-libstdc++ --with-stage1-ldflags=-static-libstdc++]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 16.2.0 (Rev3  Built by MSYS2 project) ]
+        ignore line: [COMPILER_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/]
+        ignore line: [LIBRARY_PATH=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../../ucrt64/lib/../lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../]
+        ignore line: [C:/msys64/ucrt64/bin/../../ucrt64/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-m64' '-v' '-o' 'cmTC_d4b50.exe' '-shared-libgcc' '-mtune=generic' '-march=nocona' '-dumpdir' 'cmTC_d4b50.']
+        link line: [ C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/collect2.exe -plugin C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll -plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 --sysroot=C:/msys64/ucrt64/bin/../../ucrt64 -m i386pep -Bdynamic -o cmTC_d4b50.exe C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0 -LC:/msys64/ucrt64/bin/../lib/gcc -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib -LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../.. -LC:/msys64/ucrt64/bin/../../ucrt64/lib -v --whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a --no-whole-archive --out-implib libcmTC_d4b50.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o]
+          arg [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/collect2.exe] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll] ==> ignore
+          arg [-plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe] ==> ignore
+          arg [-plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lmingwex] ==> ignore
+          arg [-plugin-opt=-pass-through=-lmsvcrt] ==> ignore
+          arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+          arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
+          arg [-plugin-opt=-pass-through=-ladvapi32] ==> ignore
+          arg [-plugin-opt=-pass-through=-lshell32] ==> ignore
+          arg [-plugin-opt=-pass-through=-luser32] ==> ignore
+          arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+          arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lmingwex] ==> ignore
+          arg [-plugin-opt=-pass-through=-lmsvcrt] ==> ignore
+          arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+          arg [--sysroot=C:/msys64/ucrt64/bin/../../ucrt64] ==> ignore
+          arg [-m] ==> ignore
+          arg [i386pep] ==> ignore
+          arg [-Bdynamic] ==> search dynamic
+          arg [-o] ==> ignore
+          arg [cmTC_d4b50.exe] ==> ignore
+          arg [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o] ==> obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o]
+          arg [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o] ==> obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o]
+          arg [-LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0] ==> dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0]
+          arg [-LC:/msys64/ucrt64/bin/../lib/gcc] ==> dir [C:/msys64/ucrt64/bin/../lib/gcc]
+          arg [-LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib] ==> dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib]
+          arg [-LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib] ==> dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib]
+          arg [-LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib] ==> dir [C:/msys64/ucrt64/bin/../../ucrt64/lib/../lib]
+          arg [-LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib] ==> dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib]
+          arg [-LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../..] ==> dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../..]
+          arg [-LC:/msys64/ucrt64/bin/../../ucrt64/lib] ==> dir [C:/msys64/ucrt64/bin/../../ucrt64/lib]
+          arg [-v] ==> ignore
+          arg [--whole-archive] ==> ignore
+          arg [CMakeFiles\\cmTC_d4b50.dir/objects.a] ==> ignore
+          arg [--no-whole-archive] ==> ignore
+          arg [--out-implib] ==> ignore
+          arg [libcmTC_d4b50.dll.a] ==> ignore
+          arg [--major-image-version] ==> ignore
+          arg [0] ==> ignore
+          arg [--minor-image-version] ==> ignore
+          arg [0] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lmingw32] ==> lib [mingw32]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lmingwex] ==> lib [mingwex]
+          arg [-lmsvcrt] ==> lib [msvcrt]
+          arg [-lkernel32] ==> lib [kernel32]
+          arg [-lpthread] ==> lib [pthread]
+          arg [-ladvapi32] ==> lib [advapi32]
+          arg [-lshell32] ==> lib [shell32]
+          arg [-luser32] ==> lib [user32]
+          arg [-lkernel32] ==> lib [kernel32]
+          arg [-lmingw32] ==> lib [mingw32]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lmingwex] ==> lib [mingwex]
+          arg [-lmsvcrt] ==> lib [msvcrt]
+          arg [-lkernel32] ==> lib [kernel32]
+          arg [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o] ==> obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o]
+          arg [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o] ==> obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o]
+        ignore line: [collect2 version 16.2.0]
+        link line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe -plugin C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll -plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 --sysroot=C:/msys64/ucrt64/bin/../../ucrt64 -m i386pep -Bdynamic -o cmTC_d4b50.exe C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0 -LC:/msys64/ucrt64/bin/../lib/gcc -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib -LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../.. -LC:/msys64/ucrt64/bin/../../ucrt64/lib -v --whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a --no-whole-archive --out-implib libcmTC_d4b50.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o] ==> linker [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe]
+        link line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe -plugin C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll -plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 --sysroot=C:/msys64/ucrt64/bin/../../ucrt64 -m i386pep -Bdynamic -o cmTC_d4b50.exe C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0 -LC:/msys64/ucrt64/bin/../lib/gcc -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib -LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../.. -LC:/msys64/ucrt64/bin/../../ucrt64/lib -v --whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a --no-whole-archive --out-implib libcmTC_d4b50.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o] ==> linker architecture flags [-m;i386pep]
+        ignore line: [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe -plugin C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/liblto_plugin.dll -plugin-opt=C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\\Users\\kluis\\AppData\\Local\\Temp\\ccjMkE9B.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 --sysroot=C:/msys64/ucrt64/bin/../../ucrt64 -m i386pep -Bdynamic -o cmTC_d4b50.exe C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0 -LC:/msys64/ucrt64/bin/../lib/gcc -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib -LC:/msys64/ucrt64/bin/../../ucrt64/lib/../lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib -LC:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../.. -LC:/msys64/ucrt64/bin/../../ucrt64/lib -v --whole-archive CMakeFiles\\cmTC_d4b50.dir/objects.a --no-whole-archive --out-implib libcmTC_d4b50.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmingwex -lmsvcrt -lkernel32 C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o]
+        linker tool for 'CXX': C:/msys64/ucrt64/x86_64-w64-mingw32/bin/ld.exe -m;i386pep
+        remove lib [msvcrt]
+        remove lib [msvcrt]
+        collapse obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/crt2.o] ==> [C:/msys64/ucrt64/lib/crt2.o]
+        collapse obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o] ==> [C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o]
+        collapse obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib/default-manifest.o] ==> [C:/msys64/ucrt64/lib/default-manifest.o]
+        collapse obj [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o] ==> [C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o]
+        collapse library dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0] ==> [C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0]
+        collapse library dir [C:/msys64/ucrt64/bin/../lib/gcc] ==> [C:/msys64/ucrt64/lib/gcc]
+        collapse library dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib/../lib] ==> [C:/msys64/ucrt64/x86_64-w64-mingw32/lib]
+        collapse library dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../lib] ==> [C:/msys64/ucrt64/lib]
+        collapse library dir [C:/msys64/ucrt64/bin/../../ucrt64/lib/../lib] ==> [C:/msys64/ucrt64/lib]
+        collapse library dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/lib] ==> [C:/msys64/ucrt64/x86_64-w64-mingw32/lib]
+        collapse library dir [C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../..] ==> [C:/msys64/ucrt64/lib]
+        collapse library dir [C:/msys64/ucrt64/bin/../../ucrt64/lib] ==> [C:/msys64/ucrt64/lib]
+        implicit libs: [stdc++;mingw32;gcc_s;gcc;mingwex;kernel32;pthread;advapi32;shell32;user32;kernel32;mingw32;gcc_s;gcc;mingwex;kernel32]
+        implicit objs: [C:/msys64/ucrt64/lib/crt2.o;C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/crtbegin.o;C:/msys64/ucrt64/lib/default-manifest.o;C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/crtend.o]
+        implicit dirs: [C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0;C:/msys64/ucrt64/lib/gcc;C:/msys64/ucrt64/x86_64-w64-mingw32/lib;C:/msys64/ucrt64/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:41 (message)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:337 (cmake_determine_linker_id)"
+      - "C:/msys64/ucrt64/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the CXX compiler's linker: "C:/msys64/ucrt64/x86_64-w64-mingw32/bin/ld.exe" "-v"
+      GNU ld (GNU Binutils) 2.47.20260726
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "CMakeLists.txt:20 (find_package)"
+    name: "nlohmann_json"
+    configs:
+      -
+        filename: "nlohmann_json.cps"
+        kind: "cps"
+      -
+        filename: "nlohmann_jsonConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "nlohmann_json-config.cmake"
+        kind: "cmake"
+    version_request:
+      version: "3.11.2"
+      version_complete: "3.11.2"
+      exact: false
+    settings:
+      required: "required_explicit"
+      quiet: false
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "nlohmann_json"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: true
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+    found:
+      path: "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/nlohmann_json-config.cmake"
+      mode: "config"
+      version: "3.11.2"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/gsa"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/msys64/ucrt64"
+        - "C:/Program Files (x86)/gsa"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "CMakeLists.txt:66 (find_program)"
+    mode: "program"
+    variable: "GSA_CLANG_TIDY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "clang-tidy"
+    candidate_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/"
+      - "C:/Program Files/PowerShell/7/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/Python313/Scripts/"
+      - "C:/Python313/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Neovim/bin/"
+      - "C:/Users/kluis/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/starship/bin/"
+      - "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/kluis/AppData/Roaming/npm/"
+      - "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/bin/"
+      - "C:/Users/kluis/AppData/Local/Programs/Zed/bin/"
+      - "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/"
+      - "C:/Users/kluis/AppData/Local/stellar/bin/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/msys64/ucrt64/sbin/"
+      - "C:/msys64/ucrt64/"
+      - "C:/Program Files (x86)/gsa/bin/"
+      - "C:/Program Files (x86)/gsa/sbin/"
+      - "C:/Program Files (x86)/gsa/"
+    searched_directories:
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/clang-tidy.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/clang-tidy.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/bin/clang-tidy"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/clang-tidy.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/clang-tidy.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/sbin/clang-tidy"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/clang-tidy.com"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/clang-tidy.exe"
+      - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/clang-tidy"
+      - "C:/Program Files/PowerShell/7/clang-tidy.com"
+      - "C:/Program Files/PowerShell/7/clang-tidy.exe"
+      - "C:/Program Files/PowerShell/7/clang-tidy"
+      - "C:/msys64/ucrt64/bin/clang-tidy.com"
+    found: "C:/msys64/ucrt64/bin/clang-tidy.exe"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators"
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/gsa"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/msys64/ucrt64"
+        - "C:/Program Files (x86)/gsa"
+...
+
+---
+events:
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "CMakeLists.txt:20 (find_package)"
+    name: "nlohmann_json"
+    configs:
+      -
+        filename: "nlohmann_json.cps"
+        kind: "cps"
+      -
+        filename: "nlohmann_jsonConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "nlohmann_json-config.cmake"
+        kind: "cmake"
+    version_request:
+      version: "3.11.2"
+      version_complete: "3.11.2"
+      exact: false
+    settings:
+      required: "required_explicit"
+      quiet: false
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "nlohmann_json"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: true
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/nlohmann_json.cps"
+        mode: "none?"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/nlohmann_jsonConfig.cmake"
+        mode: "none?"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/build/Release/generators/nlohmann_json-config.cmake"
+        mode: "none?"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/Code/GravitationalSearchAlgo/CMakeFiles/pkgRedirects/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/PowerShell/7/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/PowerShell/7/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/PowerShell/7/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/PowerShell/7/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/msys64/ucrt64/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/msys64/ucrt64/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/msys64/ucrt64/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/msys64/ucrt64/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/Scripts/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/Scripts/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/Scripts/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/Scripts/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Python313/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/wbem/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/wbem/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/wbem/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/wbem/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/WindowsPowerShell/v1.0/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/WindowsPowerShell/v1.0/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/WindowsPowerShell/v1.0/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/WindowsPowerShell/v1.0/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/OpenSSH/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/OpenSSH/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/OpenSSH/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Windows/System32/OpenSSH/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Git/cmd/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Git/cmd/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Git/cmd/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Git/cmd/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Neovim/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Neovim/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Neovim/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/Neovim/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/nvm/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/nvm/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/nvm/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/nvm/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/nvm4w/nodejs/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/nvm4w/nodejs/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/nvm4w/nodejs/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/nvm4w/nodejs/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/ProgramData/chocolatey/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/ProgramData/chocolatey/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/ProgramData/chocolatey/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/ProgramData/chocolatey/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/nodejs/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/nodejs/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/nodejs/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/nodejs/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/starship/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/starship/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/starship/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/starship/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Microsoft/WindowsApps/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Microsoft VS Code/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Roaming/npm/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Roaming/npm/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Roaming/npm/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Roaming/npm/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/DockerDesktop/resources/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Zed/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Zed/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Zed/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/Programs/Zed/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/PowerToys/DSCModules/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/stellar/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/stellar/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/stellar/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Users/kluis/AppData/Local/stellar/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files (x86)/nlohmann_jsonConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files (x86)/nlohmann_json-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files (x86)/lib/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+      -
+        path: "C:/Program Files (x86)/share/cps/nlohmann_json.cps"
+        mode: "cps"
+        reason: "no_exist"
+    found: null
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\PowerShell\\7"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Python313\\Scripts\\"
+        - "C:\\Python313\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Neovim\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\starship\\bin\\"
+        - "C:\\Program Files\\PowerShell\\7\\"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Users\\kluis\\AppData\\Roaming\\npm"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\Programs\\Zed\\bin"
+        - "C:\\Users\\kluis\\AppData\\Local\\PowerToys\\DSCModules\\"
+        - "C:\\Users\\kluis\\AppData\\Local\\stellar\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/gsa"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/msys64/ucrt64"
+        - "C:/Program Files (x86)/gsa"
+...

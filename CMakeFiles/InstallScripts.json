@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/kluis/Code/GravitationalSearchAlgo/cmake_install.cmake",
+		"C:/Users/kluis/Code/GravitationalSearchAlgo/tests/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

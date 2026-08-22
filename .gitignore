@@ -10,6 +10,7 @@
 *.lib
 *.gch
 build/
+CMakeUserPresets.json
 
 # Editor/IDE files
 .vscode/

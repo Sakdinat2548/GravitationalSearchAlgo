@@ -1,0 +1,9 @@
+gsa_history 1 0.156243
+gsa_stats 1 0.0842585
+gsa_determinism 1 0.743508
+gsa_modes 1 0.0659492
+gsa_thread_safety 1 0.0423915
+gsa_median 1 0.0150605
+gsa_convergence 1 0.030766
+gsa_validation 1 0.0221002
+---
