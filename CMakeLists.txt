@@ -79,6 +79,13 @@ if(GSA_BUILD_DEMO)
   target_compile_options(demo PRIVATE -Wall -Wextra)
 endif()
 
+# JSON config + runtime mutation example
+if(GSA_BUILD_DEMO)
+  add_executable(main src/main.cpp)
+  target_link_libraries(main PRIVATE gsa::gsa nlohmann_json::nlohmann_json)
+  target_compile_options(main PRIVATE -Wall -Wextra)
+endif()
+
 if(GSA_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
