@@ -6,6 +6,8 @@
 #include <numeric>
 #include <span>
 
+namespace gsa {
+
 struct FitnessStats {
   double best;
   double worst;
@@ -49,5 +51,7 @@ inline bool BetterFit(double a, double b, bool minimize) {
           .median = median,
           .stddev = std::sqrt(std::max(0.0, sq / n - m * m))};
 }
+
+}  // namespace gsa
 
 #endif  // GSA_STATS_HPP

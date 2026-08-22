@@ -11,10 +11,10 @@ using gsa_test::Sphere;
 
 TEST(thread_safety) {
   const auto cfg = Config();
-  GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, Sphere, cfg);
+  gsa::GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, Sphere, cfg);
 
   constexpr int n_threads{8};
-  std::vector<GsaResult> results(n_threads);
+  std::vector<gsa::GsaResult> results(n_threads);
   std::vector<std::thread> threads;
   threads.reserve(n_threads);
 

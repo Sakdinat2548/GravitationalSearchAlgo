@@ -10,7 +10,7 @@
 namespace gsa {
 
 // Load GsaConfig from nlohmann::json object
-GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
+inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
   GsaConfig cfg;
   if (j.contains("n_agents")) cfg.n_agents = j["n_agents"].get<size_t>();
   if (j.contains("max_iter")) cfg.max_iter = j["max_iter"].get<size_t>();
@@ -22,7 +22,7 @@ GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
 }
 
 // Load GsaConfig from JSON file
-GsaConfig LoadConfigFromFile(const std::string& path) {
+inline GsaConfig LoadConfigFromFile(const std::string& path) {
   std::ifstream file(path);
   if (!file) throw std::invalid_argument("Cannot open config file: " + path);
   nlohmann::json j;
@@ -31,7 +31,7 @@ GsaConfig LoadConfigFromFile(const std::string& path) {
 }
 
 // Load GsaConfig from JSON string
-GsaConfig LoadConfigFromString(const std::string& json_str) {
+inline GsaConfig LoadConfigFromString(const std::string& json_str) {
   nlohmann::json j = nlohmann::json::parse(json_str);
   return LoadConfigFromJson(j);
 }

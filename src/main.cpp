@@ -1,20 +1,12 @@
 #include <chrono>
-#include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <ranges>
 #include <span>
-#include <vector>
 
 #include "gsa/gsa.hpp"
 #include "gsa/config.hpp"
-#include <nlohmann/json.hpp>
-
-static double Sphere(std::span<const double> x) {
-  double s{};
-  for (double v : x) s += v * v;
-  return s;
-}
 
 static double Rosenbrock(std::span<const double> x) {
   double s{};
@@ -25,7 +17,27 @@ static double Rosenbrock(std::span<const double> x) {
   return s;
 }
 
-static void PrintResult(const GsaResult& res,
+static void WriteConfig(const std::string& path) {
+  if (std::filesystem::exists(path)) return;
+  const std::string json = R"({
+    "n_agents": 50,
+    "max_iter": 5000,
+    "g0": 10.0,
+    "alpha": 10.0,
+    "minimize": true,
+    "seed": 12345
+  })";
+  std::ofstream(path) << json;
+}
+
+static void PrintConfigFile(const std::string& path) {
+  std::ifstream file(path);
+  if (file) {
+    std::cout << file.rdbuf() << "\n";
+  }
+}
+
+static void PrintResult(const gsa::GsaResult& res,
                         std::chrono::steady_clock::time_point start) {
   const double ms{std::chrono::duration<double, std::milli>(
                       std::chrono::steady_clock::now() - start)
@@ -37,63 +49,32 @@ static void PrintResult(const GsaResult& res,
 }
 
 int main() {
-  // 1. Equal scalar bounds (3 dimensions, all [-5.0, 5.0]), default config.
-  GravitationalSearchAlgorithm gsa1(3, -5.0, 5.0, Sphere, {.g0 = 10.0});
-  std::cout << "Sphere, equal bounds:\n";
-  const auto start1{std::chrono::steady_clock::now()};
-  PrintResult(gsa1.Optimize(), start1);
+  WriteConfig("config.json");
+  PrintConfigFile("config.json");
 
-  // 2. Per-dimension bounds (3 dimensions with unique ranges)
-  GravitationalSearchAlgorithm gsa2(
-      {-10.0, 0.0, -1.0}, {10.0, 50.0, 1.0}, Sphere,
-      {.n_agents = 50, .max_iter = 1000, .g0 = 10.0, .alpha = 10.0});
-  std::cout << "Sphere, per-dim bounds:\n";
-  const auto start2{std::chrono::steady_clock::now()};
-  PrintResult(gsa2.Optimize(), start2);
+  gsa::GsaConfig cfg = gsa::LoadConfigFromFile("config.json");
+  gsa::GravitationalSearchAlgorithm gsa(10, -2.048, 2.048, Rosenbrock, cfg);
 
-  // 3. Rosenbrock with tuned settings
-  GravitationalSearchAlgorithm gsa3(
-      10, -2.048, 2.048, Rosenbrock,
-      {.n_agents = 50, .max_iter = 5000, .g0 = 10.0, .alpha = 10.0});
-  std::cout << "Rosenbrock, custom config:\n";
-  const auto start3{std::chrono::steady_clock::now()};
-  PrintResult(gsa3.Optimize(), start3);
+  std::cout << "Press 'r' to reload config from file and re-run.\n";
+  std::cout << "Press 'q' to quit.\n\n";
 
-  // 4. Lambda objective (Schwefel)
-  GravitationalSearchAlgorithm gsa4(
-      30, -500, 500,
-      [](std::span<const double> x) {
-        double sum{};
-        for (double val : x) sum += -val * std::sin(std::sqrt(std::abs(val)));
-        return sum;
-      },
-      {.n_agents = 100, .max_iter = 1000, .g0 = 10.0, .alpha = 20.0});
-  std::cout << "schwefel, lambda objective:\n";
-  const auto start4{std::chrono::steady_clock::now()};
-  PrintResult(gsa4.Optimize(), start4);
+  while (true) {
+    std::cout << "Run (current config):\n";
+    const auto start{std::chrono::steady_clock::now()};
+    PrintResult(gsa.Optimize(), start);
 
-  // 5. JSON config file example
-  std::cout << "Sphere, JSON config file:\n";
-  const std::string json_config = R"({
-    "n_agents": 40,
-    "max_iter": 500,
-    "g0": 10.0,
-    "alpha": 20.0,
-    "minimize": true,
-    "seed": 12345
-  })";
-  std::ofstream("config.json") << json_config;
-  GsaConfig cfg5 = gsa::LoadConfigFromFile("config.json");
-  GravitationalSearchAlgorithm gsa5(3, -5.0, 5.0, Sphere, cfg5);
-  const auto start5{std::chrono::steady_clock::now()};
-  PrintResult(gsa5.Optimize(), start5);
-
-  // 6. Runtime config mutation
-  std::cout << "Runtime config mutation:\n";
-  GravitationalSearchAlgorithm gsa6(3, -5.0, 5.0, Sphere);
-  gsa6.Config().SetG0(5.0).SetAlpha(5.0).SetNAgents(20);
-  const auto start6{std::chrono::steady_clock::now()};
-  PrintResult(gsa6.Optimize(), start6);
+    std::cout << "Command (r=reload, q=quit): ";
+    char cmd{};
+    std::cin >> cmd;
+    if (cmd == 'q') break;
+    if (cmd == 'r') {
+      std::cout << "Reloading config from file...\n";
+      cfg = gsa::LoadConfigFromFile("config.json");
+      gsa = gsa::GravitationalSearchAlgorithm(10, -2.048, 2.048, Rosenbrock, cfg);
+      PrintConfigFile("config.json");
+    }
+    std::cout << "\n";
+  }
 
   return 0;
 }

@@ -12,5 +12,5 @@ class GSAConan(ConanFile):
         cmake_layout(self)
 
     def requirements(self):
-        self.requires("nlohmann_json/3.11.2")
-        self.requires("xoshiro-cpp/1.1")
+        self.requires("nlohmann_json/3.11.2")  # type: ignore[reportOptionalCall]
+        self.requires("xoshiro-cpp/1.1")  # type: ignore[reportOptionalCall]

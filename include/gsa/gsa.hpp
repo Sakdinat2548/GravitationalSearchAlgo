@@ -15,9 +15,23 @@
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
-
 #include <xoshiro-cpp/XoshiroCpp.hpp>
+
 #include "gsa/stats.hpp"
+
+namespace gsa {
+
+using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
+
+template <std::integral T>
+constexpr auto Range(T stop) {
+  return std::views::iota(T{}, stop);
+}
+
+template <std::integral T, std::integral U>
+constexpr auto Range(T start, U stop) {
+  return std::views::iota(start, stop);
+}
 
 struct GsaConfig {
   size_t n_agents{40};
@@ -26,14 +40,6 @@ struct GsaConfig {
   double alpha{20.0};
   bool minimize{true};
   uint64_t seed{};
-
-  // Runtime config mutators
-  GsaConfig& SetNAgents(size_t v) { n_agents = v; return *this; }
-  GsaConfig& SetMaxIter(size_t v) { max_iter = v; return *this; }
-  GsaConfig& SetG0(double v) { g0 = v; return *this; }
-  GsaConfig& SetAlpha(double v) { alpha = v; return *this; }
-  GsaConfig& SetMinimize(bool v) { minimize = v; return *this; }
-  GsaConfig& SetSeed(uint64_t v) { seed = v; return *this; }
 };
 
 /** Per-iteration snapshot of the agent population. */
@@ -52,25 +58,13 @@ struct GsaResult {
   std::vector<GsaIterationInfo> history;
 };
 
-using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
-
-template <std::integral T>
-constexpr auto Range(T stop) {
-  return std::views::iota(T{}, stop);
-}
-
-template <std::integral T, std::integral U>
-constexpr auto Range(T start, U stop) {
-  return std::views::iota(start, stop);
-}
-
-constexpr double kEpsilon{1e-12};
-
 // Fast uniform random generator using top 53 bits
 inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
   const double scale{0x1.0p-53};  // 2^-53
   return min + (((gen() >> 11) * scale) * (max - min));
 }
+
+constexpr double kEpsilon{1e-12};
 
 template <typename Fn>
   requires std::invocable<Fn, std::span<const double>> &&
@@ -89,16 +83,13 @@ class GravitationalSearchAlgorithm {
     ValidateInputs(min_bounds_, max_bounds_, config_);
   }
 
-GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
-                                GsaConfig cfg = {})
+  GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
+                               GsaConfig cfg = {})
       : GravitationalSearchAlgorithm(
             dims > 0 ? std::vector<double>(dims, lower)
                      : throw std::invalid_argument("dims must be positive"),
             dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
             std::move(func), std::move(cfg)) {}
-
-  [[nodiscard]] GsaConfig& Config() { return config_; }
-  [[nodiscard]] const GsaConfig& Config() const { return config_; }
 
   [[nodiscard]] GsaResult Optimize() const {
     IterationState s{config_.n_agents, dimensions_};
@@ -342,5 +333,6 @@ GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
             .stddev_fitness = stats.stddev};
   }
 };
+}  // namespace gsa
 
 #endif  // GSA_HPP

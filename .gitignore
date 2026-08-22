@@ -11,6 +11,7 @@
 *.gch
 build/
 CMakeUserPresets.json
+config.json
 
 # Editor/IDE files
 .vscode/

@@ -9,7 +9,7 @@ TEST(median_correctness) {
   const auto expect = [&](const std::vector<double>& f, bool minimize,
                           double expected) {
     std::vector<size_t> idx(f.size());
-    const FitnessStats stats{ComputeFitnessStats(f, minimize, idx)};
+    const gsa::FitnessStats stats{gsa::ComputeFitnessStats(f, minimize, idx)};
     if (stats.median != expected) {
       ok = false;
       gsa_test::Expect(false, "median mismatch");
