@@ -75,21 +75,23 @@ class GravitationalSearchAlgorithm {
   GravitationalSearchAlgorithm(std::vector<double> lower,
                                std::vector<double> upper, Fn func,
                                GsaConfig cfg = {})
-      : config_(std::move(cfg)),
-        min_bounds_(std::move(lower)),
-        max_bounds_(std::move(upper)),
-        objective_fn_(std::move(func)) {
-    dimensions_ = min_bounds_.size();
-    ValidateInputs(min_bounds_, max_bounds_, config_);
-  }
+      : GravitationalSearchAlgorithm(ValidatedTag{}, std::move(lower),
+                                     std::move(upper), 0, std::move(func),
+                                     std::move(cfg)) {}
 
   GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
                                GsaConfig cfg = {})
-      : GravitationalSearchAlgorithm(
-            dims > 0 ? std::vector<double>(dims, lower)
-                     : throw std::invalid_argument("dims must be positive"),
-            dims > 0 ? std::vector<double>(dims, upper) : std::vector<double>{},
-            std::move(func), std::move(cfg)) {}
+      : GravitationalSearchAlgorithm(ValidatedTag{}, FilledBounds(dims, lower),
+                                     FilledBounds(dims, upper),
+                                     PositiveDims(dims), std::move(func),
+                                     std::move(cfg)) {}
+
+  GravitationalSearchAlgorithm(size_t dims, std::vector<double> lower,
+                               std::vector<double> upper, Fn func,
+                               GsaConfig cfg = {})
+      : GravitationalSearchAlgorithm(ValidatedTag{}, std::move(lower),
+                                     std::move(upper), dims, std::move(func),
+                                     std::move(cfg)) {}
 
   [[nodiscard]] GsaResult Optimize() const {
     IterationState s{config_.n_agents, dimensions_};
@@ -123,7 +125,73 @@ class GravitationalSearchAlgorithm {
     return result;
   }
 
+  [[nodiscard]] GsaConfig GetConfig() const noexcept { return config_; }
+
+  [[nodiscard]] size_t GetDimensions() const noexcept { return dimensions_; }
+
+  [[nodiscard]] std::span<const double> GetLowerBounds() const noexcept {
+    return min_bounds_;
+  }
+
+  [[nodiscard]] std::span<const double> GetUpperBounds() const noexcept {
+    return max_bounds_;
+  }
+
  private:
+  struct ValidatedTag {};
+
+  GravitationalSearchAlgorithm(ValidatedTag, std::vector<double> lower,
+                               std::vector<double> upper, size_t expected_dims,
+                               Fn func, GsaConfig cfg)
+      : config_(std::move(cfg)),
+        min_bounds_(std::move(lower)),
+        max_bounds_(std::move(upper)),
+        objective_fn_(std::move(func)) {
+    dimensions_ = min_bounds_.size();
+    ValidateBounds(min_bounds_, max_bounds_, config_, expected_dims);
+  }
+
+  static void ValidateBounds(const std::vector<double>& lower,
+                             const std::vector<double>& upper,
+                             const GsaConfig& cfg, size_t expected_dims) {
+    if (expected_dims != 0 &&
+        (lower.size() != expected_dims || upper.size() != expected_dims)) {
+      throw std::invalid_argument(
+          "dims must be positive and match bounds sizes");
+    }
+    ValidateInputs(lower, upper, cfg);
+  }
+
+  static void ValidateInputs(const std::vector<double>& lower,
+                             const std::vector<double>& upper,
+                             const GsaConfig& cfg) {
+    if (lower.empty() || upper.empty()) {
+      throw std::invalid_argument("Bounds vectors must not be empty");
+    }
+    if (lower.size() != upper.size()) {
+      throw std::invalid_argument(
+          "Lower and upper bounds must have the same size");
+    }
+    if (cfg.n_agents == 0 || cfg.max_iter == 0) {
+      throw std::invalid_argument("n_agents and max_iter must be positive");
+    }
+    for (auto i : Range(lower.size())) {
+      if (lower[i] > upper[i]) {
+        throw std::invalid_argument(
+            "Each lower bound must be <= its upper bound");
+      }
+    }
+  }
+
+  static size_t PositiveDims(int dims) {
+    if (dims <= 0) throw std::invalid_argument("dims must be positive");
+    return static_cast<size_t>(dims);
+  }
+
+  static std::vector<double> FilledBounds(int dims, double value) {
+    return std::vector<double>(PositiveDims(dims), value);
+  }
+
   /** Per-run working buffers; held by Optimize() so the instance stays const.
    */
   struct IterationState {
@@ -158,27 +226,6 @@ class GravitationalSearchAlgorithm {
   std::vector<double> min_bounds_;
   std::vector<double> max_bounds_;
   Fn objective_fn_;
-
-  static void ValidateInputs(const std::vector<double>& lower,
-                             const std::vector<double>& upper,
-                             const GsaConfig& cfg) {
-    if (lower.empty() || upper.empty()) {
-      throw std::invalid_argument("Bounds vectors must not be empty");
-    }
-    if (lower.size() != upper.size()) {
-      throw std::invalid_argument(
-          "Lower and upper bounds must have the same size");
-    }
-    if (cfg.n_agents == 0 || cfg.max_iter == 0) {
-      throw std::invalid_argument("n_agents and max_iter must be positive");
-    }
-    for (auto i : Range(lower.size())) {
-      if (lower[i] > upper[i]) {
-        throw std::invalid_argument(
-            "Each lower bound must be <= its upper bound");
-      }
-    }
-  }
 
   /** Base 1D offset of agent `agent`'s row (start of its position slice). */
   [[nodiscard]] constexpr size_t AgentOffset(size_t agent) const noexcept {

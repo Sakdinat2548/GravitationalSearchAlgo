@@ -180,7 +180,7 @@ Load configuration from a JSON file:
 
 ```cpp
 #include "gsa/gsa.hpp"
-#include "gsa/config.hpp"
+#include "gsa/json_io.hpp"
 
 gsa::GsaConfig cfg = gsa::LoadConfigFromFile("config.json");
 gsa::GravitationalSearchAlgorithm gsa(3, -5.0, 5.0, sphere, cfg);
@@ -190,6 +190,9 @@ auto best = gsa.Optimize();
 Example `config.json`:
 ```json
 {
+  "dimensions": 10,
+  "lower": -2.048,
+  "upper": 2.048,
   "n_agents": 40,
   "max_iter": 500,
   "g0": 10.0,
@@ -199,10 +202,30 @@ Example `config.json`:
 }
 ```
 
+`"lower"`/`"upper"` may also be per-dimension arrays (lengths must equal
+`"dimensions"`, or define it when omitted):
+
+```json
+{
+  "lower": [-10.0, 0.0, -1.0],
+  "upper": [10.0, 50.0, 1.0]
+}
+```
+
+Load bounds alongside the algorithm config:
+
+```cpp
+nlohmann::json j;
+std::ifstream("config.json") >> j;
+gsa::GsaConfig cfg{gsa::LoadConfigFromJson(j)};
+gsa::Bounds b{gsa::LoadBoundsFromJson(j)};
+gsa::GravitationalSearchAlgorithm gsa(b.dimensions, b.lower, b.upper, sphere, cfg);
+```
+
 Or from a JSON string:
 
 ```cpp
-#include "gsa/config.hpp"
+#include "gsa/json_io.hpp"
 
 const char* json = R"({
     "n_agents": 40,
