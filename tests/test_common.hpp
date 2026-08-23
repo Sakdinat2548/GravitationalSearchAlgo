@@ -3,10 +3,10 @@
 
 #include <array>
 #include <cmath>
+#include <format>
 #include <limits>
 #include <ranges>
 #include <span>
-#include <string>
 #include <string_view>
 
 #include "gsa/gsa.hpp"
@@ -69,7 +69,7 @@ inline bool CheckHistory(const gsa::GsaResult& res, const gsa::GsaConfig& cfg,
   bool ok{true};
   const auto report = [&](bool cond, std::string_view what) {
     ok = ok && cond;
-    if (!cond) Expect(false, std::string(name).append(": ").append(what));
+    if (!cond) Expect(false, std::format("{}: {}", name, what));
   };
 
   report(res.history.size() == cfg.max_iter + 1,

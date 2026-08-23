@@ -1,7 +1,6 @@
 #ifndef GSA_JSON_IO_HPP
 #define GSA_JSON_IO_HPP
 
-#include <fstream>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
@@ -24,7 +23,6 @@ inline auto Guard(Fn&& fn) -> decltype(fn()) {
   }
 }
 
-// Reject semantically invalid values that slipped through type parsing.
 inline void ValidateConfig(const GsaConfig& cfg) {
   if (cfg.n_agents == 0) {
     throw std::invalid_argument(R"("n_agents" must be > 0)");
@@ -40,8 +38,6 @@ inline void ValidateConfig(const GsaConfig& cfg) {
   }
 }
 
-// One side of the bounds: a scalar filled to `dims`, or an array whose
-// length must match `dims` when given.
 inline std::vector<double> ParseBoundsSide(const std::string& name,
                                            const nlohmann::json& v,
                                            size_t dims) {
@@ -75,7 +71,6 @@ struct Bounds {
   std::vector<double> lower, upper;
 };
 
-// Load GsaConfig from nlohmann::json object
 inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
   return detail::Guard([&] {
     GsaConfig cfg;
@@ -90,8 +85,6 @@ inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
   });
 }
 
-// Load problem dimensions and bounds from a JSON object.
-// "lower"/"upper" may be scalars or per-dimension arrays.
 inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
   return detail::Guard([&] {
     if (!j.contains("lower") || !j.contains("upper")) {
@@ -124,18 +117,7 @@ inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
   });
 }
 
-// Load GsaConfig from JSON file
-inline GsaConfig LoadConfigFromFile(const std::string& path) {
-  std::ifstream file(path);
-  if (!file) throw std::invalid_argument("Cannot open config file: " + path);
-  return detail::Guard([&] {
-    nlohmann::json j;
-    file >> j;
-    return LoadConfigFromJson(j);
-  });
-}
 
-// Load GsaConfig from JSON string
 inline GsaConfig LoadConfigFromString(const std::string& json_str) {
   return detail::Guard(
       [&] { return LoadConfigFromJson(nlohmann::json::parse(json_str)); });

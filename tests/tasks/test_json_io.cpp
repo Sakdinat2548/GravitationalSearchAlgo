@@ -75,6 +75,25 @@ TEST(json_io_bounds) {
                        arrays.upper[1] == 50.0,
                    "arrays define dims when omitted");
 
+  const auto mixed{gsa::LoadBoundsFromJson(nlohmann::json::parse(
+      R"({"dimensions": 3, "lower": -2.048, "upper": [5, 6, 7]})"))};
+  gsa_test::Expect(mixed.dimensions == 3 && mixed.lower.size() == 3 &&
+                       mixed.lower[0] == -2.048 && mixed.upper[1] == 6.0,
+                   "scalar lower + array upper");
+
+  const auto rev{gsa::LoadBoundsFromJson(nlohmann::json::parse(
+      R"({"dimensions": 2, "lower": [-1, -2], "upper": 5})"))};
+  gsa_test::Expect(rev.lower.size() == 2 && rev.upper[0] == 5.0 &&
+                       rev.upper[1] == 5.0,
+                   "array lower + scalar upper");
+
+  ok = Throws("scalar side requires dimensions",
+              R"({"lower": -1, "upper": [1, 2, 3]})",
+              [](const nlohmann::json& j) {
+                return gsa::LoadBoundsFromJson(j);
+              }) &&
+       ok;
+
   ok = Throws("missing lower rejected",
               R"({"upper": [1]})", [](const nlohmann::json& j) {
                 return gsa::LoadBoundsFromJson(j);

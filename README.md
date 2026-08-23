@@ -181,13 +181,15 @@ Each `gsa::GsaIterationInfo` records: `best_so_far`, `best_iter`, `worst_iter`, 
 
 ### JSON Configuration
 
-Load configuration from a JSON file:
+Parse JSON yourself, then load from the object:
 
 ```cpp
 #include "gsa/gsa.hpp"
 #include "gsa/json_io.hpp"
+#include <nlohmann/json.hpp>
 
-gsa::GsaConfig cfg = gsa::LoadConfigFromFile("config.json");
+nlohmann::json j = nlohmann::json::parse(std::ifstream("config.json"));
+gsa::GsaConfig cfg = gsa::LoadConfigFromJson(j);
 gsa::GravitationalSearchAlgorithm gsa(3, -5.0, 5.0, sphere, cfg);
 auto best = gsa.Optimize();
 ```
@@ -216,6 +218,10 @@ Example `config.json`:
   "upper": [10.0, 50.0, 1.0]
 }
 ```
+
+Mixing forms (scalar on one side, array on the other) is accepted by the JSON
+loader when `"dimensions"` is given. Direct C++ constructors do not mix: both
+bounds must be scalars or both vectors (`std::vector<double>(n, v)` fills one).
 
 Load bounds alongside the algorithm config:
 

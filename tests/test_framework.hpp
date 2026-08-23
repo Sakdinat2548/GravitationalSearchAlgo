@@ -2,6 +2,7 @@
 #define GSA_TEST_FRAMEWORK_HPP
 
 #include <iostream>
+#include <source_location>
 #include <string_view>
 #include <vector>
 
@@ -25,10 +26,13 @@ struct Registrar {
 
 inline int failures{};
 
-inline void Expect(bool cond, std::string_view msg) {
+inline void Expect(bool cond, std::string_view msg,
+                   const std::source_location& loc =
+                       std::source_location::current()) {
   if (!cond) {
     ++failures;
-    std::cout << "  FAIL: " << msg << "\n";
+    std::cout << "  FAIL [" << loc.file_name() << ":" << loc.line() << "] "
+              << msg << "\n";
   }
 }
 

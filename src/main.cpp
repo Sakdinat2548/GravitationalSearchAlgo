@@ -2,8 +2,8 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <ranges>
-#include <span>
+#include <string>
+#include <string_view>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -11,15 +11,18 @@
 
 #include "gsa/gsa.hpp"
 #include "gsa/json_io.hpp"
+#include "objective.hpp"
+
+namespace fs = std::filesystem;
 
 namespace clr {
 
-inline constexpr const char* kReset{"\033[0m"};
-inline constexpr const char* kRed{"\033[31m"};
-inline constexpr const char* kGreen{"\033[32m"};
-inline constexpr const char* kYellow{"\033[33m"};
-inline constexpr const char* kCyan{"\033[36m"};
-inline constexpr const char* kDim{"\033[2m"};
+constexpr std::string_view kReset{"\033[0m"};
+constexpr std::string_view kRed{"\033[31m"};
+constexpr std::string_view kGreen{"\033[32m"};
+constexpr std::string_view kYellow{"\033[33m"};
+constexpr std::string_view kCyan{"\033[36m"};
+constexpr std::string_view kDim{"\033[2m"};
 
 }  // namespace clr
 
@@ -33,8 +36,10 @@ static void EnableColors() {
 #endif
 }
 
-static void WriteConfig(const std::string& path) {
-  if (std::filesystem::exists(path)) return;
+const fs::path kConfigPath{"config.json"};
+
+static void WriteConfig(const fs::path& path) {
+  if (fs::exists(path)) return;
   nlohmann::json j;
   j["dimensions"] = 10;
   j["lower"] = -2.048;
@@ -45,18 +50,19 @@ static void WriteConfig(const std::string& path) {
   j["alpha"] = 10.0;
   j["minimize"] = true;
   j["seed"] = 0;
-  std::ofstream(path) << j.dump(2) << "\n";
+  std::ofstream out{path};
+  out << j.dump(2) << "\n";
 }
 
-static void PrintConfigFile(const std::string& path) {
-  std::ifstream file(path);
+static void PrintConfigFile(const fs::path& path) {
+  std::ifstream file{path};
   if (file) {
     std::cout << clr::kCyan << file.rdbuf() << clr::kReset << "\n";
   }
 }
 
-// Show the effective settings from the instance, not the raw file
-// (config.json may omit fields, which then fall back to defaults).
+// Show the current configuration that actually is being used by the GSA
+// instance, including the bounds and other parameters.
 template <typename Gsa>
 static void PrintRunningState(const Gsa& gsa) {
   const auto cfg{gsa.GetConfig()};
@@ -87,68 +93,71 @@ static void PrintResult(const gsa::GsaResult& res,
   std::cout << "\n" << clr::kDim << "-----" << clr::kReset << "\n";
 }
 
-static double Rosenbrock(std::span<const double> x) {
-  double s{};
-  for (auto i : std::views::iota(0ULL, x.size() - 1)) {
-    const double d{x[i + 1] - (x[i] * x[i])};
-    s += (100.0 * d * d) + ((x[i] - 1.0) * (x[i] - 1.0));
-  }
-  return s;
-}
-
 int main() {
   EnableColors();
-  WriteConfig("config.json");
-  PrintConfigFile("config.json");
+  WriteConfig(kConfigPath);
+  PrintConfigFile(kConfigPath);
 
   gsa::GsaConfig cfg;
   gsa::Bounds bounds;
-  gsa::GravitationalSearchAlgorithm gsa{1, std::vector<double>{-1.0},
-                                        std::vector<double>{1.0}, Rosenbrock};
+  gsa::GravitationalSearchAlgorithm gsa{
+      1, std::vector<double>{-1.0}, std::vector<double>{1.0}, objective::Fn};
   try {
     nlohmann::json j;
-    std::ifstream("config.json") >> j;
+    std::ifstream{kConfigPath} >> j;
     cfg = gsa::LoadConfigFromJson(j);
     bounds = gsa::LoadBoundsFromJson(j);
     gsa = gsa::GravitationalSearchAlgorithm(bounds.dimensions, bounds.lower,
-                                            bounds.upper, Rosenbrock, cfg);
+                                            bounds.upper, objective::Fn, cfg);
   } catch (const std::exception& e) {
     std::cout << clr::kRed << "Invalid config: " << e.what() << clr::kReset
               << "\n";
     return 1;
   }
 
-  while (true) {
+  auto run{[&] {
     PrintRunningState(gsa);
     std::cout << "Run (current config):\n";
     const auto start{std::chrono::steady_clock::now()};
     PrintResult(gsa.Optimize(), start);
+  }};
 
+  run();
+  while (true) {
     std::cout << clr::kYellow << "Command (r=reload, q=quit): " << clr::kReset;
-    char cmd{};
-    std::cin >> cmd;
-    if (cmd == 'q') break;
-    if (cmd == 'r') {
+    std::string line;
+    if (!std::getline(std::cin, line)) break;
+    const auto first{line.find_first_not_of(" \t\r\n")};
+    const std::string cmd{first == std::string::npos
+                              ? std::string{}
+                              : line.substr(first, 1)};
+    if (cmd == "q") break;
+    if (cmd == "r") {
       std::cout << clr::kYellow << "Reloading config from file..."
                 << clr::kReset << "\n";
       try {
         nlohmann::json j2;
-        std::ifstream("config.json") >> j2;
+        std::ifstream{kConfigPath} >> j2;
         gsa::GsaConfig cfg2{gsa::LoadConfigFromJson(j2)};
         gsa::Bounds b2{gsa::LoadBoundsFromJson(j2)};
         cfg = cfg2;
         gsa = gsa::GravitationalSearchAlgorithm(b2.dimensions, b2.lower,
-                                                b2.upper, Rosenbrock, cfg);
+                                                b2.upper, objective::Fn, cfg);
         std::cout << clr::kDim << "-----" << clr::kReset << "\n";
-        PrintConfigFile("config.json");
+        PrintConfigFile(kConfigPath);
       } catch (const std::exception& e) {
         std::cout << clr::kRed
                   << "Reload failed, keeping previous config: " << e.what()
                   << clr::kReset << "\n"
-                  << clr::kDim << "-----" << clr::kReset;
+                  << clr::kDim << "-----" << clr::kReset << "\n";
       }
+
+      run();
+
+      continue;
     }
-    std::cout << "\n";
+    std::cout << clr::kRed << "Invalid command '" << line
+              << "' — only r or q." << clr::kReset << "\n";
   }
 
   return 0;

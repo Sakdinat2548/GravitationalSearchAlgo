@@ -36,7 +36,7 @@ inline bool BetterFit(double a, double b, bool minimize) {
   if (n % 2 == 0) {
     std::ranges::nth_element(sorted_indices, sorted_indices.begin() + mid - 1,
                              comp);
-    median = (fitness[sorted_indices[mid - 1]] + hi) / 2;
+    median = std::midpoint(fitness[sorted_indices[mid - 1]], hi);
   }
   double sm{};
   double sq{};
