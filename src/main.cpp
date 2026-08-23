@@ -12,6 +12,8 @@
 #include "gsa/json_io.hpp"
 #include "objective.hpp"
 
+namespace fs = std::filesystem;
+
 namespace clr {
 
 constexpr std::string_view kReset{"\033[0m"};
@@ -33,10 +35,10 @@ static void EnableColors() {
 #endif
 }
 
-inline constexpr std::string_view kConfigPath{"config.json"};
+const fs::path kConfigPath{"config.json"};
 
-static void WriteConfig(std::string_view path) {
-  if (std::filesystem::exists(path)) return;
+static void WriteConfig(const fs::path& path) {
+  if (fs::exists(path)) return;
   nlohmann::json j;
   j["dimensions"] = 10;
   j["lower"] = -2.048;
@@ -47,12 +49,12 @@ static void WriteConfig(std::string_view path) {
   j["alpha"] = 10.0;
   j["minimize"] = true;
   j["seed"] = 0;
-  std::ofstream out{std::string{path}};
+  std::ofstream out{path};
   out << j.dump(2) << "\n";
 }
 
-static void PrintConfigFile(std::string_view path) {
-  std::ifstream file{std::string{path}};
+static void PrintConfigFile(const fs::path& path) {
+  std::ifstream file{path};
   if (file) {
     std::cout << clr::kCyan << file.rdbuf() << clr::kReset << "\n";
   }
@@ -101,7 +103,7 @@ int main() {
       1, std::vector<double>{-1.0}, std::vector<double>{1.0}, objective::Fn};
   try {
     nlohmann::json j;
-    std::ifstream{std::string{kConfigPath}} >> j;
+    std::ifstream{kConfigPath} >> j;
     cfg = gsa::LoadConfigFromJson(j);
     bounds = gsa::LoadBoundsFromJson(j);
     gsa = gsa::GravitationalSearchAlgorithm(bounds.dimensions, bounds.lower,
@@ -127,7 +129,7 @@ int main() {
                 << clr::kReset << "\n";
       try {
         nlohmann::json j2;
-        std::ifstream{std::string{kConfigPath}} >> j2;
+        std::ifstream{kConfigPath} >> j2;
         gsa::GsaConfig cfg2{gsa::LoadConfigFromJson(j2)};
         gsa::Bounds b2{gsa::LoadBoundsFromJson(j2)};
         cfg = cfg2;
