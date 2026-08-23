@@ -1,7 +1,6 @@
 #ifndef GSA_JSON_IO_HPP
 #define GSA_JSON_IO_HPP
 
-#include <fstream>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
@@ -118,15 +117,6 @@ inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
   });
 }
 
-inline GsaConfig LoadConfigFromFile(const std::string& path) {
-  std::ifstream file(path);
-  if (!file) throw std::invalid_argument("Cannot open config file: " + path);
-  return detail::Guard([&] {
-    nlohmann::json j;
-    file >> j;
-    return LoadConfigFromJson(j);
-  });
-}
 
 inline GsaConfig LoadConfigFromString(const std::string& json_str) {
   return detail::Guard(

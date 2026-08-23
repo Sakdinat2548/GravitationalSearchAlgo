@@ -33,7 +33,9 @@ static void EnableColors() {
 #endif
 }
 
-static void WriteConfig(const std::string& path) {
+inline constexpr std::string_view kConfigPath{"config.json"};
+
+static void WriteConfig(std::string_view path) {
   if (std::filesystem::exists(path)) return;
   nlohmann::json j;
   j["dimensions"] = 10;
@@ -45,18 +47,19 @@ static void WriteConfig(const std::string& path) {
   j["alpha"] = 10.0;
   j["minimize"] = true;
   j["seed"] = 0;
-  std::ofstream(path) << j.dump(2) << "\n";
+  std::ofstream out{std::string{path}};
+  out << j.dump(2) << "\n";
 }
 
-static void PrintConfigFile(const std::string& path) {
-  std::ifstream file(path);
+static void PrintConfigFile(std::string_view path) {
+  std::ifstream file{std::string{path}};
   if (file) {
     std::cout << clr::kCyan << file.rdbuf() << clr::kReset << "\n";
   }
 }
 
-// Show the effective settings from the instance, not the raw file
-// (config.json may omit fields, which then fall back to defaults).
+// Show the current configuration that actually is being used by the GSA
+// instance, including the bounds and other parameters.
 template <typename Gsa>
 static void PrintRunningState(const Gsa& gsa) {
   const auto cfg{gsa.GetConfig()};
@@ -89,16 +92,16 @@ static void PrintResult(const gsa::GsaResult& res,
 
 int main() {
   EnableColors();
-  WriteConfig("config.json");
-  PrintConfigFile("config.json");
+  WriteConfig(kConfigPath);
+  PrintConfigFile(kConfigPath);
 
   gsa::GsaConfig cfg;
   gsa::Bounds bounds;
-  gsa::GravitationalSearchAlgorithm gsa{1, std::vector<double>{-1.0},
-                                        std::vector<double>{1.0}, objective::Fn};
+  gsa::GravitationalSearchAlgorithm gsa{
+      1, std::vector<double>{-1.0}, std::vector<double>{1.0}, objective::Fn};
   try {
     nlohmann::json j;
-    std::ifstream("config.json") >> j;
+    std::ifstream{std::string{kConfigPath}} >> j;
     cfg = gsa::LoadConfigFromJson(j);
     bounds = gsa::LoadBoundsFromJson(j);
     gsa = gsa::GravitationalSearchAlgorithm(bounds.dimensions, bounds.lower,
@@ -124,14 +127,14 @@ int main() {
                 << clr::kReset << "\n";
       try {
         nlohmann::json j2;
-        std::ifstream("config.json") >> j2;
+        std::ifstream{std::string{kConfigPath}} >> j2;
         gsa::GsaConfig cfg2{gsa::LoadConfigFromJson(j2)};
         gsa::Bounds b2{gsa::LoadBoundsFromJson(j2)};
         cfg = cfg2;
         gsa = gsa::GravitationalSearchAlgorithm(b2.dimensions, b2.lower,
                                                 b2.upper, objective::Fn, cfg);
         std::cout << clr::kDim << "-----" << clr::kReset << "\n";
-        PrintConfigFile("config.json");
+        PrintConfigFile(kConfigPath);
       } catch (const std::exception& e) {
         std::cout << clr::kRed
                   << "Reload failed, keeping previous config: " << e.what()

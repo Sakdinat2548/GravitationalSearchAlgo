@@ -154,23 +154,17 @@ class GravitationalSearchAlgorithm {
   static void ValidateBounds(const std::vector<double>& lower,
                              const std::vector<double>& upper,
                              const GsaConfig& cfg, size_t expected_dims) {
-    if (expected_dims != 0 &&
-        (lower.size() != expected_dims || upper.size() != expected_dims)) {
-      throw std::invalid_argument(
-          "dims must be positive and match bounds sizes");
-    }
-    ValidateInputs(lower, upper, cfg);
-  }
-
-  static void ValidateInputs(const std::vector<double>& lower,
-                             const std::vector<double>& upper,
-                             const GsaConfig& cfg) {
     if (lower.empty() || upper.empty()) {
       throw std::invalid_argument("Bounds vectors must not be empty");
     }
     if (lower.size() != upper.size()) {
       throw std::invalid_argument(
           "Lower and upper bounds must have the same size");
+    }
+    if (expected_dims != 0 &&
+        (lower.size() != expected_dims || upper.size() != expected_dims)) {
+      throw std::invalid_argument(
+          "dims must be positive and match bounds sizes");
     }
     if (cfg.n_agents == 0 || cfg.max_iter == 0) {
       throw std::invalid_argument("n_agents and max_iter must be positive");
@@ -323,6 +317,8 @@ class GravitationalSearchAlgorithm {
 
       std::ranges::fill(s.total_force, 0.0);
 
+      const double gmi{gravitational_const * m_i};
+
       for (auto k : Range(k_best_count)) {
         const size_t j{s.sorted_indices[k]};
         if (i == j) continue;
@@ -337,8 +333,7 @@ class GravitationalSearchAlgorithm {
         }
 
         const double distance{std::sqrt(r_squared)};
-        const double force_mag{gravitational_const * (m_i * s.mass[j]) /
-                               (distance + kEpsilon)};
+        const double force_mag{gmi * s.mass[j] / (distance + kEpsilon)};
 
         for (auto d : Range(dimensions_)) {
           s.total_force[d] +=

@@ -181,13 +181,15 @@ Each `gsa::GsaIterationInfo` records: `best_so_far`, `best_iter`, `worst_iter`, 
 
 ### JSON Configuration
 
-Load configuration from a JSON file:
+Parse JSON yourself, then load from the object:
 
 ```cpp
 #include "gsa/gsa.hpp"
 #include "gsa/json_io.hpp"
+#include <nlohmann/json.hpp>
 
-gsa::GsaConfig cfg = gsa::LoadConfigFromFile("config.json");
+nlohmann::json j = nlohmann::json::parse(std::ifstream("config.json"));
+gsa::GsaConfig cfg = gsa::LoadConfigFromJson(j);
 gsa::GravitationalSearchAlgorithm gsa(3, -5.0, 5.0, sphere, cfg);
 auto best = gsa.Optimize();
 ```
