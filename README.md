@@ -219,6 +219,10 @@ Example `config.json`:
 }
 ```
 
+Mixing forms (scalar on one side, array on the other) is accepted by the JSON
+loader when `"dimensions"` is given. Direct C++ constructors do not mix: both
+bounds must be scalars or both vectors (`std::vector<double>(n, v)` fills one).
+
 Load bounds alongside the algorithm config:
 
 ```cpp
