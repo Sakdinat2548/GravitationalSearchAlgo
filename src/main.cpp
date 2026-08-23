@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <string_view>
 
 #ifdef _WIN32
@@ -114,17 +115,24 @@ int main() {
     return 1;
   }
 
-  while (true) {
+  auto run{[&] {
     PrintRunningState(gsa);
     std::cout << "Run (current config):\n";
     const auto start{std::chrono::steady_clock::now()};
     PrintResult(gsa.Optimize(), start);
+  }};
 
+  run();
+  while (true) {
     std::cout << clr::kYellow << "Command (r=reload, q=quit): " << clr::kReset;
-    char cmd{};
-    std::cin >> cmd;
-    if (cmd == 'q') break;
-    if (cmd == 'r') {
+    std::string line;
+    if (!std::getline(std::cin, line)) break;
+    const auto first{line.find_first_not_of(" \t\r\n")};
+    const std::string cmd{first == std::string::npos
+                              ? std::string{}
+                              : line.substr(first, 1)};
+    if (cmd == "q") break;
+    if (cmd == "r") {
       std::cout << clr::kYellow << "Reloading config from file..."
                 << clr::kReset << "\n";
       try {
@@ -141,10 +149,15 @@ int main() {
         std::cout << clr::kRed
                   << "Reload failed, keeping previous config: " << e.what()
                   << clr::kReset << "\n"
-                  << clr::kDim << "-----" << clr::kReset;
+                  << clr::kDim << "-----" << clr::kReset << "\n";
       }
+
+      run();
+
+      continue;
     }
-    std::cout << "\n";
+    std::cout << clr::kRed << "Invalid command '" << line
+              << "' — only r or q." << clr::kReset << "\n";
   }
 
   return 0;
