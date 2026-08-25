@@ -152,7 +152,7 @@ class GravitationalSearchAlgorithm {
     ValidateConfigs(min_bounds_, max_bounds_, config_, expected_dims);
   }
 
-static void ValidateConfigs(const std::vector<double>& lower,
+  static void ValidateConfigs(const std::vector<double>& lower,
                               const std::vector<double>& upper,
                               const GsaConfig& cfg, size_t expected_dims) {
     if (lower.empty() || upper.empty()) [[unlikely]] {
@@ -162,10 +162,11 @@ static void ValidateConfigs(const std::vector<double>& lower,
       throw std::invalid_argument(
           "Lower and upper bounds must have the same size");
     }
-    if (expected_dims != 0 &&
-        (lower.size() != expected_dims || upper.size() != expected_dims)) [[unlikely]] {
+    if (expected_dims != 0 && (lower.size() != expected_dims ||
+                               upper.size() != expected_dims)) [[unlikely]] {
       throw std::invalid_argument(
-          std::format("dims must be positive and match bounds sizes (expected: {}, got lower: {}, upper: {})",
+          std::format("dims must be positive and match bounds sizes (expected: "
+                      "{}, got lower: {}, upper: {})",
                       expected_dims, lower.size(), upper.size()));
     }
     if (cfg.n_agents == 0 || cfg.max_iter == 0) [[unlikely]] {
@@ -174,7 +175,8 @@ static void ValidateConfigs(const std::vector<double>& lower,
     for (auto i : Range(lower.size())) {
       if (lower[i] > upper[i]) [[unlikely]] {
         throw std::invalid_argument(
-            std::format("lower[{}] = {} > upper[{}] = {}: lower bound must be <= upper bound",
+            std::format("lower[{}] = {} > upper[{}] = {}: lower bound must be "
+                        "<= upper bound",
                         i, lower[i], i, upper[i]));
       }
     }
