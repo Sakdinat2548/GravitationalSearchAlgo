@@ -21,6 +21,9 @@ TEST(thread_safety) {
   for (auto t : std::views::iota(0, n_threads)) {
     threads.emplace_back([&gsa, &results, t] { results[t] = gsa.Optimize(); });
   }
+  for (auto& t : threads) {
+    t.join();
+  }
 
   bool ok{true};
   const double best = results[0].best_val;

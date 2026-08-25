@@ -120,17 +120,17 @@ The library is header-only. Compile directly with g++ (O3, C++20):
 ```bash
 # Using conan-installed dependencies (get include paths from conan output or compile_commands.json)
 g++.exe -O3 -std=c++20 \
-    -Iinclude \
+    -Isrc \
     -I<path_to_nlohmann_json_include> \
     -I<path_to_xoshiro_cpp_include> \
-    src/demo.cpp -o demo.exe
+    examples/demo.cpp -o demo.exe
 ```
 
 After running `conan install`, the include paths are available in `build/Release/generators/conan_toolchain.cmake` or `build/Release/compile_commands.json`.
 
 ## Usage
 
-Header-only library in `include/gsa/gsa.hpp` (`include/gsa/stats.hpp` for fitness statistics). Primary entry point: `GravitationalSearchAlgorithm`, templated on the objective callable (any invocable of `std::span<const double>` returning `double`; deduced via CTAD).
+Header-only library in `src/gsa/gsa.hpp` (`src/gsa/stats.hpp` for fitness statistics). Primary entry point: `GravitationalSearchAlgorithm`, templated on the objective callable (any invocable of `std::span<const double>` returning `double`; deduced via CTAD).
 
 ### Basic Example: Scalar Bounds
 
@@ -295,7 +295,7 @@ velocities/accelerations reset at the start.
 Build manually with:
 
 ```bash
-g++.exe -O3 -std=c++20 -Iinclude \
+g++.exe -O3 -std=c++20 -Isrc \
     -I<path_to_nlohmann_json_include> \
     -I<path_to_xoshiro_cpp_include> \
     tests/test_main.cpp tests/tasks/test_history.cpp \
