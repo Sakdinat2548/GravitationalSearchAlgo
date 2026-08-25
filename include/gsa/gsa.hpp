@@ -6,6 +6,7 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
+#include <format>
 #include <limits>
 #include <memory>
 #include <numeric>
@@ -148,31 +149,35 @@ class GravitationalSearchAlgorithm {
         max_bounds_(std::move(upper)),
         objective_fn_(std::move(func)) {
     dimensions_ = min_bounds_.size();
-    ValidateBounds(min_bounds_, max_bounds_, config_, expected_dims);
+    ValidateConfigs(min_bounds_, max_bounds_, config_, expected_dims);
   }
 
-  static void ValidateBounds(const std::vector<double>& lower,
-                             const std::vector<double>& upper,
-                             const GsaConfig& cfg, size_t expected_dims) {
-    if (lower.empty() || upper.empty()) {
+  static void ValidateConfigs(const std::vector<double>& lower,
+                              const std::vector<double>& upper,
+                              const GsaConfig& cfg, size_t expected_dims) {
+    if (lower.empty() || upper.empty()) [[unlikely]] {
       throw std::invalid_argument("Bounds vectors must not be empty");
     }
-    if (lower.size() != upper.size()) {
+    if (lower.size() != upper.size()) [[unlikely]] {
       throw std::invalid_argument(
           "Lower and upper bounds must have the same size");
     }
-    if (expected_dims != 0 &&
-        (lower.size() != expected_dims || upper.size() != expected_dims)) {
+    if (expected_dims != 0 && (lower.size() != expected_dims ||
+                               upper.size() != expected_dims)) [[unlikely]] {
       throw std::invalid_argument(
-          "dims must be positive and match bounds sizes");
+          std::format("dims must be positive and match bounds sizes (expected: "
+                      "{}, got lower: {}, upper: {})",
+                      expected_dims, lower.size(), upper.size()));
     }
-    if (cfg.n_agents == 0 || cfg.max_iter == 0) {
+    if (cfg.n_agents == 0 || cfg.max_iter == 0) [[unlikely]] {
       throw std::invalid_argument("n_agents and max_iter must be positive");
     }
     for (auto i : Range(lower.size())) {
-      if (lower[i] > upper[i]) {
+      if (lower[i] > upper[i]) [[unlikely]] {
         throw std::invalid_argument(
-            "Each lower bound must be <= its upper bound");
+            std::format("lower[{}] = {} > upper[{}] = {}: lower bound must be "
+                        "<= upper bound",
+                        i, lower[i], i, upper[i]));
       }
     }
   }

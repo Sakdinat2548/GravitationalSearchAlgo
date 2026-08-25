@@ -10,9 +10,9 @@
 namespace {
 
 template <typename Fn>
-bool Throws(std::string_view label, const nlohmann::json& j, Fn&& load) {
+bool Throws(std::string_view label, std::string_view json_str, Fn&& load) {
   try {
-    load(j);
+    load(json_str);
   } catch (const std::invalid_argument&) {
     return true;
   }
@@ -89,37 +89,36 @@ TEST(json_io_bounds) {
 
   ok = Throws("scalar side requires dimensions",
               R"({"lower": -1, "upper": [1, 2, 3]})",
-              [](const nlohmann::json& j) {
-                return gsa::LoadBoundsFromJson(j);
+              [](std::string_view s) {
+                return gsa::LoadBoundsFromJson(nlohmann::json::parse(s));
               }) &&
        ok;
-
   ok = Throws("missing lower rejected",
-              R"({"upper": [1]})", [](const nlohmann::json& j) {
-                return gsa::LoadBoundsFromJson(j);
+              R"({"upper": [1]})", [](std::string_view s) {
+                return gsa::LoadBoundsFromJson(nlohmann::json::parse(s));
               }) &&
        ok;
   ok = Throws("length mismatch rejected", R"({"dimensions": 3,
-                                             "lower": [-1, -1],
-                                             "upper": [1, 1, 1]})",
-              [](const nlohmann::json& j) {
-                return gsa::LoadBoundsFromJson(j);
+                                              "lower": [-1, -1],
+                                              "upper": [1, 1, 1]})",
+              [](std::string_view s) {
+                return gsa::LoadBoundsFromJson(nlohmann::json::parse(s));
               }) &&
        ok;
   ok = Throws("empty array rejected", R"({"lower": [], "upper": []})",
-              [](const nlohmann::json& j) {
-                return gsa::LoadBoundsFromJson(j);
+              [](std::string_view s) {
+                return gsa::LoadBoundsFromJson(nlohmann::json::parse(s));
               }) &&
        ok;
   ok = Throws("inverted bound rejected", R"({"lower": 5.0, "upper": 1.0})",
-              [](const nlohmann::json& j) {
-                return gsa::LoadBoundsFromJson(j);
+              [](std::string_view s) {
+                return gsa::LoadBoundsFromJson(nlohmann::json::parse(s));
               }) &&
        ok;
   ok = Throws("zero dims rejected", R"({"dimensions": 0, "lower": [],
-                                     "upper": []})",
-              [](const nlohmann::json& j) {
-                return gsa::LoadBoundsFromJson(j);
+                                      "upper": []})",
+              [](std::string_view s) {
+                return gsa::LoadBoundsFromJson(nlohmann::json::parse(s));
               }) &&
        ok;
   return ok;
