@@ -16,6 +16,7 @@ compile_commands.json
 
 # Editor/IDE files
 .vscode/
+opencode.json
 
 .cache/
 
