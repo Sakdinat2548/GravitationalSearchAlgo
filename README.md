@@ -92,6 +92,34 @@ python scripts/plot_gsa_history.py --input gsa_history.csv --output gsa_converge
 This saves a convergence chart as `gsa_convergence.png` without changing the C++
 optimization engine itself.
 
+### Interactive Visualizer (browser view)
+
+The project includes a Streamlit visualizer that lets you step through each
+iteration and inspect particle position, mass, and fitness.
+
+1. Install the Python visualization dependencies:
+
+```bash
+python -m pip install streamlit plotly pandas numpy
+```
+
+2. From the repository root, run the launcher:
+
+```bash
+python launch_visualizer.py
+```
+
+This starts the web app on `http://localhost:8501`.
+
+You can also launch it directly:
+
+```bash
+python -m streamlit run scripts/visualizer_interactive.py
+```
+
+The visualizer expects the particle dataset at `gsa_particles_2d.csv` in the
+project root. If the CSV is missing, run the C++ example first to generate it.
+
 ### Quick Syntax Check (warning-free sources)
 
 ```bash
