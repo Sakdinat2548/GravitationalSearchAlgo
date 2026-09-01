@@ -74,6 +74,24 @@ input: press **`r`** to reload the file and re-run with a fresh instance — no
 recompile needed; press **`q`** to quit. It prints both the raw file and the
 effective settings in use (omitted fields fall back to defaults).
 
+Each run writes a CSV file named `gsa_history.csv` in the working directory,
+containing the convergence history:
+
+```csv
+iteration,best_so_far,best_iter,worst_iter,mean_fitness,median_fitness,stddev_fitness
+1,1.23,0.50,2.00,1.10,1.05,0.35
+2,1.01,0.40,1.80,0.95,0.98,0.30
+```
+
+You can visualize it with Python:
+
+```bash
+python scripts/plot_gsa_history.py --input gsa_history.csv --output gsa_convergence.png
+```
+
+This saves a convergence chart as `gsa_convergence.png` without changing the C++
+optimization engine itself.
+
 ### Quick Syntax Check (warning-free sources)
 
 ```bash

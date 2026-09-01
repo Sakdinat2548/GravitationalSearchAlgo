@@ -57,6 +57,9 @@ struct GsaResult {
   double best_val;
   std::vector<double> best_pos;
   std::vector<GsaIterationInfo> history;
+  std::vector<std::vector<double>> agent_positions_by_iteration;
+  std::vector<std::vector<double>> agent_masses_by_iteration;
+  std::vector<std::vector<double>> agent_fitness_by_iteration;
 };
 
 // Fast uniform random generator using top 53 bits
@@ -107,19 +110,33 @@ class GravitationalSearchAlgorithm {
 
     GsaResult result{};
     result.history.reserve(config_.max_iter + 1);
+    result.agent_positions_by_iteration.reserve(config_.max_iter + 1);
+    result.agent_masses_by_iteration.reserve(config_.max_iter + 1);
+    result.agent_fitness_by_iteration.reserve(config_.max_iter + 1);
 
     InitializePositions(s, gen);
 
     for (auto k : Range(1ULL, config_.max_iter + 1)) {
       EvaluateFitness(s, global_best_val, global_best_pos);
       result.history.push_back(RecordIteration(s, global_best_val));
+      result.agent_positions_by_iteration.emplace_back(
+          s.position.begin(), s.position.end());
+      result.agent_fitness_by_iteration.emplace_back(s.fitness.begin(),
+                                                   s.fitness.end());
       ComputeMasses(s);
+      result.agent_masses_by_iteration.emplace_back(s.mass.begin(), s.mass.end());
       ComputeAccelerations(s, k, gen);
       UpdateKinematics(s, gen);
     }
 
     EvaluateFitness(s, global_best_val, global_best_pos);
     result.history.push_back(RecordIteration(s, global_best_val));
+    result.agent_positions_by_iteration.emplace_back(
+        s.position.begin(), s.position.end());
+    result.agent_fitness_by_iteration.emplace_back(s.fitness.begin(),
+                                                 s.fitness.end());
+    ComputeMasses(s);
+    result.agent_masses_by_iteration.emplace_back(s.mass.begin(), s.mass.end());
 
     result.best_val = global_best_val;
     result.best_pos = std::move(global_best_pos);
