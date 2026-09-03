@@ -185,78 +185,40 @@ off, `1` = final only, max `max_iter + 1`). Captures land in
 `res.snapshot_iters` plus flat `res.snapshot_positions` (snap → agent →
 dim, `res.snapshot_dims` dims per agent).
 
-### CSV Export and Maxima Plots
+### Visualize a run (recommended)
 
-`src/gsa/csv_io.hpp` writes Maxima-readable CSVs (no header rows, so
-`read_matrix` just works):
-
-```cpp
-#include "gsa/csv_io.hpp"
-
-gsa::WriteHistoryCsv(res, "history.csv");      // best_so_far,best_iter,worst_iter,mean,median,stddev
-gsa::WriteSnapshotsCsv(res, "snapshots.csv");  // iter,agent,x1..xD
-```
-
-The `main` demo does this automatically: every run exports to
-`exports/run_<yyyymmdd_hhmmss>/` (`history.csv` always, `snapshots.csv`
-when `snapshot_count > 0`, plus a copy of the effective `config.json`).
-Set `"snapshot_count"` in `config.json` and press `r` to re-run + export.
-
-Plot in Maxima with the tracked `examples/gsa_plot.mac` (run from the repo
-root; `.csv` extension implies comma separator, no extra flags needed):
+1. Set `"snapshot_count"` in `config.json` (e.g. `10`) and run `main` —
+   every run exports to `exports/run_<yyyymmdd_hhmmss>/` (`history.csv`,
+   `snapshots.csv`, plus the effective `config.json`).
+2. In Maxima, from the repo root, three lines do everything:
 
 ```maxima
 batch("examples/gsa_plot.mac")$
-H : gsa_read_history("exports/run_20260203_120000/history.csv")$
-gsa_plot_convergence(H)$
-S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
-gsa_plot_snapshot(S, 0, 1, 2)$   /* agents at iter 0, dims 1-2 */
-```
-
-For 2D Rosenbrock runs, `examples/rosen3d_example.mac` adds the surface
-(`plot3d`), a contour map, and agent overlays. `gsa_plot.mac` also provides
-`gsa_plot_contour(S, k, lo, hi)` (static contour + agents, draw-based so
-contours stay thin) and `gsa_animate_contour(S, iters, lo, hi, outfile)`
-which writes an animated GIF (`draw` + `terminal='animated_gif`, one frame
-per snapshot iter):
-
-```maxima
-batch("examples/gsa_plot.mac")$
-S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
-gsa_animate_contour(S, gsa_snapshot_iters(S), -2.048, 2.048,
-  "exports/run_20260203_120000/anim")$   /* → anim.gif */
-```
-
-Contour helpers assume the default 2D Rosenbrock objective; if you edit
-`objective.hpp`, update `rosen(x, y)` in `gsa_plot.mac` to match. Verified
-with Maxima 5.49 (SBCL + bundled gnuplot).
-
-To write everything to files at once (PNG stills + animated GIF),
-one call dumps `convergence.png`, `contour_first.png`,
-`contour_last.png` and `anim.gif` next to the CSVs:
-
-```maxima
-S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
-H : gsa_read_history("exports/run_20260203_120000/history.csv")$
-gsa_export_all(S, H, gsa_snapshot_iters(S), -2.048, 2.048,
-  "exports/run_20260203_120000")$
-```
-
-Or set the run folder once and skip all paths (bounds are the 2D
-lower/upper from your config):
-
-```maxima
-gsa_use("exports/run_20260203_120000", -2.048, 2.048)$
+gsa_use("exports/run_20260203_120000", -2.048, 2.048)$  /* run folder + 2D bounds */
 H : gsa_H()$  S : gsa_S()$
-gsa_go()$   /* same four files, straight into the run folder */
+gsa_go()$
 ```
 
-Single-file variants exist too: `gsa_save_convergence(H, path)`,
-`gsa_save_snapshot(S, k, xd, yd, path)`, `gsa_save_contour(S, k, lo, hi,
-path)`. Note: `plot2d` file output uses `[gnuplot_term, png]` +
-`[gnuplot_out_file, ...]` — the `[png_file, ...]` option hits an
-unbound-`GNUPLOT-PREAMBLE` Lisp error on Maxima 5.49/Windows that Maxima
-silently skips past, producing nothing.
+| Output (next to the CSVs) | Content |
+|---|---|
+| `convergence.png` | log-scale `best_so_far` vs iteration |
+| `contour_first/last.png` | agents on Rosenbrock contours, first/last snapshot |
+| `anim.gif` | every snapshot animated (~0.2 s/frame) |
+
+Alternatives: screen-only `gsa_plot_convergence(H)`, `gsa_plot_snapshot(S,
+k, xd, yd)`, `gsa_plot_contour(S, k, lo, hi)`; single-file
+`gsa_save_convergence/snapshot/contour`; 3D surface via
+`examples/rosen3d_example.mac`. CSV layouts (no headers, so
+`read_matrix` just works): `history.csv` =
+`best_so_far,best_iter,worst_iter,mean,median,stddev`;
+`snapshots.csv` = `iter,agent,x1..xD` (C++ API: `gsa::WriteHistoryCsv` /
+`gsa::WriteSnapshotsCsv` in `src/gsa/csv_io.hpp`).
+
+Contour helpers assume the default 2D Rosenbrock — if you edit
+`objective.hpp`, update the EDIT block (`objfn` + levels) in
+`gsa_plot.mac`. Verified on Maxima 5.49. (Plot-to-file uses
+`[gnuplot_term, png]` + `[gnuplot_out_file, ...]`: the `[png_file, ...]`
+option fails silently on 5.49/Windows.)
 
 ### JSON Configuration
 
