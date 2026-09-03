@@ -39,6 +39,44 @@ def load_data(csv_path: Path) -> pd.DataFrame:
     return df
 
 
+def add_objective_contour(
+    fig: go.Figure, frame_df: pd.DataFrame, data_df: pd.DataFrame
+) -> None:
+    """Interpolate the current frame's fitness values into a contour grid."""
+    x_min, x_max = data_df["x"].min(), data_df["x"].max()
+    y_min, y_max = data_df["y"].min(), data_df["y"].max()
+    x_padding = max((x_max - x_min) * 0.05, 0.1)
+    y_padding = max((y_max - y_min) * 0.05, 0.1)
+    axis_x = np.linspace(x_min - x_padding, x_max + x_padding, 100)
+    axis_y = np.linspace(y_min - y_padding, y_max + y_padding, 100)
+    grid_x, grid_y = np.meshgrid(axis_x, axis_y)
+
+    sample_x = frame_df["x"].to_numpy()
+    sample_y = frame_df["y"].to_numpy()
+    sample_fitness = frame_df["fitness"].to_numpy()
+    distance_squared = (
+        (grid_x[..., None] - sample_x) ** 2
+        + (grid_y[..., None] - sample_y) ** 2
+    )
+    weights = 1.0 / np.maximum(distance_squared, 1e-12)
+    grid_z = np.sum(weights * sample_fitness, axis=2) / np.sum(weights, axis=2)
+
+    fig.add_trace(
+        go.Contour(
+            x=axis_x,
+            y=axis_y,
+            z=grid_z,
+            colorscale="Viridis",
+            opacity=0.65,
+            contours=dict(showlabels=False),
+            colorbar=dict(title="f(x, y)"),
+            hovertemplate="x=%{x:.2f}<br>y=%{y:.2f}<br>f=%{z:.2f}<extra></extra>",
+            name="Interpolated objective",
+            showscale=True,
+        )
+    )
+
+
 def streamlit_app(df: pd.DataFrame) -> None:
     """Main Streamlit interactive visualization."""
     st.set_page_config(page_title="GSA Visualizer", layout="wide")
@@ -46,36 +84,34 @@ def streamlit_app(df: pd.DataFrame) -> None:
     
     frames = sorted(df["iteration"].unique())
     
-    # Session state for current frame
-    if "current_frame_idx" not in st.session_state:
-        st.session_state.current_frame_idx = 0
+    if "iteration_slider" not in st.session_state:
+        st.session_state.iteration_slider = 0
     
     # Control panel
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         if st.button("◀ Previous", use_container_width=True, key="btn_prev"):
-            st.session_state.current_frame_idx = max(0, st.session_state.current_frame_idx - 1)
-            st.rerun()
+            st.session_state.iteration_slider = max(0, st.session_state.iteration_slider - 1)
     with col2:
         if st.button("Next ▶", use_container_width=True, key="btn_next"):
-            st.session_state.current_frame_idx = min(len(frames) - 1, st.session_state.current_frame_idx + 1)
-            st.rerun()
+            st.session_state.iteration_slider = min(
+                len(frames) - 1, st.session_state.iteration_slider + 1
+            )
     with col3:
         slider_val = st.slider(
             "Iteration",
             0,
             len(frames) - 1,
-            st.session_state.current_frame_idx,
             key="iteration_slider",
         )
-        if slider_val != st.session_state.current_frame_idx:
-            st.session_state.current_frame_idx = slider_val
-            st.rerun()
     with col4:
-        st.write(f"**Frame {st.session_state.current_frame_idx} / {len(frames) - 1}**")
+        st.write(f"**Frame {slider_val} / {len(frames) - 1}**")
     
-    current_iter = frames[st.session_state.current_frame_idx]
+    current_frame_idx = slider_val
+    current_iter = frames[current_frame_idx]
     frame_df = df[df["iteration"] == current_iter].copy()
+    selected_agent = st.session_state.get("selected_agent")
+    selected_iteration = st.session_state.get("selected_iteration")
     
     # Main visualization columns
     viz_col, stats_col = st.columns([3, 1])
@@ -83,6 +119,7 @@ def streamlit_app(df: pd.DataFrame) -> None:
     with viz_col:
         # Create Plotly scatter plot with labels
         fig = go.Figure()
+        add_objective_contour(fig, frame_df, df)
         
         # Get iteration-specific data
         max_mass = frame_df["mass"].max()
@@ -90,7 +127,7 @@ def streamlit_app(df: pd.DataFrame) -> None:
         best_row = frame_df.loc[best_idx]
         
         # Add particle trail if multiple frames
-        if st.session_state.current_frame_idx > 0:
+        if current_frame_idx > 0:
             history = df[df["iteration"] <= current_iter]
         else:
             history = frame_df
@@ -105,6 +142,7 @@ def streamlit_app(df: pd.DataFrame) -> None:
             
             label = (
                 f"Agent {int(row['agent'])}<br>"
+                f"Iteration: {int(current_iter)}<br>"
                 f"Fitness: {row['fitness']:.6e}<br>"
                 f"Mass: {row['mass']:.4f}<br>"
                 f"Pos: ({row['x']:.2f}, {row['y']:.2f})"
@@ -126,12 +164,13 @@ def streamlit_app(df: pd.DataFrame) -> None:
                     textfont=dict(size=8),
                     hovertext=label,
                     hoverinfo="text",
+                    customdata=[[int(row["agent"]), int(current_iter)]],
                     showlegend=False,
                 )
             )
         
         # Add particle trails
-        if st.session_state.current_frame_idx > 0:
+        if current_frame_idx > 0:
             for agent_id in frame_df["agent"].unique():
                 history_agent = df[
                     (df["agent"] == agent_id) & (df["iteration"] <= current_iter)
@@ -140,9 +179,22 @@ def streamlit_app(df: pd.DataFrame) -> None:
                     go.Scatter(
                         x=history_agent["x"],
                         y=history_agent["y"],
-                        mode="lines",
-                        line=dict(color="rgba(100,100,100,0.3)", width=1),
-                        hoverinfo="skip",
+                        mode="lines+markers",
+                        line=dict(
+                            color=("rgba(220,40,40,0.95)"
+                                   if agent_id == selected_agent
+                                   else "rgba(100,100,100,0.3)"),
+                            width=3 if agent_id == selected_agent else 1,
+                        ),
+                        marker=dict(size=4 if agent_id == selected_agent else 2),
+                        customdata=history_agent[["agent", "iteration"]].to_numpy(),
+                        hovertemplate=(
+                            "Agent %{customdata[0]}<br>"
+                            "Iteration %{customdata[1]}<br>"
+                            "Position: (%{x:.2f}, %{y:.2f})<extra></extra>"
+                        ),
+                        name=f"Agent {int(agent_id)} path",
+                        legendgroup=f"agent-{int(agent_id)}",
                         showlegend=False,
                     )
                 )
@@ -169,7 +221,27 @@ def streamlit_app(df: pd.DataFrame) -> None:
             plot_bgcolor="rgba(240,240,240,1)",
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+        selection = st.plotly_chart(
+            fig,
+            use_container_width=True,
+            on_select="rerun",
+            key="particle_plot",
+        )
+        if selection and selection.selection.points:
+            point = selection.selection.points[0]
+            selected = point.get("customdata")
+            if selected:
+                agent_id, iteration = int(selected[0]), int(selected[1])
+                if (agent_id, iteration) != (selected_agent, selected_iteration):
+                    st.session_state.selected_agent = agent_id
+                    st.session_state.selected_iteration = iteration
+                    st.rerun()
+
+        if selected_agent is not None and selected_iteration is not None:
+            st.caption(
+                f"Selected Agent {selected_agent} path from iteration "
+                f"{selected_iteration}"
+            )
     
     with stats_col:
         st.subheader("Statistics")
