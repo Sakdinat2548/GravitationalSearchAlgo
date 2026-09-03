@@ -7,10 +7,11 @@
      gsa_plot_convergence(H)$
      S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
      gsa_plot_snapshot(S, 0, 1, 2)$   (snapshot at iter 0, dims 1 and 2)
-   or write everything to files at once:
-     gsa_export_all(S, H, gsa_snapshot_iters(S), -2.048, 2.048,
-       "exports/run_20260203_120000")$
-   (convergence.png, contour_first.png, contour_last.png, anim.gif).
+   or set the run folder once and skip all paths:
+     gsa_use("exports/run_20260203_120000", -2.048, 2.048)$
+     H : gsa_H()$  S : gsa_S()$
+     gsa_go()$   (convergence.png, contour_first/last.png, anim.gif
+                 into the run folder).
    Column layouts (no header rows, so read_matrix just works):
      history.csv   : best_so_far,best_iter,worst_iter,mean,median,stddev
      snapshots.csv : iter,agent,x1..xD
@@ -49,19 +50,26 @@ gsa_snapshot_iters(S) := block([ks : []],
     if not member(S[i][1], ks) then ks : cons(S[i][1], ks),
   sort(ks))$
 
-/* ---- Contour + animation (2D Rosenbrock only) ----
-   The contour needs the objective as a Maxima expression, so it assumes
-   the default objective.hpp for dims = 2:
-     rosen(x, y) = 100*(y - x^2)^2 + (x - 1)^2, min at (1, 1).
-   If you edit objective.hpp, update rosen below to match.
-*/
+/* ============================================================
+   EDIT THIS IF YOU CHANGE objective.hpp (2D runs only)
+   ------------------------------------------------------------
+   Contours need the objective as a Maxima expression, so mirror your
+   2D objective here. Two lines to touch:
+     1. objfn ......... the formula itself (default: Rosenbrock,
+                        min at (1, 1))
+     2. gsa_obj_levels  ~6 level values spanning YOUR function's range
+                        over YOUR bounds (evaluate f at the corners
+                        and center once to calibrate; wrong levels =
+                        empty or solid-black contours)
+   Nothing else in this file depends on the objective.
+   ============================================================ */
 
 load("draw")$
 
-rosen(x, y) := 100 * (y - x^2)^2 + (x - 1)^2$
+objfn(x, y) := 100 * (y - x^2)^2 + (x - 1)^2$
 
 /* Contour levels for Rosenbrock over typical [-2, 2]-ish bounds. */
-gsa_rosen_levels : [0.5, 2, 10, 50, 200, 1000]$
+gsa_obj_levels : [0.5, 2, 10, 50, 200, 1000]$
 
 /* Static contour map with snapshot-K agents overlaid (dims 1-2).
    Drawn with draw2d (per-object styles); plot2d's [contour] form cannot
@@ -71,19 +79,18 @@ gsa_plot_contour(S, k, lo, hi) := apply('draw2d, append(
    xlabel = "x1", ylabel = "x2",
    xrange = [lo, hi], yrange = [lo, hi],
    color = navy],
-  gsa_rosen_contours(lo, hi, gsa_rosen_levels),
+  gsa_obj_contours(lo, hi, gsa_obj_levels),
   [color = red, point_size = 2, point_type = filled_circle,
    key = "agents", points(gsa_snapshot_points(S, k, 1, 2))]))$
-
 /* Contour curves as draw objects (shared background for every frame). */
-gsa_rosen_contours(lo, hi, levels) := makelist(
-  implicit(rosen(x, y) = c, x, lo, hi, y, lo, hi), c, levels)$
+gsa_obj_contours(lo, hi, levels) := makelist(
+  implicit(objfn(x, y) = c, x, lo, hi, y, lo, hi), c, levels)$
 
 /* Animated GIF: static contours + agents at each iter in KS.
    KS is a list, e.g. gsa_snapshot_iters(S). OUTFILE gets .gif appended
    by draw; DELAY is in 1/100 s per frame. */
 gsa_animate_contour(S, ks, lo, hi, outfile) := block(
-  [contours : gsa_rosen_contours(lo, hi, gsa_rosen_levels), frames],
+  [contours : gsa_obj_contours(lo, hi, gsa_obj_levels), frames],
   frames : makelist(
     apply('gr2d, append([title = concat("iter ", k),
                          xrange = [lo, hi], yrange = [lo, hi]],
@@ -123,7 +130,7 @@ gsa_save_contour(S, k, lo, hi, path) := apply('draw2d, append(
    xlabel = "x1", ylabel = "x2",
    xrange = [lo, hi], yrange = [lo, hi],
    color = navy],
-  gsa_rosen_contours(lo, hi, gsa_rosen_levels),
+  gsa_obj_contours(lo, hi, gsa_obj_levels),
   [color = red, point_size = 2, point_type = filled_circle,
    key = "agents", points(gsa_snapshot_points(S, k, 1, 2))]))$
 
@@ -136,3 +143,34 @@ gsa_export_all(S, H, ks, lo, hi, dir) := block(
   gsa_save_contour(S, first_k, lo, hi, concat(dir, "/contour_first")),
   gsa_save_contour(S, last_k, lo, hi, concat(dir, "/contour_last")),
   gsa_animate_contour(S, ks, lo, hi, concat(dir, "/anim")))$
+
+/* ---- Session shortcut: set the run folder once ----
+     gsa_use("exports/run_20260203_120000", -2.048, 2.048)$
+   then everything below works with no paths retyped:
+     H : gsa_H()$  S : gsa_S()$
+     gsa_plot_contour(S, 0, gsa_lo, gsa_hi)$
+     gsa_go()$   (convergence.png, contour_first/last.png, anim.gif
+                 straight into the run folder) */
+
+gsa_run : false$
+gsa_lo : 0$
+gsa_hi : 0$
+
+gsa_use(dir, lo, hi) := (
+  gsa_run : dir,
+  gsa_lo : lo,
+  gsa_hi : hi,
+  concat("using run ", dir))$
+
+gsa_check_run() := if gsa_run = false then
+  error("no run selected: call gsa_use(dir, lo, hi) first")
+else true$
+
+gsa_H() := (gsa_check_run(),
+  gsa_read_history(concat(gsa_run, "/history.csv")))$
+
+gsa_S() := (gsa_check_run(),
+  gsa_read_snapshots(concat(gsa_run, "/snapshots.csv")))$
+
+gsa_go() := block([H : gsa_H(), S : gsa_S()],
+  gsa_export_all(S, H, gsa_snapshot_iters(S), gsa_lo, gsa_hi, gsa_run))$

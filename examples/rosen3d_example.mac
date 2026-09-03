@@ -1,8 +1,4 @@
 /* Rosenbrock 2D visualization example for Maxima.
-   Mirrors the default objective in examples/objective.hpp for dims = 2:
-     f(x, y) = 100*(y - x^2)^2 + (x - 1)^2,  global min at (1, 1).
-   If you edit objective.hpp, update rosen(x, y) below to match.
-
    Run from the repository root, either batch:
      maxima -b examples/rosen3d_example.mac
    or interactively (Maxima / wxMaxima):
@@ -12,34 +8,40 @@
    [discrete] / numericalio). Adjust options to taste.
 */
 
-load("numericalio")$
+/* ============================================================
+   EDIT THIS IF YOU CHANGE objective.hpp (2D runs only)
+   Mirror your 2D objective here (default: Rosenbrock,
+   f(x, y) = 100*(y - x^2)^2 + (x - 1)^2, min at (1, 1)).
+   For contour overlays also see the EDIT block in
+   examples/gsa_plot.mac (objfn + gsa_obj_levels).
+   ============================================================ */
+objfn(x, y) := 100 * (y - x^2)^2 + (x - 1)^2$
 
-/* The objective as a Maxima function of two variables. */
-rosen(x, y) := 100 * (y - x^2)^2 + (x - 1)^2$
+load("numericalio")$
 
 /* Bounds matching config.json defaults for the 2D Rosenbrock demo. */
 lo : -2.048$
 hi : 2.048$
 
 /* 1. The "fn in 3D": surface z = f(x, y) with the banana valley. */
-plot3d(rosen(x, y), [x, lo, hi], [y, lo, hi],
+plot3d(objfn(x, y), [x, lo, hi], [y, lo, hi],
   [grid, 50, 50],
   [xlabel, "x"], [ylabel, "y"], [zlabel, "f"],
   [title, "Rosenbrock surface"])$
 
 /* 2. Contour map (level sets of f). */
-plot2d([contour, rosen(x, y)], [x, lo, hi], [y, lo, hi],
+plot2d([contour, objfn(x, y)], [x, lo, hi], [y, lo, hi],
   [levels, 25], same_xy, [xlabel, "x"], [ylabel, "y"],
   [title, "Rosenbrock contours"])$
 
 /* 2b. Same contours via draw (used for overlays/animation). Needs
-   examples/gsa_plot.mac for gsa_rosen_contours/gsa_rosen_levels. */
+   examples/gsa_plot.mac for gsa_obj_contours/gsa_obj_levels. */
 /* batch("examples/gsa_plot.mac")$ */
 /* draw2d(grid = true, title = "Rosenbrock contours",
   xlabel = "x", ylabel = "y",
   xrange = [lo, hi], yrange = [lo, hi],
   color = navy,
-  gsa_rosen_contours(lo, hi, gsa_rosen_levels))$ */
+  gsa_obj_contours(lo, hi, gsa_obj_levels))$ */
 
 /* 3. Overlay GSA agent positions from a snapshot export.
    Set SNAP to a snapshots.csv produced by the main demo

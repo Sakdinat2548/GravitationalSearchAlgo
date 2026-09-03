@@ -242,6 +242,15 @@ gsa_export_all(S, H, gsa_snapshot_iters(S), -2.048, 2.048,
   "exports/run_20260203_120000")$
 ```
 
+Or set the run folder once and skip all paths (bounds are the 2D
+lower/upper from your config):
+
+```maxima
+gsa_use("exports/run_20260203_120000", -2.048, 2.048)$
+H : gsa_H()$  S : gsa_S()$
+gsa_go()$   /* same four files, straight into the run folder */
+```
+
 Single-file variants exist too: `gsa_save_convergence(H, path)`,
 `gsa_save_snapshot(S, k, xd, yd, path)`, `gsa_save_contour(S, k, lo, hi,
 path)`. Note: `plot2d` file output uses `[gnuplot_term, png]` +
