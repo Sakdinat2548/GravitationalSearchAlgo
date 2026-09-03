@@ -43,3 +43,48 @@ gsa_snapshot_iters(S) := block([ks : []],
   for i thru length(S) do
     if not member(S[i][1], ks) then ks : cons(S[i][1], ks),
   sort(ks))$
+
+/* ---- Contour + animation (2D Rosenbrock only) ----
+   The contour needs the objective as a Maxima expression, so it assumes
+   the default objective.hpp for dims = 2:
+     rosen(x, y) = 100*(y - x^2)^2 + (x - 1)^2, min at (1, 1).
+   If you edit objective.hpp, update rosen below to match.
+*/
+
+load("draw")$
+
+rosen(x, y) := 100 * (y - x^2)^2 + (x - 1)^2$
+
+/* Contour levels for Rosenbrock over typical [-2, 2]-ish bounds. */
+gsa_rosen_levels : [0.5, 2, 10, 50, 200, 1000]$
+
+/* Static contour map with snapshot-K agents overlaid (dims 1-2).
+   Drawn with draw2d (per-object styles); plot2d's [contour] form cannot
+   style contours and points independently. */
+gsa_plot_contour(S, k, lo, hi) := apply('draw2d, append(
+  [title = concat("iter ", k), grid = true,
+   xlabel = "x1", ylabel = "x2",
+   xrange = [lo, hi], yrange = [lo, hi],
+   color = navy],
+  gsa_rosen_contours(lo, hi, gsa_rosen_levels),
+  [color = red, point_size = 2, point_type = filled_circle,
+   key = "agents", points(gsa_snapshot_points(S, k, 1, 2))]))$
+
+/* Contour curves as draw objects (shared background for every frame). */
+gsa_rosen_contours(lo, hi, levels) := makelist(
+  implicit(rosen(x, y) = c, x, lo, hi, y, lo, hi), c, levels)$
+
+/* Animated GIF: static contours + agents at each iter in KS.
+   KS is a list, e.g. gsa_snapshot_iters(S). OUTFILE gets .gif appended
+   by draw; DELAY is in 1/100 s per frame. */
+gsa_animate_contour(S, ks, lo, hi, outfile) := block(
+  [contours : gsa_rosen_contours(lo, hi, gsa_rosen_levels), frames],
+  frames : makelist(
+    apply('gr2d, append([title = concat("iter ", k),
+                         xrange = [lo, hi], yrange = [lo, hi]],
+                        contours,
+                        [points(gsa_snapshot_points(S, k, 1, 2))])),
+    k, ks),
+  apply('draw, append([delay = 20, file_name = outfile,
+                       terminal = 'animated_gif, dimensions = [600, 500]],
+                      frames)))$

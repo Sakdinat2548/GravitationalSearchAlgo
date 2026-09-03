@@ -213,6 +213,24 @@ S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
 gsa_plot_snapshot(S, 0, 1, 2)$   /* agents at iter 0, dims 1-2 */
 ```
 
+For 2D Rosenbrock runs, `examples/rosen3d_example.mac` adds the surface
+(`plot3d`), a contour map, and agent overlays. `gsa_plot.mac` also provides
+`gsa_plot_contour(S, k, lo, hi)` (static contour + agents, draw-based so
+contours stay thin) and `gsa_animate_contour(S, iters, lo, hi, outfile)`
+which writes an animated GIF (`draw` + `terminal='animated_gif`, one frame
+per snapshot iter):
+
+```maxima
+batch("examples/gsa_plot.mac")$
+S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
+gsa_animate_contour(S, gsa_snapshot_iters(S), -2.048, 2.048,
+  "exports/run_20260203_120000/anim")$   /* → anim.gif */
+```
+
+Contour helpers assume the default 2D Rosenbrock objective; if you edit
+`objective.hpp`, update `rosen(x, y)` in `gsa_plot.mac` to match. Verified
+with Maxima 5.49 (SBCL + bundled gnuplot).
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:

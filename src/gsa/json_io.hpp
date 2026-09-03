@@ -46,7 +46,7 @@ inline void ValidateConfig(const GsaConfig& cfg) {
   }
   if (cfg.snapshot_count > cfg.max_iter + 1) [[unlikely]] {
     throw std::invalid_argument(
-        "\"snapshot_count\" cannot exceed \"max_iter\" + 1");
+        R"("\"snapshot_count\" cannot exceed \"max_iter\" + 1")");
   }
 }
 
