@@ -58,3 +58,9 @@ plot2d([contour, rosen(x, y)], [x, lo, hi], [y, lo, hi],
 /* S : gsa_read_snapshots(SNAP)$ */
 /* ANIM : "exports/run_20260203_120000/anim"$ */
 /* gsa_animate_contour(S, gsa_snapshot_iters(S), lo, hi, ANIM)$ */
+
+/* 5. Everything to files at once (PNG stills + GIF) into the run folder:
+   convergence.png, contour_first.png, contour_last.png, anim.gif. */
+/* H : gsa_read_history("exports/run_20260203_120000/history.csv")$ */
+/* gsa_export_all(S, H, gsa_snapshot_iters(S), lo, hi,
+  "exports/run_20260203_120000")$ */

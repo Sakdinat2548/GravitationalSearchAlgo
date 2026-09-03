@@ -231,6 +231,24 @@ Contour helpers assume the default 2D Rosenbrock objective; if you edit
 `objective.hpp`, update `rosen(x, y)` in `gsa_plot.mac` to match. Verified
 with Maxima 5.49 (SBCL + bundled gnuplot).
 
+To write everything to files at once (PNG stills + animated GIF),
+one call dumps `convergence.png`, `contour_first.png`,
+`contour_last.png` and `anim.gif` next to the CSVs:
+
+```maxima
+S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
+H : gsa_read_history("exports/run_20260203_120000/history.csv")$
+gsa_export_all(S, H, gsa_snapshot_iters(S), -2.048, 2.048,
+  "exports/run_20260203_120000")$
+```
+
+Single-file variants exist too: `gsa_save_convergence(H, path)`,
+`gsa_save_snapshot(S, k, xd, yd, path)`, `gsa_save_contour(S, k, lo, hi,
+path)`. Note: `plot2d` file output uses `[gnuplot_term, png]` +
+`[gnuplot_out_file, ...]` — the `[png_file, ...]` option hits an
+unbound-`GNUPLOT-PREAMBLE` Lisp error on Maxima 5.49/Windows that Maxima
+silently skips past, producing nothing.
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:
