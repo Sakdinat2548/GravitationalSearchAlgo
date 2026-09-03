@@ -8,7 +8,8 @@ add_executable(gsa_test
     tasks/test_median.cpp
     tasks/test_convergence.cpp
     tasks/test_validation.cpp
-    tasks/test_json_io.cpp)
+    tasks/test_json_io.cpp
+    tasks/test_snapshots.cpp)
 target_link_libraries(gsa_test PRIVATE gsa::gsa)
 target_compile_options(gsa_test PRIVATE -Wall -Wextra)
 
@@ -22,3 +23,4 @@ add_test(NAME gsa_convergence COMMAND gsa_test convergence)
 add_test(NAME gsa_validation COMMAND gsa_test validation)
 add_test(NAME gsa_json_io_config COMMAND gsa_test json_io_config)
 add_test(NAME gsa_json_io_bounds COMMAND gsa_test json_io_bounds)
+add_test(NAME gsa_snapshots COMMAND gsa_test snapshots)

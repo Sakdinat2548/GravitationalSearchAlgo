@@ -179,6 +179,40 @@ double last_mean = res.history.back().mean_fitness;   // mean fitness, last iter
 
 Each `gsa::GsaIterationInfo` records: `best_so_far`, `best_iter`, `worst_iter`, `mean_fitness`, `median_fitness`, `stddev_fitness`.
 
+Set `cfg.snapshot_count = N` to also capture all agent positions at `N`
+evenly spaced iterations (always including iter 0 and `max_iter`; `0` =
+off, `1` = final only, max `max_iter + 1`). Captures land in
+`res.snapshot_iters` plus flat `res.snapshot_positions` (snap → agent →
+dim, `res.snapshot_dims` dims per agent).
+
+### CSV Export and Maxima Plots
+
+`src/gsa/csv_io.hpp` writes Maxima-readable CSVs (no header rows, so
+`read_matrix` just works):
+
+```cpp
+#include "gsa/csv_io.hpp"
+
+gsa::WriteHistoryCsv(res, "history.csv");      // best_so_far,best_iter,worst_iter,mean,median,stddev
+gsa::WriteSnapshotsCsv(res, "snapshots.csv");  // iter,agent,x1..xD
+```
+
+The `main` demo does this automatically: every run exports to
+`exports/run_<yyyymmdd_hhmmss>/` (`history.csv` always, `snapshots.csv`
+when `snapshot_count > 0`, plus a copy of the effective `config.json`).
+Set `"snapshot_count"` in `config.json` and press `r` to re-run + export.
+
+Plot in Maxima with the tracked `examples/gsa_plot.mac` (run from the repo
+root; `.csv` extension implies comma separator, no extra flags needed):
+
+```maxima
+batch("examples/gsa_plot.mac")$
+H : gsa_read_history("exports/run_20260203_120000/history.csv")$
+gsa_plot_convergence(H)$
+S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
+gsa_plot_snapshot(S, 0, 1, 2)$   /* agents at iter 0, dims 1-2 */
+```
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:
@@ -205,7 +239,8 @@ Example `config.json`:
   "g0": 10.0,
   "alpha": 20.0,
   "minimize": true,
-  "seed": 12345
+  "seed": 12345,
+  "snapshot_count": 0
 }
 ```
 
@@ -290,7 +325,8 @@ velocities/accelerations reset at the start.
 - `test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are bit-identical.
 - `test_median.cpp` — direct unit test of `ComputeFitnessStats`: exact median `(n-1)/2` for even/odd populations in both modes, plus scrambled even array.
 - `test_convergence.cpp` — fixed-seed sphere run converges (`best_val < 0.01`; uses `g0 = 10.0`).
-- `test_validation.cpp` — constructor rejects empty/mismatched bounds, zero agents, zero iterations, `lower > upper` with `std::invalid_argument`.
+- `test_validation.cpp` — constructor rejects empty/mismatched bounds, zero agents, zero iterations, `lower > upper`, `snapshot_count > max_iter + 1` with `std::invalid_argument`.
+- `test_snapshots.cpp` — snapshot iters exact (`{0,100,…,500}` for count 6), flat size `== snaps·agents·dims`, same-seed identical, CSV line counts + `best_so_far` round-trip.
 
 Build manually with:
 
@@ -302,7 +338,7 @@ g++.exe -O3 -std=c++20 -Isrc \
     tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp \
     tests/tasks/test_modes.cpp tests/tasks/test_thread_safety.cpp \
     tests/tasks/test_median.cpp tests/tasks/test_convergence.cpp \
-    tests/tasks/test_validation.cpp -o gsa_test.exe
+    tests/tasks/test_validation.cpp tests/tasks/test_snapshots.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset conan-release`):

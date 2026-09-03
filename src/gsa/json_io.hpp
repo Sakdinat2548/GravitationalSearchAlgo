@@ -44,6 +44,10 @@ inline void ValidateConfig(const GsaConfig& cfg) {
   if (cfg.alpha < 0.0) [[unlikely]] {
     throw std::invalid_argument("\"alpha\" must be >= 0");
   }
+  if (cfg.snapshot_count > cfg.max_iter + 1) [[unlikely]] {
+    throw std::invalid_argument(
+        "\"snapshot_count\" cannot exceed \"max_iter\" + 1");
+  }
 }
 
 inline std::vector<double> ParseBoundsSide(std::string_view name,
@@ -85,6 +89,7 @@ inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
     cfg.alpha = j.value("alpha", cfg.alpha);
     cfg.minimize = j.value("minimize", cfg.minimize);
     cfg.seed = j.value("seed", cfg.seed);
+    cfg.snapshot_count = j.value("snapshot_count", cfg.snapshot_count);
 
     detail::ValidateConfig(cfg);
     return cfg;

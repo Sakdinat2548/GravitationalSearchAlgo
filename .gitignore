@@ -13,6 +13,7 @@ build/
 CMakeUserPresets.json
 config.json
 compile_commands.json
+/exports/
 
 # Editor/IDE files
 .vscode/

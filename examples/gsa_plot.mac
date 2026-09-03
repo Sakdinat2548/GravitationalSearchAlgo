@@ -1,0 +1,45 @@
+/* GSA plot helpers for Maxima.
+   Run from the repository root, e.g.:
+     load("numericalio")$
+     batch("examples/gsa_plot.mac")$
+   then:
+     H : gsa_read_history("exports/run_20260203_120000/history.csv")$
+     gsa_plot_convergence(H)$
+     S : gsa_read_snapshots("exports/run_20260203_120000/snapshots.csv")$
+     gsa_plot_snapshot(S, 0, 1, 2)$   (snapshot at iter 0, dims 1 and 2)
+   Column layouts (no header rows, so read_matrix just works):
+     history.csv   : best_so_far,best_iter,worst_iter,mean,median,stddev
+     snapshots.csv : iter,agent,x1..xD
+*/
+
+load("numericalio")$
+
+/* History matrix: one row per iteration (row 1 = iter 0). */
+gsa_read_history(path) := read_matrix(path)$
+
+/* Convergence curve: best_so_far vs iteration, log scale. */
+gsa_plot_convergence(H) := plot2d(
+  [discrete, makelist([i - 1, H[i][1]], i, 1, length(H))],
+  [logy, grid2d, xlabel, "iteration", ylabel, "best_so_far"])$
+
+/* Snapshot matrix: one row per (snapshot, agent). */
+gsa_read_snapshots(path) := read_matrix(path)$
+
+/* [x, y] points of snapshot taken at iteration K using dims XD and YD
+   (1-based dimension indices). */
+gsa_snapshot_points(S, k, xd, yd) := block([pts : []],
+  for i thru length(S) do
+    if S[i][1] = k then pts : cons([S[i][2 + xd], S[i][2 + yd]], pts),
+  pts)$
+
+/* Scatter of agents at iteration K. */
+gsa_plot_snapshot(S, k, xd, yd) := plot2d(
+  [discrete, gsa_snapshot_points(S, k, xd, yd)],
+  [style, points, grid2d, xlabel, concat("x", xd), ylabel, concat("x", yd),
+   title, concat("iter ", k)])$
+
+/* Distinct iteration indices present in a snapshot matrix. */
+gsa_snapshot_iters(S) := block([ks : []],
+  for i thru length(S) do
+    if not member(S[i][1], ks) then ks : cons(S[i][1], ks),
+  sort(ks))$
