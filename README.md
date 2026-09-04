@@ -212,6 +212,21 @@ if you edit `objective.hpp`, update the EDIT block (`objective_2d` +
 `LEVELS`) at the top of `scripts/plot_gsa.py`. Scatter, convergence and
 animation are purely data-driven and work for any objective.
 
+### Example: 2D Rosenbrock run
+
+Config: 2D, bounds ±2.048, 50 agents, 5000 iters, `g0 = alpha = 10`,
+`seed = 42`, `snapshot_count = 10` → `best_val ≈ 1.6e-15` (global
+minimum at (1, 1)). Generated with `scripts/plot_gsa.py` (see
+`docs/images/`):
+
+![convergence](docs/images/convergence.png)
+
+| First snapshot (iter 0) | Last snapshot (iter 5000) |
+|---|---|
+| ![first](docs/images/contour_first.png) | ![last](docs/images/contour_last.png) |
+
+![animation](docs/images/anim.gif)
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:
