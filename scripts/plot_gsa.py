@@ -29,6 +29,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.colors import LogNorm
 
 
 def read_csv(path):
@@ -43,22 +44,23 @@ def as_list(v, dims, default):
 
 
 def draw_contour(fig, ax, lo, hi):
-    n = 120
+    n = 300
     xs = np.linspace(lo[0], hi[0], n)
     ys = np.linspace(lo[1], hi[1], n)
     x, y = np.meshgrid(xs, ys)
-    z = objective_2d(x, y)
+    z = np.maximum(objective_2d(x, y), 1e-9)
+    mesh = ax.pcolormesh(x, y, z, cmap="viridis", shading="gouraud",
+                         norm=LogNorm())
     levels = [c for c in LEVELS if c < z.max()] or 8
-    ax.contourf(x, y, z, levels=levels, cmap="viridis", alpha=0.9)
     ax.contour(x, y, z, levels=levels, colors="white", linewidths=0.4,
                alpha=0.6)
-    fig.colorbar(ax.collections[0], ax=ax, label="f")
+    fig.colorbar(mesh, ax=ax, label="f")
 
 
 def dot_sizes(mass):
     m = np.asarray(mass, dtype=float)
     peak = m.max() if m.max() > 0 else 1.0
-    return 25 + 600 * (m / peak)
+    return 10 + 200 * (m / peak)
 
 
 def scatter_points(ax, rows):
