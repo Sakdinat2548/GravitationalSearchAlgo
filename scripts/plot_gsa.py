@@ -28,8 +28,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.colors import LogNorm
+from PIL import Image
 
 
 def read_csv(path):
@@ -128,26 +128,42 @@ def main():
     fig, ax = plt.subplots()
     if dims == 2:
         draw_contour(fig, ax, lo, hi)
-    scat = scatter_points(ax, by_iter[frames[0]])
+    # Empty artists: created before the bg snapshot so neither the dots
+    # nor the title are baked into it (else every frame ghosts them).
+    scat = ax.scatter([], [], s=[], c="red", edgecolors="black",
+                      linewidths=0.5, alpha=0.9, label="agents", zorder=3)
     ax.set(xlim=(lo[0], hi[0]), ylim=(lo[1], hi[1]), xlabel="x1",
            ylabel="x2")
     ax.set_aspect("equal")
     ax.grid(True, alpha=0.3)
     ax.legend()
-    title_obj = ax.set_title(f"iter {frames[0]}")
+    title_obj = ax.set_title("")
 
-    def update(k):
+    # Manual blit loop: heatmap rasterized once into bg; only dots + title
+    # redraw per frame. Frames share frame 0's palette — PillowWriter
+    # quantizes each frame independently, which makes static background
+    # pixels shimmer as the dots move.
+    fig.canvas.draw()
+    bg = fig.canvas.copy_from_bbox(fig.bbox)
+    pil_frames = []
+    for k in frames:
         rows = by_iter[k]
-        scat.set_offsets(np.c_[ [float(r["x1"]) for r in rows],
-                                [float(r["x2"]) for r in rows]])
+        fig.canvas.restore_region(bg)
+        scat.set_offsets(np.c_[[float(r["x1"]) for r in rows],
+                               [float(r["x2"]) for r in rows]])
         scat.set_sizes(dot_sizes([float(r["mass"]) for r in rows]))
         title_obj.set_text(f"iter {k}")
-        return (scat, title_obj)
-
-    # blit=True: heatmap rasterized once, only dots + title redraw per
-    # frame. Identical output, ~10x faster on contour backgrounds.
-    FuncAnimation(fig, update, frames=frames, blit=True).save(
-        run / "anim.gif", writer=PillowWriter(fps=5))
+        fig.draw_artist(scat)
+        fig.draw_artist(title_obj)
+        fig.canvas.blit(fig.bbox)
+        pil_frames.append(Image.fromarray(
+            np.asarray(fig.canvas.buffer_rgba())).convert("RGB"))
+    palette = pil_frames[0].quantize(colors=256)
+    quantized = [palette] + [f.quantize(palette=palette,
+                                        dither=Image.Dither.NONE)
+                             for f in pil_frames[1:]]
+    quantized[0].save(run / "anim.gif", save_all=True,
+                      append_images=quantized[1:], duration=200, loop=0)
     plt.close(fig)
     print(f"wrote convergence.png, contour_first/last.png, anim.gif in {run}")
 
