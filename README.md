@@ -203,7 +203,7 @@ Captures land in `res.snapshot_iters` plus flat `res.snapshot_positions`
 | Output (next to the CSVs) | Content |
 |---|---|
 | `convergence.png` | log-scale `best_so_far` vs iteration |
-| `contour_first/last.png` | agents (dot size ∝ mass) on contours, first/last snapshot |
+| `contour_first/last.png` | agents (dot size ∝ per-frame mass) on heatmap contours, first/last snapshot |
 | `anim.gif` | every snapshot animated (5 fps) |
 
 Bounds and dims come from the run's own `config.json` — no retyping.

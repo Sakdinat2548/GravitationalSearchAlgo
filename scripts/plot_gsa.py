@@ -42,28 +42,36 @@ def as_list(v, dims, default):
     return [float(v if v is not None else default)] * dims
 
 
-def draw_contour(ax, lo, hi):
+def draw_contour(fig, ax, lo, hi):
     n = 120
     xs = np.linspace(lo[0], hi[0], n)
     ys = np.linspace(lo[1], hi[1], n)
     x, y = np.meshgrid(xs, ys)
     z = objective_2d(x, y)
     levels = [c for c in LEVELS if c < z.max()] or 8
-    ax.contour(x, y, z, levels=levels, colors="navy", linewidths=0.7,
-               alpha=0.8)
+    ax.contourf(x, y, z, levels=levels, cmap="viridis", alpha=0.9)
+    ax.contour(x, y, z, levels=levels, colors="white", linewidths=0.4,
+               alpha=0.6)
+    fig.colorbar(ax.collections[0], ax=ax, label="f")
+
+
+def dot_sizes(mass):
+    m = np.asarray(mass, dtype=float)
+    peak = m.max() if m.max() > 0 else 1.0
+    return 25 + 600 * (m / peak)
 
 
 def scatter_points(ax, rows):
     x = np.array([float(r["x1"]) for r in rows])
     y = np.array([float(r["x2"]) for r in rows])
-    m = np.array([float(r["mass"]) for r in rows])
-    return ax.scatter(x, y, s=20 + 500 * m, c="red", alpha=0.8,
-                      label="agents")
+    return ax.scatter(x, y, s=dot_sizes([float(r["mass"]) for r in rows]),
+                      c="red", edgecolors="black", linewidths=0.5,
+                      alpha=0.9, label="agents", zorder=3)
 
 
 def contour_frame(by_iter, k, lo, hi, title):
     fig, ax = plt.subplots()
-    draw_contour(ax, lo, hi)
+    draw_contour(fig, ax, lo, hi)
     scatter_points(ax, by_iter[k])
     ax.set(xlim=(lo[0], hi[0]), ylim=(lo[1], hi[1]), xlabel="x1",
            ylabel="x2", title=title)
@@ -117,7 +125,7 @@ def main():
 
     fig, ax = plt.subplots()
     if dims == 2:
-        draw_contour(ax, lo, hi)
+        draw_contour(fig, ax, lo, hi)
     scat = scatter_points(ax, by_iter[frames[0]])
     ax.set(xlim=(lo[0], hi[0]), ylim=(lo[1], hi[1]), xlabel="x1",
            ylabel="x2")
@@ -129,7 +137,7 @@ def main():
         rows = by_iter[k]
         scat.set_offsets(np.c_[ [float(r["x1"]) for r in rows],
                                 [float(r["x2"]) for r in rows]])
-        scat.set_sizes(20 + 500 * np.array([float(r["mass"]) for r in rows]))
+        scat.set_sizes(dot_sizes([float(r["mass"]) for r in rows]))
         ax.set_title(f"iter {k}")
         return (scat,)
 
