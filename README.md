@@ -2,6 +2,17 @@
 
 C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.).
 
+2D Rosenbrock demo (50 agents, 5000 iters, `seed = 42` → `best_val ≈ 1.6e-15`;
+see [Visualize a run](#visualize-a-run)):
+
+<img src="docs/images/convergence.png" width="640" alt="convergence">
+
+| First snapshot (iter 0) | Last snapshot (iter 5000) |
+|---|---|
+| <img src="docs/images/contour_first.png" width="310" alt="first"> | <img src="docs/images/contour_last.png" width="310" alt="last"> |
+
+<img src="docs/images/anim.gif" width="640" alt="animation">
+
 ## Build
 
 Requires [CMake](https://cmake.org) (3.20+) and [Conan 2](https://conan.io).
@@ -216,16 +227,8 @@ animation are purely data-driven and work for any objective.
 
 Config: 2D, bounds ±2.048, 50 agents, 5000 iters, `g0 = alpha = 10`,
 `seed = 42`, `snapshot_count = 10` → `best_val ≈ 1.6e-15` (global
-minimum at (1, 1)). Generated with `scripts/plot_gsa.py` (see
-`docs/images/`):
-
-![convergence](docs/images/convergence.png)
-
-| First snapshot (iter 0) | Last snapshot (iter 5000) |
-|---|---|
-| ![first](docs/images/contour_first.png) | ![last](docs/images/contour_last.png) |
-
-![animation](docs/images/anim.gif)
+minimum at (1, 1)). The plots are shown at the top of this file
+(sources in `docs/images/`, regenerable via `scripts/plot_gsa.py`).
 
 ### JSON Configuration
 
