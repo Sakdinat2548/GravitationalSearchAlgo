@@ -63,7 +63,7 @@ def draw_contour(fig, ax, lo, hi):
 def dot_sizes(mass):
     m = np.asarray(mass, dtype=float)
     peak = m.max() if m.max() > 0 else 1.0
-    return 8 + 150 * (m / peak)
+    return 6 + 110 * (m / peak)
 
 
 def scatter_points(ax, rows):
