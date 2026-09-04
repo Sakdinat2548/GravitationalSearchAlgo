@@ -28,6 +28,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.colors import LogNorm
 from PIL import Image
 
@@ -143,6 +144,7 @@ def main():
     # redraw per frame. Frames share frame 0's palette — PillowWriter
     # quantizes each frame independently, which makes static background
     # pixels shimmer as the dots move.
+    assert isinstance(fig.canvas, FigureCanvasAgg)  # Agg forced above
     fig.canvas.draw()
     bg = fig.canvas.copy_from_bbox(fig.bbox)
     pil_frames = []
