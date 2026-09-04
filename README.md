@@ -179,46 +179,38 @@ double last_mean = res.history.back().mean_fitness;   // mean fitness, last iter
 
 Each `gsa::GsaIterationInfo` records: `best_so_far`, `best_iter`, `worst_iter`, `mean_fitness`, `median_fitness`, `stddev_fitness`.
 
-Set `cfg.snapshot_count = N` to also capture all agent positions at `N`
-evenly spaced iterations (always including iter 0 and `max_iter`; `0` =
-off, `1` = final only, max `max_iter + 1`). Captures land in
-`res.snapshot_iters` plus flat `res.snapshot_positions` (snap → agent →
-dim, `res.snapshot_dims` dims per agent).
+Set `cfg.snapshot_count = N` to also capture all agent positions, masses
+and fitnesses at `N` evenly spaced iterations (always including iter 0
+and `max_iter`; `0` = off, `1` = final only, max `max_iter + 1`).
+Captures land in `res.snapshot_iters` plus flat `res.snapshot_positions`
+(snap → agent → dim), `res.snapshot_masses` and `res.snapshot_fitnesses`
+(snap → agent).
 
-### Visualize a run (recommended)
+### Visualize a run
 
 1. Set `"snapshot_count"` in `config.json` (e.g. `10`) and run `main` —
    every run exports to `exports/run_<yyyymmdd_hhmmss>/` (`history.csv`,
-   `snapshots.csv`, plus the effective `config.json`).
-2. In Maxima, from the repo root, three lines do everything:
+   `snapshots.csv`, plus the effective `config.json`). Both CSVs have
+   header rows: `history.csv` holds
+   `best_so_far,best_iter,worst_iter,mean_fitness,median_fitness,stddev_fitness`;
+   `snapshots.csv` holds `iter,agent,mass,fitness,x1..xD`.
+2. From the repo root with `.venv` active, one command plots everything:
 
-```maxima
-batch("examples/gsa_plot.mac")$
-gsa_use("exports/run_20260203_120000", -2.048, 2.048)$  /* run folder + 2D bounds */
-H : gsa_H()$  S : gsa_S()$
-gsa_go()$
+```bash
+.venv/Scripts/python scripts/plot_gsa.py exports/run_20260203_120000
 ```
 
 | Output (next to the CSVs) | Content |
 |---|---|
 | `convergence.png` | log-scale `best_so_far` vs iteration |
-| `contour_first/last.png` | agents on Rosenbrock contours, first/last snapshot |
-| `anim.gif` | every snapshot animated (~0.2 s/frame) |
+| `contour_first/last.png` | agents (dot size ∝ mass) on contours, first/last snapshot |
+| `anim.gif` | every snapshot animated (5 fps) |
 
-Alternatives: screen-only `gsa_plot_convergence(H)`, `gsa_plot_snapshot(S,
-k, xd, yd)`, `gsa_plot_contour(S, k, lo, hi)`; single-file
-`gsa_save_convergence/snapshot/contour`; 3D surface via
-`examples/rosen3d_example.mac`. CSV layouts (no headers, so
-`read_matrix` just works): `history.csv` =
-`best_so_far,best_iter,worst_iter,mean,median,stddev`;
-`snapshots.csv` = `iter,agent,x1..xD` (C++ API: `gsa::WriteHistoryCsv` /
-`gsa::WriteSnapshotsCsv` in `src/gsa/csv_io.hpp`).
-
-Contour helpers assume the default 2D Rosenbrock — if you edit
-`objective.hpp`, update the EDIT block (`objfn` + levels) in
-`gsa_plot.mac`. Verified on Maxima 5.49. (Plot-to-file uses
-`[gnuplot_term, png]` + `[gnuplot_out_file, ...]`: the `[png_file, ...]`
-option fails silently on 5.49/Windows.)
+Bounds and dims come from the run's own `config.json` — no retyping.
+Contour backgrounds assume 2D and mirror the default Rosenbrock objective;
+if you edit `objective.hpp`, update the EDIT block (`objective_2d` +
+`LEVELS`) at the top of `scripts/plot_gsa.py`. Scatter, convergence and
+animation are purely data-driven and work for any objective.
 
 ### JSON Configuration
 

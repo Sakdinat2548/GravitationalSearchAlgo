@@ -60,6 +60,8 @@ struct GsaResult {
   std::vector<GsaIterationInfo> history;
   std::vector<size_t> snapshot_iters;
   std::vector<double> snapshot_positions;
+  std::vector<double> snapshot_masses;
+  std::vector<double> snapshot_fitnesses;
   size_t snapshot_dims{};
 };
 
@@ -116,6 +118,8 @@ class GravitationalSearchAlgorithm {
     result.snapshot_iters.reserve(capture.size());
     result.snapshot_positions.reserve(capture.size() * config_.n_agents *
                                       dimensions_);
+    result.snapshot_masses.reserve(capture.size() * config_.n_agents);
+    result.snapshot_fitnesses.reserve(capture.size() * config_.n_agents);
     result.snapshot_dims = dimensions_;
     size_t next{};
     const auto maybe_capture = [&](size_t h) {
@@ -123,6 +127,10 @@ class GravitationalSearchAlgorithm {
         result.snapshot_iters.push_back(h);
         result.snapshot_positions.insert(result.snapshot_positions.end(),
                                          s.position.begin(), s.position.end());
+        result.snapshot_masses.insert(result.snapshot_masses.end(),
+                                      s.mass.begin(), s.mass.end());
+        result.snapshot_fitnesses.insert(result.snapshot_fitnesses.end(),
+                                         s.fitness.begin(), s.fitness.end());
         ++next;
       }
     };
@@ -132,14 +140,15 @@ class GravitationalSearchAlgorithm {
     for (auto k : Range(1ULL, config_.max_iter + 1)) {
       EvaluateFitness(s, global_best_val, global_best_pos);
       result.history.push_back(RecordIteration(s, global_best_val));
-      maybe_capture(k - 1);
       ComputeMasses(s);
+      maybe_capture(k - 1);
       ComputeAccelerations(s, k, gen);
       UpdateKinematics(s, gen);
     }
 
     EvaluateFitness(s, global_best_val, global_best_pos);
     result.history.push_back(RecordIteration(s, global_best_val));
+    ComputeMasses(s);
     maybe_capture(config_.max_iter);
 
     result.best_val = global_best_val;

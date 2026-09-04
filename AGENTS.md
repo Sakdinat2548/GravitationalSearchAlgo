@@ -98,21 +98,21 @@ The tracked tests are eleven CTest entries (`gsa_history`, `gsa_stats`, `gsa_det
 - `src/gsa/gsa.hpp` — header-only algorithm library (primary work here). `GravitationalSearchAlgorithm` is a class template on the objective callable (any `std::invocable<std::span<const double>>` returning `double`, deduced via CTAD). Public header included as `#include "gsa/gsa.hpp"`. Xoshiro RNG resolved via Conan (`<xoshiro-cpp/XoshiroCpp.hpp>`).
 - `src/gsa/stats.hpp` — `FitnessStats` + `ComputeFitnessStats` (order statistics: min/max, two-`nth_element` median, mean, stddev) and `BetterFit`; the `gsa_median` test calls it directly.
 - `src/gsa/json_io.hpp` — JSON loading utilities (namespace `gsa`): `LoadConfigFromJson`/`LoadConfigFromString` for `GsaConfig`, plus `Bounds` + `LoadBoundsFromJson` for dimensions/bounds (scalar or per-dim arrays; bounds are required — no defaults).
-- `src/gsa/csv_io.hpp` — `WriteHistoryCsv`/`WriteSnapshotsCsv`: Maxima-readable CSVs (no header rows; `.csv` extension implies comma separator in `read_matrix`).
+- `src/gsa/csv_io.hpp` — `WriteHistoryCsv`/`WriteSnapshotsCsv`: header-row CSVs (`history`: 6 stat cols; `snapshots`: `iter,agent,mass,fitness,x1..xD`).
 - `examples/demo.cpp` — API demo: equal-bounds, per-dimension-bounds, rosenbrock (custom `g0`/`alpha`), and lambda-objective examples; prints `best_val` + position for each.
 - `examples/main.cpp` — JSON config hot-reload demo: creates `config.json` only if missing, prints the raw file, runs Rosenbrock; pressing `r` reloads the file and reassigns a fresh instance. Every run exports to `exports/run_<yyyymmdd_hhmmss>/` (`history.csv` always, `snapshots.csv` when `snapshot_count > 0`, plus effective `config.json`).
-- `examples/gsa_plot.mac` — Maxima loader: `gsa_read_history`/`gsa_plot_convergence`/`gsa_read_snapshots`/`gsa_plot_snapshot` over the exported CSVs, plus 2D-Rosenbrock contour helpers (`gsa_plot_contour`, `gsa_animate_contour` → animated GIF via `draw` + `terminal='animated_gif`; contours drawn as `implicit` level curves since `gr2d` has no contour object). Contour code assumes the default `objective.hpp`; verified against real Maxima 5.49 (if editing, re-verify with `maxima -b` on a fresh export).
+- `scripts/plot_gsa.py` — matplotlib viz (runs on `.venv` Python 3.13): `python scripts/plot_gsa.py exports/run_<ts>/` writes `convergence.png`, `contour_first/last.png`, `anim.gif` into the run dir; bounds/dims read from the run's `config.json`. Contour background mirrors the default 2D Rosenbrock (`objective_2d` + `LEVELS` EDIT block); scatter/convergence/animation are data-driven. Dot size scales with mass.
 - `tests/` — self-contained framework (`test_framework.hpp` registers named tests; `test_common.hpp` shares objectives/invariant helpers; `test_main.cpp` dispatches, passing a test name as argv[1] to run only that one) + `tests/tasks/*.cpp`, one file per test: `test_history.cpp`, `test_stats.cpp`, `test_determinism.cpp`, `test_modes.cpp`, `test_thread_safety.cpp`, `test_median.cpp`, `test_convergence.cpp`, `test_validation.cpp`, `test_json_io.cpp` (registers both JSON IO tests), `test_snapshots.cpp`. Its own `CMakeLists.txt` builds `gsa_test` and registers CTest; run a single test directly: `build/Release/tests/gsa_test.exe <name>` (name = argv[1], e.g. `determinism`).
 - `conanfile.py` — Conan 2 recipe declaring `nlohmann_json/3.11.2` and `xoshiro-cpp/1.1` requirements.
 - `profiles/` — Conan profiles: `windows-msys2-gcc` (MSYS2 UCRT64 g++), `linux-gcc`, `macos-clang`.
 - `CMakeLists.txt` / `CMakePresets.json` — Ninja + MinGW Makefiles Release build; options `GSA_BUILD_DEMO`, `GSA_BUILD_MAIN`, `GSA_BUILD_TESTS`; outputs in `build/` or `build/Release/`.
 - `.clang-format` / `.clang-tidy` — Google formatting and Google-casing naming conventions.
 - `.vscode/` — VS Code C++20 IntelliSense config (includes conan paths via env vars).
-- `.venv/` + `pyrightconfig.json` — Python venv with `conan` + `pyright` for `conanfile.py` type checking.
+- `.venv/` + `pyrightconfig.json` — Python 3.13 venv with `conan` + `pyright` (conanfile type checking) plus `matplotlib` + `pillow` (viz script). Recreated on 3.13 because the scientific stack has no cp314 Windows wheels; `pyrightconfig.json` is version-agnostic.
 
 ## API
 
-- `GsaConfig { n_agents, max_iter, g0, alpha, minimize, seed, snapshot_count }` — seed `0` means `std::random_device`; `snapshot_count` (`0` = off, `1` = final only, max `max_iter + 1`) captures all agent positions at evenly spaced iterations incl. iter 0 and `max_iter`.
+- `GsaConfig { n_agents, max_iter, g0, alpha, minimize, seed, snapshot_count }` — seed `0` means `std::random_device`; `snapshot_count` (`0` = off, `1` = final only, max `max_iter + 1`) captures all agent positions, masses and fitnesses at evenly spaced iterations incl. iter 0 and `max_iter`. Captures happen after `ComputeMasses` so masses are current (positions/fitness unaffected — `ComputeMasses` only writes `s.mass`); the extra final `ComputeMasses` call serves the last snapshot only.
 - **Changing config between runs**: the instance is immutable — assign a fresh `GravitationalSearchAlgorithm` with a new `GsaConfig` (all members are value types; reassignment is cheap and memory-safe). Each `Optimize()` is an independent run.
 **JSON config**: `gsa::LoadConfigFromString(str)`, `gsa::LoadConfigFromJson(json)` return `GsaConfig`.
 - `GravitationalSearchAlgorithm` ctors: `(lower, upper, func, cfg)`,
@@ -125,7 +125,7 @@ The tracked tests are eleven CTest entries (`gsa_history`, `gsa_stats`, `gsa_det
   ctor — safe because no argument reads another argument's moved-from state
   (mem-initializer argument evaluation order is unspecified; never inspect one
   moved-from parameter from a sibling argument expression).
-- `GsaResult Optimize() const` returns `{ best_val, best_pos, history, snapshot_iters, snapshot_positions, snapshot_dims }` (positions flat: snap → agent → dim).
+- `GsaResult Optimize() const` returns `{ best_val, best_pos, history, snapshot_iters, snapshot_positions, snapshot_masses, snapshot_fitnesses, snapshot_dims }` (positions flat: snap → agent → dim; masses/fitnesses flat: snap → agent).
 - `GsaIterationInfo` (per iteration): `best_so_far, best_iter, worst_iter, mean_fitness, median_fitness, stddev_fitness`.
 - Calling `Optimize()` again on the same instance is an independent run: positions are re-randomized and `V`/`A` are reset to zero at the start. Within a single run the paper-faithful recurrence `V(t+1) = rand * V(t) + A(t)` holds ("old V feeds new V").
 
