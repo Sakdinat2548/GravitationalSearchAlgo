@@ -5,13 +5,12 @@ C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.)
 2D Rosenbrock demo (50 agents, 5000 iters, `seed = 42` → `best_val ≈ 1.6e-15`;
 see [Visualize a run](#visualize-a-run)):
 
-<img src="docs/images/convergence.png" width="310" alt="convergence">
+<img src="docs/images/convergence.png" width="400" alt="convergence"> | <img src="docs/images/anim.gif" width="400" alt="animation">
+|---|---|
 
 | First snapshot (iter 0) | Last snapshot (iter 5000) |
 |---|---|
-| <img src="docs/images/contour_first.png" width="310" alt="first"> | <img src="docs/images/contour_last.png" width="310" alt="last"> |
-
-<img src="docs/images/anim.gif" width="310" alt="animation">
+| <img src="docs/images/contour_first.png" width="400" alt="first"> | <img src="docs/images/contour_last.png" width="400" alt="last"> |
 
 ## Build
 
