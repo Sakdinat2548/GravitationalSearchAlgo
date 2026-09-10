@@ -5,16 +5,16 @@ C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.)
 2D Rosenbrock demo (50 agents, 5000 iters, `seed = 42` → `best_val ≈ 1.6e-15`;
 see [Visualize a run](#visualize-a-run)):
 
-<img src="docs/images/convergence.png" width="400" alt="convergence"> | <img src="docs/images/anim.gif" width="400" alt="animation">
+<img src="docs/images/convergence.png" width="320" alt="convergence"> | <img src="docs/images/anim.gif" width="320" alt="animation">
 |---|---|
 
 | First snapshot (iter 0) | Last snapshot (iter 5000) |
 |---|---|
-| <img src="docs/images/contour_first.png" width="400" alt="first"> | <img src="docs/images/contour_last.png" width="400" alt="last"> |
+| <img src="docs/images/contour_first.png" width="320" alt="first"> | <img src="docs/images/contour_last.png" width="320" alt="last"> |
 
 | 3D surface + agents | Best-path trail animation |
 |---|---|
-| <img src="docs/images/surface_3d.png" width="400" alt="surface"> | <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
+| <img src="docs/images/surface_3d.png" width="320" alt="surface"> | <img src="docs/images/anim3d.gif" width="320" alt="3d animation"> |
 
 ## Benchmark: minimization on 2D Rosenbrock (±30) with n = 50 agents, max_iter = 5000, over 30 runs
 
