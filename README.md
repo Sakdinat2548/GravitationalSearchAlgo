@@ -20,9 +20,9 @@ see [Visualize a run](#visualize-a-run)):
 
 |  | GSA | Simple metaheuristic | Genetic |
 |---|---|---|---|
-| Average best-so-far | 53 | 923 | 345 |
-| Median best-so-far | 28 | 378 | 282 |
-| Average mean fitness | 1.5e+07 | 1074 | 1406 |
+| Average best-so-far | 28 | 923 | 345 |
+| Median best-so-far | 26 | 378 | 282 |
+| Average mean fitness | 28 | 1074 | 1406 |
 
 (Final-iteration values from `exports/bench/*_avg.csv`; see
 [Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
