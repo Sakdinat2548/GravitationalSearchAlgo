@@ -2,6 +2,33 @@
 
 C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.).
 
+2D Rosenbrock demo (50 agents, 5000 iters, `seed = 42` → `best_val ≈ 1.6e-15`;
+see [Visualize a run](#visualize-a-run)):
+
+<img src="docs/images/convergence.png" width="400" alt="convergence"> | <img src="docs/images/anim.gif" width="400" alt="animation">
+|---|---|
+
+| First snapshot (iter 0) | Last snapshot (iter 5000) |
+|---|---|
+| <img src="docs/images/contour_first.png" width="400" alt="first"> | <img src="docs/images/contour_last.png" width="400" alt="last"> |
+
+| 3D surface + agents | Best-path trail animation |
+|---|---|
+| <img src="docs/images/surface_3d.png" width="400" alt="surface"> | <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
+
+## Benchmark: minimization on 2D Rosenbrock (±30) with n = 50 agents, max_iter = 5000, over 30 runs
+
+|  | GSA | Simple metaheuristic | Genetic |
+|---|---|---|---|
+| Average best-so-far | 8.2e-09 | 1.8e-05 | 2.7e-05 |
+| Median best-so-far | 2.1e-20 | 1.2e-05 | 2.0e-05 |
+| Average mean fitness | 1.7e+06 | 9.3e-04 | 2.4e+02 |
+
+(Final-iteration values from `exports/bench/*_avg.csv`; see
+[Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
+
+<img src="docs/images/compare.png" width="480" alt="average best-so-far comparison">
+
 ## Build
 
 Requires [CMake](https://cmake.org) (3.20+) and [Conan 2](https://conan.io).
@@ -179,6 +206,70 @@ double last_mean = res.history.back().mean_fitness;   // mean fitness, last iter
 
 Each `gsa::GsaIterationInfo` records: `best_so_far`, `best_iter`, `worst_iter`, `mean_fitness`, `median_fitness`, `stddev_fitness`.
 
+Set `cfg.snapshot_count = N` to also capture all agent positions, masses
+and fitnesses at `N` evenly spaced iterations (always including iter 0
+and `max_iter`; `0` = off, `1` = final only, max `max_iter + 1`).
+Captures land in `res.snapshot_iters` plus flat `res.snapshot_positions`
+(snap → agent → dim), `res.snapshot_masses` and `res.snapshot_fitnesses`
+(snap → agent).
+
+### Visualize a run
+
+1. Set `"snapshot_count"` in `config.json` (e.g. `10`) and run `main` —
+   every run exports to `exports/run_<yyyymmdd_hhmmss>/` (`history.csv`,
+   `snapshots.csv`, plus the effective `config.json`). Both CSVs have
+   header rows: `history.csv` holds
+   `best_so_far,best_iter,worst_iter,mean_fitness,median_fitness,stddev_fitness`;
+   `snapshots.csv` holds `iter,agent,mass,fitness,x1..xD`.
+2. From the repo root with `.venv` active, one command plots everything:
+
+```bash
+.venv/Scripts/python scripts/plot_gsa.py exports/run_20260203_120000
+```
+
+| Output (next to the CSVs) | Content |
+|---|---|
+| `convergence.png` | log-scale `best_so_far` vs iteration |
+| `contour_first/last.png` | agents (dot size ∝ per-frame mass) on heatmap contours, first/last snapshot |
+| `anim.gif` | every snapshot animated (5 fps) |
+
+Bounds and dims come from the run's own `config.json` — no retyping.
+Contour backgrounds assume 2D and mirror the default Rosenbrock objective;
+if you edit `objective.hpp`, update the EDIT block (`objective_2d` +
+`LEVELS`) at the top of `scripts/plot_gsa.py`. Scatter, convergence and
+animation are purely data-driven and work for any objective.
+
+### Example: 2D Rosenbrock run
+
+Config: 2D, bounds ±2.048, 50 agents, 5000 iters, `g0 = alpha = 10`,
+`seed = 42`, `snapshot_count = 10` → `best_val ≈ 1.6e-15` (global
+minimum at (1, 1)). The plots are shown at the top of this file
+(sources in `docs/images/`, regenerable via `scripts/plot_gsa.py`).
+
+### Algorithm comparison (GSA vs metaheuristic vs genetic)
+
+Fairness contract: same dims/bounds/objective/population/iters, N=30
+runs with distinct deterministic seeds (`seed = base + i`), minimize
+everywhere; each line is the mean of best-so-far per iteration.
+
+```bash
+# 1. GSA -> exports/bench/gsa_avg.csv (defaults: 50 agents, 5000 iters,
+#    bounds +-30, g0=100, alpha=20; positional args override, see bench_gsa.cpp)
+build/Release/bench.exe
+# 2. Python algos (-> meta_avg.csv, ga_avg.csv, same defaults);
+#    objectives live in scripts/objective.py (single place to change
+#    the formula); all tunables are flags, see benchmark.py --help
+.venv/Scripts/python scripts/benchmark.py
+# 3. Plot -> exports/bench/compare.png
+.venv/Scripts/python scripts/plot_compare.py
+```
+
+`scripts/simple_metaheuristic.py` implements the workshop loaded-coin
+algorithm (`--p-head 0.5`, `--step 0.01`); `scripts/genetic.py`
+implements the real-valued GA (roulette on `1/(1+f)`, blend crossover +
+noise, mutation, elitism; `--pc 0.8 --pm 0.0075`). All tunables are CLI
+flags — see `benchmark.py --help`.
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:
@@ -205,7 +296,8 @@ Example `config.json`:
   "g0": 10.0,
   "alpha": 20.0,
   "minimize": true,
-  "seed": 12345
+  "seed": 12345,
+  "snapshot_count": 0
 }
 ```
 
@@ -290,7 +382,8 @@ velocities/accelerations reset at the start.
 - `test_thread_safety.cpp` — 8 concurrent `Optimize()` calls on one instance are bit-identical.
 - `test_median.cpp` — direct unit test of `ComputeFitnessStats`: exact median `(n-1)/2` for even/odd populations in both modes, plus scrambled even array.
 - `test_convergence.cpp` — fixed-seed sphere run converges (`best_val < 0.01`; uses `g0 = 10.0`).
-- `test_validation.cpp` — constructor rejects empty/mismatched bounds, zero agents, zero iterations, `lower > upper` with `std::invalid_argument`.
+- `test_validation.cpp` — constructor rejects empty/mismatched bounds, zero agents, zero iterations, `lower > upper`, `snapshot_count > max_iter + 1` with `std::invalid_argument`.
+- `test_snapshots.cpp` — snapshot iters exact (`{0,100,…,500}` for count 6), flat size `== snaps·agents·dims`, same-seed identical, CSV line counts + `best_so_far` round-trip.
 
 Build manually with:
 
@@ -302,7 +395,7 @@ g++.exe -O3 -std=c++20 -Isrc \
     tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp \
     tests/tasks/test_modes.cpp tests/tasks/test_thread_safety.cpp \
     tests/tasks/test_median.cpp tests/tasks/test_convergence.cpp \
-    tests/tasks/test_validation.cpp -o gsa_test.exe
+    tests/tasks/test_validation.cpp tests/tasks/test_snapshots.cpp -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset conan-release`):

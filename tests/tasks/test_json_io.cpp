@@ -41,6 +41,10 @@ TEST(json_io_config) {
               gsa::LoadConfigFromString) &&
        ok;
   ok = Throws("negative alpha rejected", R"({"alpha": -0.5})",
+               gsa::LoadConfigFromString) &&
+        ok;
+  ok = Throws("snapshot_count above max_iter + 1 rejected",
+              R"({"max_iter": 11, "snapshot_count": 13})",
               gsa::LoadConfigFromString) &&
        ok;
   ok = Throws("type mismatch rejected", R"({"seed": "abc"})",
@@ -52,9 +56,10 @@ TEST(json_io_config) {
 
   const auto all{gsa::LoadConfigFromString(
       R"({"n_agents": 9, "max_iter": 11, "g0": 2.5, "alpha": 0.25,
-          "minimize": false, "seed": 42})")};
+          "minimize": false, "seed": 42, "snapshot_count": 5})")};
   gsa_test::Expect(all.n_agents == 9 && all.max_iter == 11 && all.g0 == 2.5 &&
-                       all.alpha == 0.25 && !all.minimize && all.seed == 42,
+                       all.alpha == 0.25 && !all.minimize && all.seed == 42 &&
+                       all.snapshot_count == 5,
                    "all fields parsed");
   return ok;
 }

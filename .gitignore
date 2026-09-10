@@ -13,12 +13,15 @@ build/
 CMakeUserPresets.json
 config.json
 compile_commands.json
+/exports/
+__pycache__/
 
 # Editor/IDE files
 .vscode/
 opencode.json
 
 .cache/
+
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/

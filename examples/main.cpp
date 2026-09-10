@@ -1,5 +1,6 @@
 #include <chrono>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -9,6 +10,7 @@
 #include <windows.h>
 #endif
 
+#include "gsa/csv_io.hpp"
 #include "gsa/gsa.hpp"
 #include "gsa/json_io.hpp"
 #include "objective.hpp"
@@ -41,7 +43,7 @@ const fs::path kConfigPath{"config.json"};
 static void WriteConfig(const fs::path& path) {
   if (fs::exists(path)) return;
   nlohmann::json j;
-  j["dimensions"] = 10;
+  j["dimensions"] = 2;
   j["lower"] = -2.048;
   j["upper"] = 2.048;
   j["n_agents"] = 50;
@@ -50,6 +52,7 @@ static void WriteConfig(const fs::path& path) {
   j["alpha"] = 10.0;
   j["minimize"] = true;
   j["seed"] = 0;
+  j["snapshot_count"] = 10;
   std::ofstream out{path};
   out << j.dump(2) << "\n";
 }
@@ -74,7 +77,7 @@ static void PrintRunningState(const Gsa& gsa) {
             << "  g0=" << cfg.g0 << "  alpha=" << cfg.alpha
             << "  minimize=" << (cfg.minimize ? "true" : "false")
             << "  seed=" << cfg.seed << (cfg.seed == 0 ? " (random)" : "")
-            << "\n  lower=[";
+            << "  snapshot_count=" << cfg.snapshot_count << "\n  lower=[";
   for (double v : lower) std::cout << v << ' ';
   std::cout << "]\n  upper=[";
   for (double v : upper) std::cout << v << ' ';
@@ -91,6 +94,38 @@ static void PrintResult(const gsa::GsaResult& res,
             << "\n  position:";
   for (double p : res.best_pos) std::cout << " " << p;
   std::cout << "\n" << clr::kDim << "-----" << clr::kReset << "\n";
+}
+
+template <typename Gsa>
+static fs::path ExportResult(const Gsa& gsa, const gsa::GsaResult& res) {
+  const std::string stamp{
+      std::format("{:%Y%m%d_%H%M%S}", std::chrono::floor<std::chrono::seconds>(
+                                          std::chrono::system_clock::now()))};
+  fs::path dir{"exports/run_" + stamp};
+  for (int dup{2}; fs::exists(dir); ++dup) {
+    dir = fs::path{"exports/run_" + stamp + "_" + std::to_string(dup)};
+  }
+  fs::create_directories(dir);
+  gsa::WriteHistoryCsv(res, dir / "history.csv");
+  if (!res.snapshot_iters.empty()) {
+    gsa::WriteSnapshotsCsv(res, dir / "snapshots.csv");
+  }
+  const auto cfg{gsa.GetConfig()};
+  const auto lower{gsa.GetLowerBounds()};
+  const auto upper{gsa.GetUpperBounds()};
+  nlohmann::json j;
+  j["dimensions"] = gsa.GetDimensions();
+  j["lower"] = std::vector<double>(lower.begin(), lower.end());
+  j["upper"] = std::vector<double>(upper.begin(), upper.end());
+  j["n_agents"] = cfg.n_agents;
+  j["max_iter"] = cfg.max_iter;
+  j["g0"] = cfg.g0;
+  j["alpha"] = cfg.alpha;
+  j["minimize"] = cfg.minimize;
+  j["seed"] = cfg.seed;
+  j["snapshot_count"] = cfg.snapshot_count;
+  std::ofstream{dir / "config.json"} << j.dump(2) << "\n";
+  return dir;
 }
 
 int main() {
@@ -119,7 +154,14 @@ int main() {
     PrintRunningState(gsa);
     std::cout << "Run (current config):\n";
     const auto start{std::chrono::steady_clock::now()};
-    PrintResult(gsa.Optimize(), start);
+    const auto res{gsa.Optimize()};
+    PrintResult(res, start);
+    try {
+      std::cout << "Exported to " << ExportResult(gsa, res) << "\n";
+    } catch (const std::exception& e) {
+      std::cout << clr::kRed << "Export failed: " << e.what() << clr::kReset
+                << "\n";
+    }
   }};
 
   run();
@@ -128,9 +170,8 @@ int main() {
     std::string line;
     if (!std::getline(std::cin, line)) break;
     const auto first{line.find_first_not_of(" \t\r\n")};
-    const std::string cmd{first == std::string::npos
-                              ? std::string{}
-                              : line.substr(first, 1)};
+    const std::string cmd{first == std::string::npos ? std::string{}
+                                                     : line.substr(first, 1)};
     if (cmd == "q") break;
     if (cmd == "r") {
       std::cout << clr::kYellow << "Reloading config from file..."
@@ -156,8 +197,8 @@ int main() {
 
       continue;
     }
-    std::cout << clr::kRed << "Invalid command '" << line
-              << "' — only r or q." << clr::kReset << "\n";
+    std::cout << clr::kRed << "Invalid command '" << line << "' — only r or q."
+              << clr::kReset << "\n";
   }
 
   return 0;

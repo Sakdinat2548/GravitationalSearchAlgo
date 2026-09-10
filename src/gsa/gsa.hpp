@@ -41,6 +41,7 @@ struct GsaConfig {
   double alpha{20.0};
   bool minimize{true};
   uint64_t seed{};
+  size_t snapshot_count{};
 };
 
 /** Per-iteration snapshot of the agent population. */
@@ -57,6 +58,11 @@ struct GsaResult {
   double best_val;
   std::vector<double> best_pos;
   std::vector<GsaIterationInfo> history;
+  std::vector<size_t> snapshot_iters;
+  std::vector<double> snapshot_positions;
+  std::vector<double> snapshot_masses;
+  std::vector<double> snapshot_fitnesses;
+  size_t snapshot_dims{};
 };
 
 // Fast uniform random generator using top 53 bits
@@ -108,18 +114,42 @@ class GravitationalSearchAlgorithm {
     GsaResult result{};
     result.history.reserve(config_.max_iter + 1);
 
+    const std::vector<size_t> capture{SnapshotIters(config_)};
+    result.snapshot_iters.reserve(capture.size());
+    result.snapshot_positions.reserve(capture.size() * config_.n_agents *
+                                      dimensions_);
+    result.snapshot_masses.reserve(capture.size() * config_.n_agents);
+    result.snapshot_fitnesses.reserve(capture.size() * config_.n_agents);
+    result.snapshot_dims = dimensions_;
+    size_t next{};
+    const auto maybe_capture = [&](size_t h) {
+      if (next < capture.size() && capture[next] == h) {
+        result.snapshot_iters.push_back(h);
+        result.snapshot_positions.insert(result.snapshot_positions.end(),
+                                         s.position.begin(), s.position.end());
+        result.snapshot_masses.insert(result.snapshot_masses.end(),
+                                      s.mass.begin(), s.mass.end());
+        result.snapshot_fitnesses.insert(result.snapshot_fitnesses.end(),
+                                         s.fitness.begin(), s.fitness.end());
+        ++next;
+      }
+    };
+
     InitializePositions(s, gen);
 
     for (auto k : Range(1ULL, config_.max_iter + 1)) {
       EvaluateFitness(s, global_best_val, global_best_pos);
       result.history.push_back(RecordIteration(s, global_best_val));
       ComputeMasses(s);
+      maybe_capture(k - 1);
       ComputeAccelerations(s, k, gen);
       UpdateKinematics(s, gen);
     }
 
     EvaluateFitness(s, global_best_val, global_best_pos);
     result.history.push_back(RecordIteration(s, global_best_val));
+    ComputeMasses(s);
+    maybe_capture(config_.max_iter);
 
     result.best_val = global_best_val;
     result.best_pos = std::move(global_best_pos);
@@ -172,6 +202,11 @@ class GravitationalSearchAlgorithm {
     if (cfg.n_agents == 0 || cfg.max_iter == 0) [[unlikely]] {
       throw std::invalid_argument("n_agents and max_iter must be positive");
     }
+    if (cfg.snapshot_count > cfg.max_iter + 1) [[unlikely]] {
+      throw std::invalid_argument(std::format(
+          "snapshot_count ({}) exceeds max_iter + 1 ({})", cfg.snapshot_count,
+          cfg.max_iter + 1));
+    }
     for (auto i : Range(lower.size())) {
       if (lower[i] > upper[i]) [[unlikely]] {
         throw std::invalid_argument(
@@ -180,6 +215,17 @@ class GravitationalSearchAlgorithm {
                         i, lower[i], i, upper[i]));
       }
     }
+  }
+
+  static std::vector<size_t> SnapshotIters(const GsaConfig& cfg) {
+    if (cfg.snapshot_count == 0) return {};
+    if (cfg.snapshot_count == 1) return {cfg.max_iter};
+    std::vector<size_t> iters;
+    iters.reserve(cfg.snapshot_count);
+    for (auto i : Range(cfg.snapshot_count)) {
+      iters.push_back(i * cfg.max_iter / (cfg.snapshot_count - 1));
+    }
+    return iters;
   }
 
   static size_t PositiveDims(int dims) {

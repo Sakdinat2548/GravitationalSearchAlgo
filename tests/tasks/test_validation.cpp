@@ -67,6 +67,20 @@ TEST(validation) {
                                                             Sphere);
                     }) &&
        ok;
+  ok = ExpectThrows("snapshot_count above max_iter + 1",
+                    [] {
+                      gsa::GravitationalSearchAlgorithm gsa(
+                          std::vector<double>{-5.0}, std::vector<double>{5.0},
+                          Sphere,
+                          {.n_agents = 50,
+                           .max_iter = 500,
+                           .g0 = 100.0,
+                           .alpha = 20.0,
+                           .minimize = true,
+                           .seed = 12345,
+                           .snapshot_count = 502});
+                    }) &&
+       ok;
 
   return ok;
 }

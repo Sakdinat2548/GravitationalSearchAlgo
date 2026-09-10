@@ -13,12 +13,12 @@ TEST(thread_safety) {
   const auto cfg = Config();
   gsa::GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, Sphere, cfg);
 
-  constexpr int n_threads{8};
-  std::vector<gsa::GsaResult> results(n_threads);
+  constexpr int kNThreads{8};
+  std::vector<gsa::GsaResult> results(kNThreads);
   std::vector<std::jthread> threads;
-  threads.reserve(n_threads);
+  threads.reserve(kNThreads);
 
-  for (auto t : std::views::iota(0, n_threads)) {
+  for (auto t : std::views::iota(0, kNThreads)) {
     threads.emplace_back([&gsa, &results, t] { results[t] = gsa.Optimize(); });
   }
   for (auto& t : threads) {
