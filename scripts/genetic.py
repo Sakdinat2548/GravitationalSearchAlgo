@@ -18,6 +18,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
     def clamp(x):
         return [min(hi, max(lo, v)) for v, lo, hi in zip(x, lower, upper)]
 
+    # Random initial population inside bounds.
     pop = [clamp([rng.uniform(lo, hi) for lo, hi in zip(lower, upper)])
            for _ in range(n_agents)]
     fit = [fn(p) for p in pop]
@@ -26,6 +27,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
     trail = [best]
     means = [sum(fit) / len(fit)]
 
+    # Roulette wheel: fitter chromosomes get proportionally larger slices.
     def roulette(fits, total):
         if total <= 0:
             return rng.randrange(len(fits))
@@ -38,9 +40,11 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
         return len(fits) - 1
 
     for _ in range(max_iter):
+        # Selection: fill the mating pool, biased toward fitter parents.
         fits = [1.0 / (1.0 + f) for f in fit]
         total = sum(fits)
         mating = [list(pop[roulette(fits, total)]) for _ in range(n_agents)]
+        # Crossover (method d): random pairs blend + noise -> 2 children.
         idx = [i for i in range(n_agents) if rng.random() < pc]
         rng.shuffle(idx)
         for a, b in zip(idx[::2], idx[1::2]):
@@ -52,6 +56,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
                                for u, v, w in zip(x, y, w1)])
             mating[b] = clamp([(1 - alpha) * u + alpha * v + w
                                for u, v, w in zip(x, y, w2)])
+        # Mutation (method b): pull toward a random point in bounds.
         for i in range(n_agents):
             if rng.random() < pm:
                 a = rng.random()
@@ -63,6 +68,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
         if cur < best:
             best = cur
             elite = list(pop[fit.index(cur)])
+        # Elitism: worst offspring overwritten by the all-time best.
         worst = fit.index(max(fit))
         pop[worst], fit[worst] = list(elite), best
         trail.append(best)
