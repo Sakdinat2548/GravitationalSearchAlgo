@@ -16,13 +16,13 @@ see [Visualize a run](#visualize-a-run)):
 |---|---|
 | <img src="docs/images/surface_3d.png" width="400" alt="surface"> | <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
 
-## Benchmark: minimization on 2D Rosenbrock (±30) with n = 50 agents, max_iter = 5000, over 30 runs
+## Benchmark: minimization on 30D Rosenbrock (±30) with n = 50 agents, max_iter = 1000, over 30 runs
 
 |  | GSA | Simple metaheuristic | Genetic |
 |---|---|---|---|
-| Average best-so-far | 8.2e-09 | 1.8e-05 | 2.7e-05 |
-| Median best-so-far | 2.1e-20 | 1.2e-05 | 2.0e-05 |
-| Average mean fitness | 1.7e+06 | 9.3e-04 | 2.4e+02 |
+| Average best-so-far | 53 | 923 | 345 |
+| Median best-so-far | 28 | 378 | 282 |
+| Average mean fitness | 1.5e+07 | 1074 | 1406 |
 
 (Final-iteration values from `exports/bench/*_avg.csv`; see
 [Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
