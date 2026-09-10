@@ -3,6 +3,7 @@
 //
 // Usage: bench [runs=30] [iters=1000] [agents=30] [dims=2] [lo=-2.048]
 //              [hi=2.048] [seed_base=1000] [objective=rosenbrock]
+//              [g0=100.0] [alpha=20.0]
 // Writes exports/bench/gsa_avg.csv (header iter,avg_best,std_best;
 // std is population std, matching scripts/benchmark.py).
 #include <cmath>
@@ -61,6 +62,8 @@ int main(int argc, char** argv) {
   const double hi{Arg<double>(args, 5, 2.048)};
   const uint64_t seed_base{Arg<uint64_t>(args, 6, 1000)};
   const std::string objective{Arg<std::string>(args, 7, "rosenbrock")};
+  const double g0{Arg<double>(args, 8, 100.0)};
+  const double alpha{Arg<double>(args, 9, 20.0)};
   auto fn = objective == "sphere"
                 ? static_cast<double (*)(std::span<const double>)>(Sphere)
                 : static_cast<double (*)(std::span<const double>)>(Rosenbrock);
@@ -72,8 +75,8 @@ int main(int argc, char** argv) {
         dims, lo, hi, fn,
         {.n_agents = agents,
          .max_iter = iters,
-         .g0 = 10.0,
-         .alpha = 10.0,
+         .g0 = g0,
+         .alpha = alpha,
          .minimize = true,
          .seed = seed_base + r});
     const auto res{gsa.Optimize()};
