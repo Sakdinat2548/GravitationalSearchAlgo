@@ -1,8 +1,8 @@
 // Multi-run GSA benchmark: runs Optimize() N times with distinct seeds
 // and writes the averaged best-so-far per iteration.
 //
-// Usage: bench [runs=30] [iters=1000] [agents=30] [dims=2] [lo=-2.048]
-//              [hi=2.048] [seed_base=1000] [objective=rosenbrock]
+// Usage: bench [runs=30] [iters=5000] [agents=50] [dims=2] [lo=-30.0]
+//              [hi=30.0] [seed_base=1000] [objective=rosenbrock]
 //              [g0=100.0] [alpha=20.0]
 // Writes exports/bench/gsa_avg.csv (header iter,avg_best,std_best;
 // std is population std, matching scripts/benchmark.py).
@@ -55,11 +55,11 @@ T Arg(const std::vector<std::string>& args, size_t i, T fallback) {
 int main(int argc, char** argv) {
   const std::vector<std::string> args(argv + 1, argv + argc);
   const size_t runs{Arg<size_t>(args, 0, 30)};
-  const size_t iters{Arg<size_t>(args, 1, 1000)};
-  const size_t agents{Arg<size_t>(args, 2, 30)};
+  const size_t iters{Arg<size_t>(args, 1, 5000)};
+  const size_t agents{Arg<size_t>(args, 2, 50)};
   const size_t dims{Arg<size_t>(args, 3, 2)};
-  const double lo{Arg<double>(args, 4, -2.048)};
-  const double hi{Arg<double>(args, 5, 2.048)};
+  const double lo{Arg<double>(args, 4, -30.0)};
+  const double hi{Arg<double>(args, 5, 30.0)};
   const uint64_t seed_base{Arg<uint64_t>(args, 6, 1000)};
   const std::string objective{Arg<std::string>(args, 7, "rosenbrock")};
   const double g0{Arg<double>(args, 8, 100.0)};

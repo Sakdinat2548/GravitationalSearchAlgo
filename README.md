@@ -240,8 +240,9 @@ runs with distinct deterministic seeds (`seed = base + i`), minimize
 everywhere; each line is the mean of best-so-far per iteration.
 
 ```bash
-# 1. GSA: 30 runs -> exports/bench/gsa_avg.csv
-build/Release/bench.exe 30 1000 30 2 -2.048 2.048 1000
+# 1. GSA: 30 runs -> exports/bench/gsa_avg.csv (defaults: 50 agents,
+#    5000 iters, bounds +-30; positional args override, see bench_gsa.cpp)
+build/Release/bench.exe
 # 2. Python algos (-> meta_avg.csv, ga_avg.csv); objectives live in
 #    scripts/objective.py (single place to change the formula)
 .venv/Scripts/python scripts/benchmark.py
