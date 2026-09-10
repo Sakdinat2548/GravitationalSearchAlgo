@@ -72,6 +72,7 @@ inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
 }
 
 constexpr double kEpsilon{1e-12};
+constexpr double kMassFloor{1e-6};
 
 template <typename Fn>
   requires std::invocable<Fn, std::span<const double>> &&
@@ -322,7 +323,10 @@ class GravitationalSearchAlgorithm {
       s.mass[i] = (config_.minimize ? (max_fit - s.fitness[i])
                                     : (s.fitness[i] - min_fit)) *
                   inv_fit_diff;
-      s.mass[i] = std::max(s.mass[i], 0.0);
+      // Mass floor: a zero-mass agent feels no force and freezes forever,
+      // while a single far outlier stretches the denominator flat for
+      // everyone — keep a whisper of mass so no one gets stuck.
+      s.mass[i] = std::max(s.mass[i], kMassFloor);
       sum_q += s.mass[i];
     }
     sum_q = std::max(sum_q, kEpsilon);
