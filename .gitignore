@@ -14,6 +14,7 @@ CMakeUserPresets.json
 config.json
 compile_commands.json
 /exports/
+__pycache__/
 
 # Editor/IDE files
 .vscode/
