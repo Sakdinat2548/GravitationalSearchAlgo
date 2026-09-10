@@ -46,9 +46,9 @@ def write(path, avg, med, std, mean):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--runs", type=int, default=30)
-    p.add_argument("--iters", type=int, default=5000)
+    p.add_argument("--iters", type=int, default=1000)
     p.add_argument("--agents", type=int, default=50)
-    p.add_argument("--dims", type=int, default=2)
+    p.add_argument("--dims", type=int, default=30)
     p.add_argument("--lower", type=float, default=-30.0)
     p.add_argument("--upper", type=float, default=30.0)
     p.add_argument("--objective", default="rosenbrock", choices=FUNCTIONS)
