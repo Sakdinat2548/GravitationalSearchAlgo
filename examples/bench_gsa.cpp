@@ -98,6 +98,10 @@ int main(int argc, char** argv) {
 
   fs::create_directories("exports/bench");
   std::ofstream out{"exports/bench/gsa_avg.csv"};
+  if (!out) {
+    std::cerr << "cannot open exports/bench/gsa_avg.csv for writing\n";
+    return 1;
+  }
   out << "iter,avg_best,median_best,std_best,avg_mean\n";
   std::vector<double> col(runs);
   for (size_t i{}; i <= iters; ++i) {
