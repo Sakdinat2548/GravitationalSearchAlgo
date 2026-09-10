@@ -43,7 +43,7 @@ const fs::path kConfigPath{"config.json"};
 static void WriteConfig(const fs::path& path) {
   if (fs::exists(path)) return;
   nlohmann::json j;
-  j["dimensions"] = 10;
+  j["dimensions"] = 2;
   j["lower"] = -2.048;
   j["upper"] = 2.048;
   j["n_agents"] = 50;
@@ -52,7 +52,7 @@ static void WriteConfig(const fs::path& path) {
   j["alpha"] = 10.0;
   j["minimize"] = true;
   j["seed"] = 0;
-  j["snapshot_count"] = 0;
+  j["snapshot_count"] = 10;
   std::ofstream out{path};
   out << j.dump(2) << "\n";
 }
@@ -75,10 +75,9 @@ static void PrintRunningState(const Gsa& gsa) {
             << "\n  dims=" << gsa.GetDimensions()
             << "  n_agents=" << cfg.n_agents << "  max_iter=" << cfg.max_iter
             << "  g0=" << cfg.g0 << "  alpha=" << cfg.alpha
-             << "  minimize=" << (cfg.minimize ? "true" : "false")
-             << "  seed=" << cfg.seed << (cfg.seed == 0 ? " (random)" : "")
-             << "  snapshot_count=" << cfg.snapshot_count
-            << "\n  lower=[";
+            << "  minimize=" << (cfg.minimize ? "true" : "false")
+            << "  seed=" << cfg.seed << (cfg.seed == 0 ? " (random)" : "")
+            << "  snapshot_count=" << cfg.snapshot_count << "\n  lower=[";
   for (double v : lower) std::cout << v << ' ';
   std::cout << "]\n  upper=[";
   for (double v : upper) std::cout << v << ' ';
@@ -99,9 +98,9 @@ static void PrintResult(const gsa::GsaResult& res,
 
 template <typename Gsa>
 static fs::path ExportResult(const Gsa& gsa, const gsa::GsaResult& res) {
-  const std::string stamp{std::format(
-      "{:%Y%m%d_%H%M%S}", std::chrono::floor<std::chrono::seconds>(
-                              std::chrono::system_clock::now()))};
+  const std::string stamp{
+      std::format("{:%Y%m%d_%H%M%S}", std::chrono::floor<std::chrono::seconds>(
+                                          std::chrono::system_clock::now()))};
   fs::path dir{"exports/run_" + stamp};
   for (int dup{2}; fs::exists(dir); ++dup) {
     dir = fs::path{"exports/run_" + stamp + "_" + std::to_string(dup)};
@@ -171,9 +170,8 @@ int main() {
     std::string line;
     if (!std::getline(std::cin, line)) break;
     const auto first{line.find_first_not_of(" \t\r\n")};
-    const std::string cmd{first == std::string::npos
-                              ? std::string{}
-                              : line.substr(first, 1)};
+    const std::string cmd{first == std::string::npos ? std::string{}
+                                                     : line.substr(first, 1)};
     if (cmd == "q") break;
     if (cmd == "r") {
       std::cout << clr::kYellow << "Reloading config from file..."
@@ -199,8 +197,8 @@ int main() {
 
       continue;
     }
-    std::cout << clr::kRed << "Invalid command '" << line
-              << "' — only r or q." << clr::kReset << "\n";
+    std::cout << clr::kRed << "Invalid command '" << line << "' — only r or q."
+              << clr::kReset << "\n";
   }
 
   return 0;

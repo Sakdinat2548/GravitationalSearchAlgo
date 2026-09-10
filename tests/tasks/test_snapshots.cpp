@@ -73,7 +73,7 @@ TEST(snapshots) {
     double fmin{1e300};
     double fmax{-1e300};
     for (size_t a{}; a < 50; ++a) {
-      const size_t flat{s * 50 + a};
+      const size_t flat{(s * 50) + a};
       const double m{six.snapshot_masses[flat]};
       if (m < 0.0 || m > 1.0) {
         Expect(false, "snapshot mass outside [0, 1]");
@@ -86,7 +86,7 @@ TEST(snapshots) {
       const double y{six.snapshot_positions[base + 1]};
       fmin = std::min(fmin, fx);
       fmax = std::max(fmax, fx);
-      if (fx != x * x + y * y) {
+      if (fx != (x * x) + (y * y)) {
         Expect(false, "snapshot fitness != sphere(position)");
         ok = false;
       }
@@ -114,15 +114,17 @@ TEST(snapshots) {
     Expect(false, "same seed: snapshots differ");
   }
 
+  bool threw{false};
   try {
     auto bad = Config();
     bad.snapshot_count = bad.max_iter + 2;
     gsa::GravitationalSearchAlgorithm gsa(std::vector<double>{-5.0},
                                           std::vector<double>{5.0}, Sphere, bad);
-    Expect(false, "count > max_iter+1: no throw");
-    ok = false;
   } catch (const std::invalid_argument&) {
+    threw = true;
   }
+  ok = threw && ok;
+  if (!threw) Expect(false, "count > max_iter+1: no throw");
 
   const auto dir{std::filesystem::temp_directory_path() / "gsa_snap_test"};
   std::filesystem::create_directories(dir);
@@ -132,8 +134,8 @@ TEST(snapshots) {
   if (CountLines(dir / "history.csv") != 502) {
     Expect(false, "history.csv: line count != max_iter + 2");
   }
-  ok = CountLines(dir / "snapshots.csv") == 6 * 50 + 1 && ok;
-  if (CountLines(dir / "snapshots.csv") != 6 * 50 + 1) {
+  ok = CountLines(dir / "snapshots.csv") == (6 * 50) + 1 && ok;
+  if (CountLines(dir / "snapshots.csv") != (6 * 50) + 1) {
     Expect(false, "snapshots.csv: line count != snaps*agents + 1");
   }
   std::ifstream hist{dir / "history.csv"};

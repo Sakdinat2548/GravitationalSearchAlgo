@@ -23,6 +23,7 @@ find_package(xoshiro-cpp 1.1 CONFIG REQUIRED)
 option(GSA_BUILD_DEMO "Build the API demo (examples/demo.cpp)" ON)
 option(GSA_BUILD_TESTS "Build and register the CTest suite" ON)
 option(GSA_BUILD_MAIN "Build the main executable (examples/main.cpp)" ON)
+option(GSA_BUILD_BENCH "Build the multi-run benchmark (examples/bench_gsa.cpp)" ON)
 
 add_library(gsa INTERFACE)
 add_library(gsa::gsa ALIAS gsa)
@@ -35,6 +36,7 @@ target_compile_options(gsa INTERFACE -Wall -Wextra)
 set(GSA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/demo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples/bench_gsa.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_history.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
@@ -75,6 +77,12 @@ if(GSA_BUILD_MAIN)
   add_executable(main examples/main.cpp)
   target_link_libraries(main PRIVATE gsa::gsa nlohmann_json::nlohmann_json)
   target_compile_options(main PRIVATE -Wall -Wextra)
+endif()
+
+if(GSA_BUILD_BENCH)
+  add_executable(bench examples/bench_gsa.cpp)
+  target_link_libraries(bench PRIVATE gsa::gsa)
+  target_compile_options(bench PRIVATE -Wall -Wextra)
 endif()
 
 if(GSA_BUILD_TESTS)

@@ -233,6 +233,28 @@ Config: 2D, bounds ±2.048, 50 agents, 5000 iters, `g0 = alpha = 10`,
 minimum at (1, 1)). The plots are shown at the top of this file
 (sources in `docs/images/`, regenerable via `scripts/plot_gsa.py`).
 
+### Algorithm comparison (GSA vs metaheuristic vs genetic)
+
+Fairness contract: same dims/bounds/objective/population/iters, N=30
+runs with distinct deterministic seeds (`seed = base + i`), minimize
+everywhere; each line is the mean of best-so-far per iteration.
+
+```bash
+# 1. GSA: 30 runs -> exports/bench/gsa_avg.csv
+build/Release/bench.exe 30 1000 30 2 -2.048 2.048 1000
+# 2. Python algos (-> meta_avg.csv, ga_avg.csv); objectives live in
+#    scripts/objective.py (single place to change the formula)
+.venv/Scripts/python scripts/benchmark.py
+# 3. Plot -> exports/bench/compare.png
+.venv/Scripts/python scripts/plot_compare.py
+```
+
+`scripts/simple_metaheuristic.py` implements the workshop loaded-coin
+algorithm (`--p-head 0.5`, `--step 0.01`); `scripts/genetic.py`
+implements the real-valued GA (roulette on `1/(1+f)`, blend crossover +
+noise, mutation, elitism; `--pc 0.8 --pm 0.0075`). All tunables are CLI
+flags — see `benchmark.py --help`.
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:
