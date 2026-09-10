@@ -5,7 +5,7 @@ Usage (from the repo root, .venv active):
     python scripts/benchmark.py [--runs 30 --iters 1000 --agents 30 ...]
 
 Writes exports/bench/meta_avg.csv and ga_avg.csv
-(header iter,avg_best,std_best; std is population std).
+(header iter,avg_best,median_best,std_best,avg_mean; std is population std).
 """
 
 import argparse
@@ -18,20 +18,29 @@ import simple_metaheuristic
 from objective import FUNCTIONS
 
 
+def col_avg(trails):
+    n = len(trails[0])
+    return [sum(t[i] for t in trails) / len(trails) for i in range(n)]
+
+
 def average(trails):
     n = len(trails[0])
-    return [sum(t[i] for t in trails) / len(trails) for i in range(n)], [
-        statistics.pstdev([t[i] for t in trails]) for i in range(n)
-    ]
+    return (
+        col_avg(trails),
+        [statistics.median([t[i] for t in trails]) for i in range(n)],
+        [statistics.pstdev([t[i] for t in trails]) for i in range(n)],
+    )
 
 
-def write(path, avg, std):
+def write(path, avg, med, std, mean):
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", newline="") as f:
         out = csv.writer(f)
-        out.writerow(["iter", "avg_best", "std_best"])
-        for i, (a, s) in enumerate(zip(avg, std)):
-            out.writerow([i, f"{a:.17g}", f"{s:.17g}"])
+        out.writerow(["iter", "avg_best", "median_best", "std_best",
+                      "avg_mean"])
+        for i, (a, m, s, u) in enumerate(zip(avg, med, std, mean)):
+            out.writerow([i, f"{a:.17g}", f"{m:.17g}", f"{s:.17g}",
+                          f"{u:.17g}"])
 
 
 def main():
@@ -57,24 +66,24 @@ def main():
     upper = [a.upper] * a.dims
     outdir = Path(a.outdir)
 
-    meta = [
+    meta_best, meta_mean = zip(*[
         simple_metaheuristic.run(
             fn, lower, upper, a.agents, a.iters, a.p_head, a.step, a.seed_base + i
         )
         for i in range(a.runs)
-    ]
-    avg, std = average(meta)
-    write(outdir / "meta_avg.csv", avg, std)
+    ])
+    avg, med, std = average(meta_best)
+    write(outdir / "meta_avg.csv", avg, med, std, col_avg(meta_mean))
     print(f"meta: {a.runs} runs, final avg_best={avg[-1]:.6g}")
 
-    ga = [
+    ga_best, ga_mean = zip(*[
         genetic.run(
             fn, lower, upper, a.agents, a.iters, a.pc, a.pm, a.noise, a.seed_base + i
         )
         for i in range(a.runs)
-    ]
-    avg, std = average(ga)
-    write(outdir / "ga_avg.csv", avg, std)
+    ])
+    avg, med, std = average(ga_best)
+    write(outdir / "ga_avg.csv", avg, med, std, col_avg(ga_mean))
     print(f"ga: {a.runs} runs, final avg_best={avg[-1]:.6g}")
 
 

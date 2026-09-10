@@ -3,8 +3,8 @@
 Per iteration: find the best agent; each agent copies it with
 probability p_head, then perturbs every dimension by uniform
 ±step*width (clamped to bounds); greedy accept on <=.
-Returns best-so-far, index 0 = initial population (matches GSA
-history row-index = iteration).
+Returns (best-so-far, mean-fitness) lists, index 0 = initial population
+(matches GSA history row-index = iteration).
 """
 import random
 
@@ -18,6 +18,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, p_head=0.5,
     fit = [fn(p) for p in pop]
     best = min(fit)
     trail = [best]
+    means = [sum(fit) / len(fit)]
     for _ in range(max_iter):
         champion = pop[fit.index(best)]
         for i in range(n_agents):
@@ -27,7 +28,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, p_head=0.5,
             fx = fn(x)
             if fx <= fit[i]:
                 pop[i], fit[i] = x, fx
-                if fx < best:
-                    best = fx
+                best = min(best, fx)
         trail.append(best)
-    return trail
+        means.append(sum(fit) / len(fit))
+    return trail, means

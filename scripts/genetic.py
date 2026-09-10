@@ -4,7 +4,8 @@
 Roulette-wheel selection on fit = 1/(1+f) (minimization adapter;
 algorithm math itself is verbatim), crossover method d (random blend
 + zero-mean noise, clamped to bounds), mutation method b, elitism
-(keep best). Returns best-so-far, index 0 = initial population.
+(keep best). Returns (best-so-far, mean-fitness) lists, index 0 =
+initial population.
 """
 import random
 
@@ -23,6 +24,7 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
     best = min(fit)
     elite = list(pop[fit.index(best)])
     trail = [best]
+    means = [sum(fit) / len(fit)]
 
     def roulette(fits, total):
         if total <= 0:
@@ -64,4 +66,5 @@ def run(fn, lower, upper, n_agents=30, max_iter=1000, pc=0.8, pm=0.0075,
         worst = fit.index(max(fit))
         pop[worst], fit[worst] = list(elite), best
         trail.append(best)
-    return trail
+        means.append(sum(fit) / len(fit))
+    return trail, means

@@ -6,10 +6,12 @@
 //              [g0=100.0] [alpha=20.0]
 // Writes exports/bench/gsa_avg.csv (header iter,avg_best,std_best;
 // std is population std, matching scripts/benchmark.py).
+#include <algorithm>
 #include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <span>
 #include <string>
 #include <type_traits>
@@ -70,6 +72,9 @@ int main(int argc, char** argv) {
 
   std::vector<double> sum(iters + 1, 0.0);
   std::vector<double> sumsq(iters + 1, 0.0);
+  std::vector<double> mean_sum(iters + 1, 0.0);
+  std::vector<std::vector<double>> all_best(
+      runs, std::vector<double>(iters + 1));
   for (size_t r{}; r < runs; ++r) {
     gsa::GravitationalSearchAlgorithm gsa(
         dims, lo, hi, fn,
@@ -84,6 +89,8 @@ int main(int argc, char** argv) {
       const double b{res.history[i].best_so_far};
       sum[i] += b;
       sumsq[i] += b * b;
+      mean_sum[i] += res.history[i].mean_fitness;
+      all_best[r][i] = b;
     }
     std::cout << "run " << (r + 1) << "/" << runs
               << " best=" << res.best_val << "\n";
@@ -91,11 +98,24 @@ int main(int argc, char** argv) {
 
   fs::create_directories("exports/bench");
   std::ofstream out{"exports/bench/gsa_avg.csv"};
-  out << "iter,avg_best,std_best\n";
+  out << "iter,avg_best,median_best,std_best,avg_mean\n";
+  std::vector<double> col(runs);
   for (size_t i{}; i <= iters; ++i) {
     const double mean{sum[i] / runs};
     const double var{std::max(sumsq[i] / runs - mean * mean, 0.0)};
-    out << i << ',' << mean << ',' << std::sqrt(var) << '\n';
+    for (size_t r{}; r < runs; ++r) {
+      col[r] = all_best[r][i];
+    }
+    const size_t mid{runs / 2};
+    std::ranges::nth_element(col, col.begin() + mid);
+    const double hi{col[mid]};
+    double median{hi};
+    if (runs % 2 == 0) {
+      std::ranges::nth_element(col, col.begin() + mid - 1);
+      median = std::midpoint(col[mid - 1], hi);
+    }
+    out << i << ',' << mean << ',' << median << ',' << std::sqrt(var) << ','
+        << (mean_sum[i] / runs) << '\n';
   }
   std::cout << "wrote exports/bench/gsa_avg.csv\n";
   return 0;
