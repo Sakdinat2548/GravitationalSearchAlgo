@@ -22,9 +22,19 @@ def read(path):
         [float(r["avg_best"]) for r in rows]
 
 
+def newest_bench():
+    cands = sorted(Path("exports").glob("bench_*"), key=lambda p: p.stat().st_mtime)
+    if cands:
+        return cands[-1]
+    legacy = Path("exports/bench")
+    if (legacy / "gsa_avg.csv").exists():
+        return legacy
+    sys.exit("no bench output found under exports/ (run benchmark.py --run-bench first)")
+
+
 def main():
-    bench = Path(sys.argv[1]) if len(sys.argv) > 1 else \
-        Path("exports/bench")
+    bench = Path(sys.argv[1]) if len(sys.argv) > 1 else newest_bench()
+    print(f"bench dir: {bench}")
     fig, ax = plt.subplots()
     styles = {"gsa": "-", "meta": "--", "ga": "--"}
     for name in ("gsa", "meta", "ga"):

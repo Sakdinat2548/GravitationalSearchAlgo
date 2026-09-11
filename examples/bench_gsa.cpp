@@ -3,12 +3,15 @@
 //
 // Usage: bench [runs=30] [iters=1000] [agents=50] [dims=30] [lo=-30.0]
 //              [hi=30.0] [seed_base=1000] [objective=rosenbrock]
-//              [g0=100.0] [alpha=20.0]
-// Writes exports/bench/gsa_avg.csv (header iter,avg_best,std_best;
-// std is population std, matching scripts/benchmark.py).
+//              [g0=100.0] [alpha=20.0] [outdir=""]
+// Writes gsa_avg.csv (header iter,avg_best,median_best,std_best,avg_mean;
+// std is population std) into outdir, or a fresh timestamped
+// exports/bench_<yyyymmdd_hhmmss>/ when outdir is empty.
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -66,6 +69,16 @@ int main(int argc, char** argv) {
   const std::string objective{Arg<std::string>(args, 7, "rosenbrock")};
   const double g0{Arg<double>(args, 8, 100.0)};
   const double alpha{Arg<double>(args, 9, 20.0)};
+  fs::path outdir{Arg<std::string>(args, 10, "")};
+  if (outdir.empty()) {
+    const std::string stamp{std::format(
+        "bench_{:%Y%m%d_%H%M%S}", std::chrono::floor<std::chrono::seconds>(
+                                      std::chrono::system_clock::now()))};
+    outdir = fs::path{"exports"} / stamp;
+    for (int dup{2}; fs::exists(outdir); ++dup) {
+      outdir = fs::path{"exports/" + stamp + "_" + std::to_string(dup)};
+    }
+  }
   auto fn = objective == "sphere"
                 ? static_cast<double (*)(std::span<const double>)>(Sphere)
                 : static_cast<double (*)(std::span<const double>)>(Rosenbrock);
@@ -96,10 +109,11 @@ int main(int argc, char** argv) {
               << " best=" << res.best_val << "\n";
   }
 
-  fs::create_directories("exports/bench");
-  std::ofstream out{"exports/bench/gsa_avg.csv"};
+  fs::create_directories(outdir);
+  std::ofstream out{outdir / "gsa_avg.csv"};
   if (!out) {
-    std::cerr << "cannot open exports/bench/gsa_avg.csv for writing\n";
+    std::cerr << "cannot open " << (outdir / "gsa_avg.csv").string()
+              << " for writing\n";
     return 1;
   }
   out << "iter,avg_best,median_best,std_best,avg_mean\n";
@@ -121,6 +135,6 @@ int main(int argc, char** argv) {
     out << i << ',' << mean << ',' << median << ',' << std::sqrt(var) << ','
         << (mean_sum[i] / runs) << '\n';
   }
-  std::cout << "wrote exports/bench/gsa_avg.csv\n";
+  std::cout << "wrote " << (outdir / "gsa_avg.csv").string() << "\n";
   return 0;
 }
