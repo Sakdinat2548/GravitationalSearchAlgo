@@ -3,19 +3,36 @@ write averaged best-so-far CSVs.
 
 Usage (from the repo root, .venv active):
     python scripts/benchmark.py [--runs 30 --iters 1000 --agents 30 ...]
+    python scripts/benchmark.py --run-bench   # also runs bench.exe first
 
-Writes exports/bench/meta_avg.csv and ga_avg.csv
-(header iter,avg_best,median_best,std_best,avg_mean; std is population std).
+Writes meta_avg.csv and ga_avg.csv (plus gsa_avg.csv with --run-bench)
+into a fresh timestamped exports/bench_<yyyymmdd_hhmmss>/ folder
+(header iter,avg_best,median_best,std_best,avg_mean; std is population
+std). Pass --outdir to reuse a folder instead.
 """
 
 import argparse
 import csv
 import statistics
+import subprocess
+import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import genetic
 import simple_metaheuristic
 from objective import FUNCTIONS
+
+
+def fresh_dir(base):
+    # UTC, matching the std::chrono timestamps bench.exe generates.
+    stamp = datetime.now(timezone.utc).strftime("bench_%Y%m%d_%H%M%S")
+    outdir = Path(base) / stamp
+    dup = 2
+    while outdir.exists():
+        outdir = Path(f"{base}/{stamp}_{dup}")
+        dup += 1
+    return outdir
 
 
 def col_avg(trails):
@@ -46,9 +63,9 @@ def write(path, avg, med, std, mean):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--runs", type=int, default=30)
-    p.add_argument("--iters", type=int, default=5000)
+    p.add_argument("--iters", type=int, default=1000)
     p.add_argument("--agents", type=int, default=50)
-    p.add_argument("--dims", type=int, default=2)
+    p.add_argument("--dims", type=int, default=30)
     p.add_argument("--lower", type=float, default=-30.0)
     p.add_argument("--upper", type=float, default=30.0)
     p.add_argument("--objective", default="rosenbrock", choices=FUNCTIONS)
@@ -58,13 +75,30 @@ def main():
     p.add_argument("--pc", type=float, default=0.8)
     p.add_argument("--pm", type=float, default=0.0075)
     p.add_argument("--noise", type=float, default=0.01)
-    p.add_argument("--outdir", default="exports/bench")
+    p.add_argument("--g0", type=float, default=100.0)
+    p.add_argument("--alpha", type=float, default=20.0)
+    p.add_argument("--outdir", default=None)
+    p.add_argument("--run-bench", action="store_true",
+                   help="run bench.exe into the same folder first")
+    p.add_argument("--bench-exe", default="build/Release/bench.exe")
     a = p.parse_args()
 
     fn = FUNCTIONS[a.objective]
     lower = [a.lower] * a.dims
     upper = [a.upper] * a.dims
-    outdir = Path(a.outdir)
+    outdir = Path(a.outdir) if a.outdir else fresh_dir("exports")
+    outdir.mkdir(parents=True, exist_ok=True)
+    print(f"outdir: {outdir}")
+
+    if a.run_bench:
+        bench = Path(a.bench_exe)
+        if not bench.exists():
+            sys.exit(f"bench executable not found: {bench}")
+        subprocess.run([
+            str(bench), str(a.runs), str(a.iters), str(a.agents),
+            str(a.dims), str(a.lower), str(a.upper), str(a.seed_base),
+            a.objective, str(a.g0), str(a.alpha), str(outdir),
+        ], check=True)
 
     meta_best, meta_mean = zip(*[
         simple_metaheuristic.run(

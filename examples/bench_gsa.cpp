@@ -1,14 +1,17 @@
 // Multi-run GSA benchmark: runs Optimize() N times with distinct seeds
 // and writes the averaged best-so-far per iteration.
 //
-// Usage: bench [runs=30] [iters=5000] [agents=50] [dims=2] [lo=-30.0]
+// Usage: bench [runs=30] [iters=1000] [agents=50] [dims=30] [lo=-30.0]
 //              [hi=30.0] [seed_base=1000] [objective=rosenbrock]
-//              [g0=100.0] [alpha=20.0]
-// Writes exports/bench/gsa_avg.csv (header iter,avg_best,std_best;
-// std is population std, matching scripts/benchmark.py).
+//              [g0=100.0] [alpha=20.0] [outdir=""]
+// Writes gsa_avg.csv (header iter,avg_best,median_best,std_best,avg_mean;
+// std is population std) into outdir, or a fresh timestamped
+// exports/bench_<yyyymmdd_hhmmss>/ when outdir is empty.
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -57,15 +60,25 @@ T Arg(const std::vector<std::string>& args, size_t i, T fallback) {
 int main(int argc, char** argv) {
   const std::vector<std::string> args(argv + 1, argv + argc);
   const size_t runs{Arg<size_t>(args, 0, 30)};
-  const size_t iters{Arg<size_t>(args, 1, 5000)};
+  const size_t iters{Arg<size_t>(args, 1, 1000)};
   const size_t agents{Arg<size_t>(args, 2, 50)};
-  const size_t dims{Arg<size_t>(args, 3, 2)};
+  const size_t dims{Arg<size_t>(args, 3, 30)};
   const double lo{Arg<double>(args, 4, -30.0)};
   const double hi{Arg<double>(args, 5, 30.0)};
   const uint64_t seed_base{Arg<uint64_t>(args, 6, 1000)};
   const std::string objective{Arg<std::string>(args, 7, "rosenbrock")};
   const double g0{Arg<double>(args, 8, 100.0)};
   const double alpha{Arg<double>(args, 9, 20.0)};
+  fs::path outdir{Arg<std::string>(args, 10, "")};
+  if (outdir.empty()) {
+    const std::string stamp{std::format(
+        "bench_{:%Y%m%d_%H%M%S}", std::chrono::floor<std::chrono::seconds>(
+                                      std::chrono::system_clock::now()))};
+    outdir = fs::path{"exports"} / stamp;
+    for (int dup{2}; fs::exists(outdir); ++dup) {
+      outdir = fs::path{"exports/" + stamp + "_" + std::to_string(dup)};
+    }
+  }
   auto fn = objective == "sphere"
                 ? static_cast<double (*)(std::span<const double>)>(Sphere)
                 : static_cast<double (*)(std::span<const double>)>(Rosenbrock);
@@ -96,8 +109,13 @@ int main(int argc, char** argv) {
               << " best=" << res.best_val << "\n";
   }
 
-  fs::create_directories("exports/bench");
-  std::ofstream out{"exports/bench/gsa_avg.csv"};
+  fs::create_directories(outdir);
+  std::ofstream out{outdir / "gsa_avg.csv"};
+  if (!out) {
+    std::cerr << "cannot open " << (outdir / "gsa_avg.csv").string()
+              << " for writing\n";
+    return 1;
+  }
   out << "iter,avg_best,median_best,std_best,avg_mean\n";
   std::vector<double> col(runs);
   for (size_t i{}; i <= iters; ++i) {
@@ -117,6 +135,6 @@ int main(int argc, char** argv) {
     out << i << ',' << mean << ',' << median << ',' << std::sqrt(var) << ','
         << (mean_sum[i] / runs) << '\n';
   }
-  std::cout << "wrote exports/bench/gsa_avg.csv\n";
+  std::cout << "wrote " << (outdir / "gsa_avg.csv").string() << "\n";
   return 0;
 }

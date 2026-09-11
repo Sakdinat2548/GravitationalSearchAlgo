@@ -12,17 +12,17 @@ see [Visualize a run](#visualize-a-run)):
 |---|---|
 | <img src="docs/images/contour_first.png" width="400" alt="first"> | <img src="docs/images/contour_last.png" width="400" alt="last"> |
 
-| 3D surface + agents | Best-path trail animation |
-|---|---|
-| <img src="docs/images/surface_3d.png" width="400" alt="surface"> | <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
+| Best-path trail animation (2D Rosenbrock valley) |
+|---|
+| <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
 
-## Benchmark: minimization on 2D Rosenbrock (±30) with n = 50 agents, max_iter = 5000, over 30 runs
+## Benchmark: minimization on 30D Rosenbrock (±30) with n = 50 agents, max_iter = 1000, over 30 runs
 
 |  | GSA | Simple metaheuristic | Genetic |
 |---|---|---|---|
-| Average best-so-far | 8.2e-09 | 1.8e-05 | 2.7e-05 |
-| Median best-so-far | 2.1e-20 | 1.2e-05 | 2.0e-05 |
-| Average mean fitness | 1.7e+06 | 9.3e-04 | 2.4e+02 |
+| Average best-so-far | 28 | 923 | 345 |
+| Median best-so-far | 26 | 378 | 282 |
+| Average mean fitness | 28 | 1074 | 1406 |
 
 (Final-iteration values from `exports/bench/*_avg.csv`; see
 [Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
@@ -252,17 +252,19 @@ Fairness contract: same dims/bounds/objective/population/iters, N=30
 runs with distinct deterministic seeds (`seed = base + i`), minimize
 everywhere; each line is the mean of best-so-far per iteration.
 
+One command runs all three into a fresh timestamped folder
+(`bench.exe` takes positional args, same order as the flags below):
+
 ```bash
-# 1. GSA -> exports/bench/gsa_avg.csv (defaults: 50 agents, 5000 iters,
-#    bounds +-30, g0=100, alpha=20; positional args override, see bench_gsa.cpp)
-build/Release/bench.exe
-# 2. Python algos (-> meta_avg.csv, ga_avg.csv, same defaults);
-#    objectives live in scripts/objective.py (single place to change
-#    the formula); all tunables are flags, see benchmark.py --help
-.venv/Scripts/python scripts/benchmark.py
-# 3. Plot -> exports/bench/compare.png
-.venv/Scripts/python scripts/plot_compare.py
+.venv/Scripts/python scripts/benchmark.py --run-bench
+.venv/Scripts/python scripts/plot_compare.py   # newest bench_* by default
 ```
+
+Defaults: 50 agents, 1000 iters, 30 dims, bounds +-30, g0=100, alpha=20;
+objectives live in scripts/objective.py (single place to change the
+formula); all tunables are flags, see `benchmark.py --help`. The data
+behind the gallery above is tracked under `docs/`
+(`run_<ts>/` single run, `bench_<ts>/` comparison).
 
 `scripts/simple_metaheuristic.py` implements the workshop loaded-coin
 algorithm (`--p-head 0.5`, `--step 0.01`); `scripts/genetic.py`

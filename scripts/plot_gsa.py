@@ -140,17 +140,6 @@ def move_3d(scat, rows):
     scat.set_sizes(dot_sizes([float(r["mass"]) for r in rows]))
 
 
-def surface_frame(by_iter, k, lo, hi, title):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-    paint_surface(ax, lo, hi)
-    scatter_3d(ax, by_iter[k])
-    ax.set_title(title)
-    ax.view_init(elev=25, azim=-60)
-    ax.legend()
-    return fig
-
-
 def main():
     if len(sys.argv) < 2 or not (Path(sys.argv[1]) / "history.csv").exists():
         sys.exit("usage: plot_gsa.py RUN_DIR  (folder with history.csv)")
@@ -195,12 +184,6 @@ def main():
         run / "contour_last.png", dpi=100
     )
     plt.close("all")
-    if dims == 2:
-        surface_frame(by_iter, frames[-1], lo, hi, f"iter {frames[-1]}").savefig(
-            run / "surface_3d.png", dpi=100
-        )
-        plt.close("all")
-
     fig, ax = plt.subplots()
     if dims == 2:
         draw_contour(fig, ax, lo, hi)
@@ -316,7 +299,7 @@ def main():
         )
         plt.close(fig3)
     print(
-        f"wrote convergence.png, contour_first/last.png, surface_3d.png,"
+        f"wrote convergence.png, contour_first/last.png,"
         f" anim.gif, anim3d.gif in {run}"
     )
 
