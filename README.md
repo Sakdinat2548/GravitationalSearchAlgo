@@ -12,6 +12,10 @@ see [Visualize a run](#visualize-a-run)):
 |---|---|
 | <img src="docs/images/contour_first.png" width="400" alt="first"> | <img src="docs/images/contour_last.png" width="400" alt="last"> |
 
+| Best-path trail animation (2D Rosenbrock valley) |
+|---|
+| <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
+
 ## Benchmark: minimization on 30D Rosenbrock (±30) with n = 50 agents, max_iter = 1000, over 30 runs
 
 |  | GSA | Simple metaheuristic | Genetic |

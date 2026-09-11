@@ -26,9 +26,10 @@ def main():
     bench = Path(sys.argv[1]) if len(sys.argv) > 1 else \
         Path("exports/bench")
     fig, ax = plt.subplots()
+    styles = {"gsa": "-", "meta": "--", "ga": "--"}
     for name in ("gsa", "meta", "ga"):
         iters, avg = read(bench / f"{name}_avg.csv")
-        ax.semilogy(iters, avg, label=name)
+        ax.semilogy(iters, avg, label=name, linestyle=styles[name])
     ax.set(xlabel="iteration", ylabel="average best-so-far",
            title="GSA vs simple metaheuristic vs genetic")
     ax.grid(True, which="both", alpha=0.3)
