@@ -16,7 +16,7 @@ import csv
 import statistics
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import genetic
@@ -25,7 +25,8 @@ from objective import FUNCTIONS
 
 
 def fresh_dir(base):
-    stamp = datetime.now().strftime("bench_%Y%m%d_%H%M%S")
+    # UTC, matching the std::chrono timestamps bench.exe generates.
+    stamp = datetime.now(timezone.utc).strftime("bench_%Y%m%d_%H%M%S")
     outdir = Path(base) / stamp
     dup = 2
     while outdir.exists():
