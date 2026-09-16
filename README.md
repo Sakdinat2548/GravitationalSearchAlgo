@@ -41,24 +41,29 @@ C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.)
 
 |  | GSA | Simple metaheuristic | Genetic |
 |---|---|---|---|
-| Average best-so-far | 28 | 923 | 345 |
-| Median best-so-far | 26 | 378 | 282 |
-| Average mean fitness | 28 | 1074 | 1406 |
+| Average best-so-far | 28 | 147 | 427 |
+| Median best-so-far | 26 | 37 | 135 |
+| Average mean fitness | 28 | 153 | 5.2e5 |
 
-<img src="docs/rosenbrock/bench_20260911_095423/compare.png" width="480" alt="average best-so-far comparison (Rosenbrock)">
+<img src="docs/rosenbrock/bench_20260916_133911/compare.png" width="480" alt="average best-so-far comparison (Rosenbrock)">
 
 30D Sphere (±100):
 
 |  | GSA | Simple metaheuristic | Genetic |
 |---|---|---|---|
-| Average best-so-far | 2.0e-17 | 20.7 | 24.9 |
-| Median best-so-far | 1.9e-17 | 21.4 | 24.0 |
-| Average mean fitness | 3.2e-17 | 28.5 | 89.4 |
+| Average best-so-far | 2.0e-17 | 0.82 | 1.26 |
+| Median best-so-far | 1.9e-17 | 0.85 | 1.28 |
+| Average mean fitness | 3.2e-17 | 1.17 | 251 |
 
-<img src="docs/sphere/bench_20260916_131652/compare.png" width="480" alt="average best-so-far comparison (Sphere)">
+<img src="docs/sphere/bench_20260916_134031/compare.png" width="480" alt="average best-so-far comparison (Sphere)">
 
 (Final-iteration values from `docs/{rosenbrock,sphere}/bench_*/*_avg.csv`; see
 [Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
+
+Baseline settings (tuned by grid sweep, same for both functions):
+GSA `g0=100, alpha=20` · meta `p-head=0.9, step=0.002` · GA `pc=0.8, pm=0.03,
+noise=0.002`. Full per-bench record (protocol + params) in each bench dir's
+`algos.json`.
 
 </details>
 
@@ -289,14 +294,14 @@ One command runs all three into a fresh timestamped folder
 (`bench.exe` takes positional args, same order as the flags below):
 
 ```bash
-.venv/Scripts/python scripts/benchmark.py --run-bench
+.venv/Scripts/python scripts/benchmark.py --run-bench --p-head 0.9 --step 0.002 --pc 0.8 --pm 0.03 --noise 0.002
 .venv/Scripts/python scripts/plot_compare.py   # newest bench_* by default
 ```
 
 Sphere variant (bounds ±100, same fairness contract):
 
 ```bash
-.venv/Scripts/python scripts/benchmark.py --run-bench --objective sphere --lower -100 --upper 100
+.venv/Scripts/python scripts/benchmark.py --run-bench --objective sphere --lower -100 --upper 100 --p-head 0.9 --step 0.002 --pc 0.8 --pm 0.03 --noise 0.002
 .venv/Scripts/python scripts/plot_compare.py   # newest bench_* by default
 ```
 
