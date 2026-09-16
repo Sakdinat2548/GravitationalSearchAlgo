@@ -312,10 +312,21 @@ behind the gallery above is tracked under `docs/`
 (`rosenbrock/run_<ts>/` + `rosenbrock/bench_<ts>/`, `sphere/run_<ts>/` + `sphere/bench_<ts>/`).
 
 `scripts/simple_metaheuristic.py` implements the workshop loaded-coin
-algorithm (`--p-head 0.5`, `--step 0.01`); `scripts/genetic.py`
-implements the real-valued GA (roulette on `1/(1+f)`, blend crossover +
-noise, mutation, elitism; `--pc 0.8 --pm 0.0075`). All tunables are CLI
+algorithm; `scripts/genetic.py` implements the real-valued GA (roulette on
+`1/(1+f)`, blend crossover + noise, mutation, elitism). All tunables are CLI
 flags — see `benchmark.py --help`.
+
+Parameter glossary (tuned values used above; step/noise scale with bounds width):
+
+| Param | Algo | Meaning |
+|---|---|---|
+| `g0` | GSA | initial gravitational constant (force scale; tune to bounds) |
+| `alpha` | GSA | decay rate, `G(t) = g0·exp(-alpha·t)` |
+| `p-head` | meta | per-iteration probability an agent copies the champion (`1.0` = all copy) |
+| `step` | meta | perturbation radius as a fraction of bounds width (±`step·width` per dim) |
+| `pc` | GA | crossover probability per individual per generation |
+| `pm` | GA | mutation probability per individual per generation (pull toward a random point) |
+| `noise` | GA | crossover blend noise as a fraction of bounds width (±`noise·width` per dim) |
 
 ### JSON Configuration
 
