@@ -45,6 +45,8 @@ C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.)
 | Median best-so-far | 26 | 378 | 282 |
 | Average mean fitness | 28 | 1074 | 1406 |
 
+<img src="docs/rosenbrock/bench_20260911_095423/compare.png" width="480" alt="average best-so-far comparison (Rosenbrock)">
+
 30D Sphere (±100):
 
 |  | GSA | Simple metaheuristic | Genetic |
@@ -53,16 +55,10 @@ C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.)
 | Median best-so-far | 1.9e-17 | 21.4 | 24.0 |
 | Average mean fitness | 3.2e-17 | 28.5 | 89.4 |
 
+<img src="docs/sphere/bench_20260916_131652/compare.png" width="480" alt="average best-so-far comparison (Sphere)">
+
 (Final-iteration values from `docs/{rosenbrock,sphere}/bench_*/*_avg.csv`; see
 [Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
-
-Rosenbrock (30D, ±30):
-
-<img src="docs/rosenbrock/bench_20260911_095423/compare.png" width="480" alt="average best-so-far comparison (Rosenbrock)">
-
-Sphere (30D, ±100):
-
-<img src="docs/sphere/bench_20260916_131652/compare.png" width="480" alt="average best-so-far comparison (Sphere)">
 
 </details>
 
