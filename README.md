@@ -34,7 +34,7 @@ C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.)
 
 </details>
 
-<details open>
+<details>
 <summary><strong>Benchmark</strong> — minimization, n = 50 agents, max_iter = 1000, 30 runs (click to expand/collapse)</summary>
 
 30D Rosenbrock (±30):
