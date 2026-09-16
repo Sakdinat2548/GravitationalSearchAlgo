@@ -46,114 +46,83 @@ no API key, $0).
 
 ## Project
 
-C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.).
-Dependencies managed by Conan 2:
-- `nlohmann_json/3.11.2` — JSON configuration support
-- `xoshiro-cpp/1.1` — Xoshiro256++ PRNG (included via `<xoshiro-cpp/XoshiroCpp.hpp>`)
+C++20 header-only Gravitational Search Algorithm (`src/gsa/gsa.hpp`, namespace `gsa`).
+Conan 2 deps (both header-only): `nlohmann_json/3.11.2`, `xoshiro-cpp/1.1`
+(`<xoshiro-cpp/XoshiroCpp.hpp>`). `GravitationalSearchAlgorithm` is templated on
+the objective (any `std::invocable<std::span<const double>>` returning `double`, CTAD-deduced).
 
-## Build / Verify (CMake + Conan 2, MSYS2 UCRT64 g++ on Windows)
+## Build / Verify (MSYS2 UCRT64 g++ on Windows)
 
 ```bash
-# 1. Install Conan dependencies (pick profile from profiles/ per OS;
-#    Windows shown; both deps are header-only so no binaries are built)
 conan install . --build=missing -pr:h=profiles/windows-msys2-gcc -pr:b=profiles/windows-msys2-gcc
-
-# 2. Configure with Conan toolchain
 cmake --preset conan-release
-
-# 3. Build
 cmake --build --preset conan-release
-
-# Fast syntax check; must be warning-free
-cmake --build --preset conan-release --target check-gsa
-
-# Run the test suite (GSA invariants + determinism)
+cmake --build --preset conan-release --target check-gsa      # syntax, must be warning-free
+cmake --build --preset conan-release --target check-naming   # clang-tidy Google-casing, must be warning-free
 ctest --preset conan-release
-
-# Google-casing naming lint (see .clang-tidy); must be warning-free too
-cmake --build --preset conan-release --target check-naming
 ```
 
-Build outputs land in `build/Release/` (`build/Release/demo.exe`, `build/Release/main.exe`, `build/Release/tests/gsa_test.exe`).
+- Profiles in `profiles/` (`windows-msys2-gcc`, `linux-gcc`, `macos-clang`). Never use bare
+  `conan profile detect` — it mis-detects MSVC and defaults to cppstd=14, which rejects
+  xoshiro-cpp (needs ≥17). `conan-release` is Conan-generated per machine
+  (`CMakeUserPresets.json` include); the name is stable, the generator is not.
+- Fallback without Conan (`default` preset, Ninja) needs system-installed deps:
+  `cmake --preset default && cmake --build --preset default && ctest --preset default`.
+- Outputs: `build/Release/{demo,main,bench}.exe`, `build/Release/tests/gsa_test.exe`.
 
-Profiles live in `profiles/`: `windows-msys2-gcc`, `linux-gcc`, `macos-clang`. Do NOT use bare `conan profile detect` — it mis-detects MSVC on Windows machines with VS remnants and defaults to cppstd=14, which rejects xoshiro-cpp (requires ≥17). The `conan-release` preset itself is Conan-generated per machine (`CMakeUserPresets.json` includes it); its generator varies by OS but the name is stable.
+## Tests
 
-Alternative: `default` preset (Ninja, no Conan) — requires system-installed `nlohmann_json` and `xoshiro-cpp`:
-```bash
-cmake --preset default
-cmake --build --preset default
-ctest --preset default
-```
+11 CTest entries from `tests/tasks/*.cpp` via self-contained `TEST(name)` framework
+(`tests/TEST.md`): `gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
+`gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`,
+`gsa_json_io_config`, `gsa_json_io_bounds`, `gsa_snapshots`. Single test:
+`build/Release/tests/gsa_test.exe <name>` (e.g. `determinism`). Recurring invariants:
+history size == `max_iter + 1`, monotonic `best_so_far` per mode, mean/median within
+`[best_iter, worst_iter]` (reversed for maximize), `stddev >= 0` finite, same seed ⇒
+identical, both `minimize` modes + odd agent count.
 
-The tracked tests are eleven CTest entries (`gsa_history`, `gsa_stats`, `gsa_determinism`,
-`gsa_modes`, `gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`,
-`gsa_json_io_config`, `gsa_json_io_bounds`, `gsa_snapshots`) built from `tests/tasks/*.cpp` (see Files). Each asserts one invariant group, plus same-seed determinism, both `minimize` modes, an odd agent count (median), and concurrent `Optimize()` on one instance. Recurring invariants:
-- history size == `max_iter + 1`; `best_so_far` monotonic per mode.
-- `mean_fitness` and `median_fitness` within `[best_iter, worst_iter]` (reversed for maximize).
-- `stddev_fitness >= 0` and finite; same `seed` => identical results.
-- Check both `minimize = true` and `false`, and an odd agent count (median).
+## API essentials
 
-## Files
+- `GsaConfig { n_agents, max_iter, g0, alpha, minimize, seed, snapshot_count }`.
+  `seed 0` = `std::random_device`. `snapshot_count`: `0` = off, `1` = final only,
+  max `max_iter + 1`; always includes iter 0 and `max_iter`.
+- Instance is immutable — change config by assigning a fresh instance. Every `Optimize()`
+  is an independent run (positions re-randomized, V/A zeroed); within a run
+  `V(t+1) = rand·V(t) + A(t)`. `Optimize()` is `const` and thread-safe if the objective is.
+- Ctors: `(lower, upper, func, cfg)`, `(dims, lo, hi, func, cfg)`,
+  `(dims, lower_vec, upper_vec, func, cfg)`. Bounds are required, no defaults.
+  JSON loader (`json_io.hpp`: `LoadConfigFromJson`/`LoadConfigFromString`, `Bounds` +
+  `LoadBoundsFromJson`) accepts mixed scalar/array bounds when `dimensions` is given;
+  C++ ctors do not mix — both scalar or both vectors.
+- `GsaResult`: `best_val`, `best_pos`, `history` (`GsaIterationInfo`: `best_so_far`,
+  `best_iter`, `worst_iter`, `mean_fitness`, `median_fitness`, `stddev_fitness`),
+  flat snapshots (`snapshot_iters`, `snapshot_positions` snap→agent→dim, `snapshot_masses` /
+  `snapshot_fitnesses` snap→agent).
 
-- `src/gsa/gsa.hpp` — header-only algorithm library (primary work here). `GravitationalSearchAlgorithm` is a class template on the objective callable (any `std::invocable<std::span<const double>>` returning `double`, deduced via CTAD). Public header included as `#include "gsa/gsa.hpp"`. Xoshiro RNG resolved via Conan (`<xoshiro-cpp/XoshiroCpp.hpp>`).
-- `src/gsa/stats.hpp` — `FitnessStats` + `ComputeFitnessStats` (order statistics: min/max, two-`nth_element` median, mean, stddev) and `BetterFit`; the `gsa_median` test calls it directly.
-- `src/gsa/json_io.hpp` — JSON loading utilities (namespace `gsa`): `LoadConfigFromJson`/`LoadConfigFromString` for `GsaConfig`, plus `Bounds` + `LoadBoundsFromJson` for dimensions/bounds (scalar or per-dim arrays; bounds are required — no defaults).
-- `src/gsa/csv_io.hpp` — `WriteHistoryCsv`/`WriteSnapshotsCsv`: header-row CSVs (`history`: 6 stat cols; `snapshots`: `iter,agent,mass,fitness,x1..xD`).
-- `examples/demo.cpp` — API demo: equal-bounds, per-dimension-bounds, rosenbrock (custom `g0`/`alpha`), and lambda-objective examples; prints `best_val` + position for each.
-- `examples/main.cpp` — JSON config hot-reload demo: creates `config.json` only if missing, prints the raw file, runs Rosenbrock; pressing `r` reloads the file and reassigns a fresh instance. Every run exports to `exports/run_<yyyymmdd_hhmmss>/` (`history.csv` always, `snapshots.csv` when `snapshot_count > 0`, plus effective `config.json`).
-- `scripts/plot_gsa.py` — matplotlib viz (runs on `.venv` Python 3.13): `python scripts/plot_gsa.py exports/run_<ts>/` writes `convergence.png`, `contour_first/last.png`, `anim.gif`, `anim3d.gif` into the run dir; bounds/dims read from the run's `config.json`. Contour/surface backgrounds mirror the default 2D Rosenbrock (`objective_2d` + `LEVELS` EDIT block); scatter/convergence/animations are data-driven. Dot size scales with mass.
-- `scripts/objective.py` — single shared Python objectives (`FUNCTIONS` dict); both comparison algos import it.
-- `scripts/simple_metaheuristic.py` + `scripts/genetic.py` — workshop loaded-coin algorithm and real-valued GA (roulette on `1/(1+f)`, blend crossover + noise, mutation, elitism); stdlib only, `run(...) → best_so_far` with iter 0 = initial.
-- `scripts/benchmark.py` — runs both Python algos N=30 (`--runs/--iters/--agents/--p-head/--step/--pc/--pm/--noise/--seed-base` flags) → `exports/bench_<ts>/{meta,ga}_avg.csv` (`iter,avg_best,median_best,std_best,avg_mean`; `--run-bench` also drives `bench.exe` into the same folder); `scripts/plot_compare.py` → `compare.png` in newest `bench_*` (3-line semilogy).
-- `examples/bench_gsa.cpp` — same N-run protocol in C++ (`bench` target, `GSA_BUILD_BENCH`) → `exports/bench_<ts>/gsa_avg.csv` (11th argv = outdir, else timestamped) (same 5 columns; median via two `nth_element` calls like `ComputeFitnessStats`). Fairness contract: same dims/bounds/objective/pop/iters, distinct deterministic seeds, minimize everywhere.
-- `tests/` — self-contained framework (`test_framework.hpp` registers named tests; `test_common.hpp` shares objectives/invariant helpers; `test_main.cpp` dispatches, passing a test name as argv[1] to run only that one) + `tests/tasks/*.cpp`, one file per test: `test_history.cpp`, `test_stats.cpp`, `test_determinism.cpp`, `test_modes.cpp`, `test_thread_safety.cpp`, `test_median.cpp`, `test_convergence.cpp`, `test_validation.cpp`, `test_json_io.cpp` (registers both JSON IO tests), `test_snapshots.cpp`. Its own `CMakeLists.txt` builds `gsa_test` and registers CTest; run a single test directly: `build/Release/tests/gsa_test.exe <name>` (name = argv[1], e.g. `determinism`).
-- `conanfile.py` — Conan 2 recipe declaring `nlohmann_json/3.11.2` and `xoshiro-cpp/1.1` requirements.
-- `profiles/` — Conan profiles: `windows-msys2-gcc` (MSYS2 UCRT64 g++), `linux-gcc`, `macos-clang`.
-- `CMakeLists.txt` / `CMakePresets.json` — Ninja + MinGW Makefiles Release build; options `GSA_BUILD_DEMO`, `GSA_BUILD_MAIN`, `GSA_BUILD_BENCH`, `GSA_BUILD_TESTS`; outputs in `build/` or `build/Release/`.
-- `.clang-format` / `.clang-tidy` — Google formatting and Google-casing naming conventions.
-- `.vscode/` — VS Code C++20 IntelliSense config (includes conan paths via env vars).
-- `.venv/` + `pyrightconfig.json` — Python 3.13 venv with `conan` + `pyright` (conanfile type checking) plus `matplotlib` + `pillow` (viz script). Recreated on 3.13 because the scientific stack has no cp314 Windows wheels; `pyrightconfig.json` is version-agnostic.
+## Conventions / gotchas
 
-## API
+- C++20. Integer loops use `Range(n)` / `Range(a, b)` (`views::iota` wrapper); keep
+  `std::iota` (`ranges::iota` is C++23). `dimensions_` and dim counters are `size_t`;
+  index agent rows via `AgentOffset(agent)` (`agent * dimensions_`).
+- Per-`Optimize()` buffers only — never add instance state. Hot loop
+  `ComputeAccelerations` (O(N²·kbest·dims)): keep hoisted row spans
+  (`positions.subspan(AgentOffset(i), dimensions_)`), `nth_element` k-best, no per-iter alloc.
+- Do not remove the `kMassFloor` (1e-6) in `ComputeMasses` — prevents frozen zero-mass
+  agents / outlier-flattened swarm (verified vs Rashedi Table 4).
+- Determinism: same seed + same build ⇒ identical (`gsa_determinism`). Cross-build ULP
+  drift is fine; time a quick bench (e.g. 200 agents × 500 iters) after hot-loop edits.
+- `best_iter`/`worst_iter` semantics flip with `minimize` — re-verify after stat changes.
+- Terse code, no comments unless asked. clang-tidy enforces Google-casing with `lower_case`
+  variables/members (`_` suffix); `check-naming` covers `src/gsa/*.hpp`.
 
-- `GsaConfig { n_agents, max_iter, g0, alpha, minimize, seed, snapshot_count }` — seed `0` means `std::random_device`; `snapshot_count` (`0` = off, `1` = final only, max `max_iter + 1`) captures all agent positions, masses and fitnesses at evenly spaced iterations incl. iter 0 and `max_iter`. Captures happen after `ComputeMasses` so masses are current (positions/fitness unaffected — `ComputeMasses` only writes `s.mass`); the extra final `ComputeMasses` call serves the last snapshot only.
-- **Changing config between runs**: the instance is immutable — assign a fresh `GravitationalSearchAlgorithm` with a new `GsaConfig` (all members are value types; reassignment is cheap and memory-safe). Each `Optimize()` is an independent run.
-**JSON config**: `gsa::LoadConfigFromString(str)`, `gsa::LoadConfigFromJson(json)` return `GsaConfig`.
-- `GravitationalSearchAlgorithm` ctors: `(lower, upper, func, cfg)`,
-  `(dims, lo, hi, func, cfg)` (scalar bounds), or
-  `(dims, lower_vec, upper_vec, func, cfg)`. All three delegate to a private
-  `ValidatedTag` canonical ctor that runs the single validator
-  `ValidateConfigs(lower, upper, cfg, expected_dims)` (`expected_dims == 0`
-  derives from the vectors).
-  Public ctors all take by-value sources and `std::move` into the canonical
-  ctor — safe because no argument reads another argument's moved-from state
-  (mem-initializer argument evaluation order is unspecified; never inspect one
-  moved-from parameter from a sibling argument expression).
-- `GsaResult Optimize() const` returns `{ best_val, best_pos, history, snapshot_iters, snapshot_positions, snapshot_masses, snapshot_fitnesses, snapshot_dims }` (positions flat: snap → agent → dim; masses/fitnesses flat: snap → agent).
-- `GsaIterationInfo` (per iteration): `best_so_far, best_iter, worst_iter, mean_fitness, median_fitness, stddev_fitness`.
-- Calling `Optimize()` again on the same instance is an independent run: positions are re-randomized and `V`/`A` are reset to zero at the start. Within a single run the paper-faithful recurrence `V(t+1) = rand * V(t) + A(t)` holds ("old V feeds new V").
+## Viz / benchmarks (for runs, not library edits)
 
-## Conventions
-
-- C++20 (`-std=c++20`). `std::ranges` preferred where C++20 supports it (not `std::ranges::iota` — that is C++23; `std::iota` stays). Integer loops use the Python-style `Range(n)` / `Range(start, stop)` helper (wraps `std::views::iota`; `Range(n)` starts at 0).
-- Particle arrays are flat `std::vector<double>`; use `AgentOffset(agent)` to get the base offset of an agent's row (`agent * dimensions_`). `dimensions_` and per-dimension loop counters are `size_t` (no sign-conversion casts).
-- All working buffers live in a private per-call `IterationState` (created per `Optimize()`). The instance stores only immutable config, so `Optimize()` is `const` and concurrent calls on one instance are safe (the objective function itself must be thread-safe). Buffers are resized once per call — no per-iteration allocation.
-- `IterationState` allocates exactly two buffers per call: `arena_d` (3*N*D + 2*N + D doubles, uninitialized `make_unique_for_overwrite` arrays) and `arena_i` (N indices); only `velocity` + `acceleration` are zeroed (the sole required initial state); six `std::span<double>` + one `std::span<size_t>` slice the arenas (position, velocity, acceleration, fitness, mass, total_force, sorted_indices). Copy/move are deleted — spans must never dangle.
-- `ComputeAccelerations` is the hot spot: O(N^2 * kbest * dims). It uses k-best selection via `nth_element`, flat contiguous arrays, and hoisted row spans (`std::span<const double> x_i = positions.subspan(AgentOffset(i), dimensions_)`) inside the pair loops. Keep that pattern; do not re-index with `s.position[offset + d]` in the inner loops. `total_force` is a per-dimension scratch, refilled once per agent.
-- `ComputeMasses` floors masses at `kMassFloor` (1e-6): without it a zero-mass agent feels no force and freezes forever while a single far outlier stretches the denominator flat for everyone (swarm stagnates, mean ≫ best). Verified against Rashedi Table 4 — do not remove.
-- **Determinism contract**: same seed + same build => identical results (enforced by `gsa_determinism`). Cross-version ULP drift is acceptable — hot-loop refactors do NOT need bit-identical-to-baseline verification. When changing hot loops, time a quick benchmark (e.g. `n_agents=200, max_iter=500`) so perf does not silently regress; results may differ by ULPs from previous builds.
-- `RecordIteration` (private member) calls `ComputeFitnessStats` (in `stats.hpp`; takes `std::span<size_t>` for `sorted_indices`) for history stats via order statistics, no per-iteration sort: min/max from `minmax_element`, median via two `nth_element` calls on `sorted_indices` — one at `n / 2` (upper-middle), and for even `n` one at `n / 2 - 1` (lower-middle; a single `nth_element` cannot pin the `(n-1)/2` slot, which sits in an unordered half). `sorted_indices` is reused, so its partition is re-done in `ComputeAccelerations` right after). Mean/stddev sum in physical array order; all stats are deterministic for a given seed + build (see Determinism contract above).
-- The user prefers terse code; add no comments unless asked. Verify `best_iter`/`worst_iter` semantics flip with `config_.minimize` (they did before).
-
-## Current State
-
-Merged features (through current branch):
-- Header-only GSA library with `std::span` API
-- Conan 2 integration: `nlohmann_json/3.11.2`, `xoshiro-cpp/1.1`
-- JSON config: `LoadConfigFromString`, `LoadConfigFromJson` (in `src/gsa/json_io.hpp`)
-- All public API in `gsa::` namespace; config changes via instance reassignment (no mutators)
-- `conanfile.py` + `profiles/` (windows-msys2-gcc, linux-gcc, macos-clang) for portable builds
-- `examples/main.cpp` demonstrating JSON config hot-reload (`r` key)
-- `examples/demo.cpp` with 4 original API examples
-- 11/11 CTest tests passing, `check-gsa` + `check-naming` clean
-- Same-seed determinism verified across all configurations
+- `main.exe` exports `exports/run_<ts>/` (`history.csv` always, `snapshots.csv` if
+  `snapshot_count > 0`, plus effective `config.json`). `python scripts/plot_gsa.py <run>/`
+  (`.venv` Python) writes convergence/contour/anim GIFs; 2D contour background is
+  Rosenbrock-hardcoded (`objective_2d` + `LEVELS` EDIT block) — update it for other objectives.
+- Fairness contract for comparisons: same dims/bounds/objective/pop/iters, distinct
+  deterministic seeds, minimize everywhere. `benchmark.py --run-bench` drives `bench.exe`
+  + Python algos (N=30) into `exports/bench_<ts>/{gsa,meta,ga}_avg.csv`
+  (`iter,avg_best,median_best,std_best,avg_mean`); `plot_compare.py` → `compare.png`.
+  Objectives live in `scripts/objective.py` (mirror of C++ side).
