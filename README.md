@@ -2,21 +2,42 @@
 
 C++20 implementation of the Gravitational Search Algorithm (GSA, Rashedi et al.).
 
-2D Rosenbrock demo (50 agents, 5000 iters, `seed = 42` → `best_val ≈ 1.6e-15`;
-see [Visualize a run](#visualize-a-run)):
+<details open>
+<summary><strong>Rosenbrock demo</strong> — 2D, 50 agents, 5000 iters, <code>seed = 42</code> → <code>best_val ≈ 1.6e-15</code> (click to expand/collapse)</summary>
 
-<img src="docs/images/convergence.png" width="400" alt="convergence"> | <img src="docs/images/anim.gif" width="400" alt="animation">
+<img src="docs/rosenbrock/run_20260911_025320/convergence.png" width="400" alt="convergence"> | <img src="docs/rosenbrock/run_20260911_025320/anim.gif" width="400" alt="animation">
 |---|---|
 
 | First snapshot (iter 0) | Last snapshot (iter 5000) |
 |---|---|
-| <img src="docs/images/contour_first.png" width="400" alt="first"> | <img src="docs/images/contour_last.png" width="400" alt="last"> |
+| <img src="docs/rosenbrock/run_20260911_025320/contour_first.png" width="400" alt="first"> | <img src="docs/rosenbrock/run_20260911_025320/contour_last.png" width="400" alt="last"> |
 
 | Best-path trail animation (2D Rosenbrock valley) |
 |---|
-| <img src="docs/images/anim3d.gif" width="400" alt="3d animation"> |
+| <img src="docs/rosenbrock/run_20260911_025320/anim3d.gif" width="400" alt="3d animation"> |
 
-## Benchmark: minimization on 30D Rosenbrock (±30) with n = 50 agents, max_iter = 1000, over 30 runs
+</details>
+
+<details>
+<summary><strong>Sphere demo</strong> — 2D, bounds ±100, 50 agents, 1000 iters, 30 snapshots, <code>seed = 42</code> → <code>best_val ≈ 3.5e-15</code> (click to expand/collapse)</summary>
+
+<img src="docs/sphere/run_20260916_132111/convergence.png" width="400" alt="convergence"> | <img src="docs/sphere/run_20260916_132111/anim.gif" width="400" alt="animation">
+|---|---|
+
+| First snapshot (iter 0) | Last snapshot (iter 1000) |
+|---|---|
+| <img src="docs/sphere/run_20260916_132111/contour_first.png" width="400" alt="first"> | <img src="docs/sphere/run_20260916_132111/contour_last.png" width="400" alt="last"> |
+
+| Best-path trail animation (2D Sphere bowl) |
+|---|
+| <img src="docs/sphere/run_20260916_132111/anim3d.gif" width="400" alt="3d animation"> |
+
+</details>
+
+<details open>
+<summary><strong>Benchmark</strong> — minimization, n = 50 agents, max_iter = 1000, 30 runs (click to expand/collapse)</summary>
+
+30D Rosenbrock (±30):
 
 |  | GSA | Simple metaheuristic | Genetic |
 |---|---|---|---|
@@ -24,10 +45,26 @@ see [Visualize a run](#visualize-a-run)):
 | Median best-so-far | 26 | 378 | 282 |
 | Average mean fitness | 28 | 1074 | 1406 |
 
-(Final-iteration values from `exports/bench/*_avg.csv`; see
+30D Sphere (±100):
+
+|  | GSA | Simple metaheuristic | Genetic |
+|---|---|---|---|
+| Average best-so-far | 2.0e-17 | 20.7 | 24.9 |
+| Median best-so-far | 1.9e-17 | 21.4 | 24.0 |
+| Average mean fitness | 3.2e-17 | 28.5 | 89.4 |
+
+(Final-iteration values from `docs/{rosenbrock,sphere}/bench_*/*_avg.csv`; see
 [Algorithm comparison](#algorithm-comparison-gsa-vs-metaheuristic-vs-genetic).)
 
-<img src="docs/images/compare.png" width="480" alt="average best-so-far comparison">
+Rosenbrock (30D, ±30):
+
+<img src="docs/rosenbrock/bench_20260911_095423/compare.png" width="480" alt="average best-so-far comparison (Rosenbrock)">
+
+Sphere (30D, ±100):
+
+<img src="docs/sphere/bench_20260916_131652/compare.png" width="480" alt="average best-so-far comparison (Sphere)">
+
+</details>
 
 ## Build
 
@@ -244,7 +281,7 @@ animation are purely data-driven and work for any objective.
 Config: 2D, bounds ±2.048, 50 agents, 5000 iters, `g0 = alpha = 10`,
 `seed = 42`, `snapshot_count = 10` → `best_val ≈ 1.6e-15` (global
 minimum at (1, 1)). The plots are shown at the top of this file
-(sources in `docs/images/`, regenerable via `scripts/plot_gsa.py`).
+(sources in `docs/rosenbrock/run_20260911_025320/`, regenerable via `scripts/plot_gsa.py`).
 
 ### Algorithm comparison (GSA vs metaheuristic vs genetic)
 
@@ -260,11 +297,18 @@ One command runs all three into a fresh timestamped folder
 .venv/Scripts/python scripts/plot_compare.py   # newest bench_* by default
 ```
 
+Sphere variant (bounds ±100, same fairness contract):
+
+```bash
+.venv/Scripts/python scripts/benchmark.py --run-bench --objective sphere --lower -100 --upper 100
+.venv/Scripts/python scripts/plot_compare.py   # newest bench_* by default
+```
+
 Defaults: 50 agents, 1000 iters, 30 dims, bounds +-30, g0=100, alpha=20;
 objectives live in scripts/objective.py (single place to change the
 formula); all tunables are flags, see `benchmark.py --help`. The data
 behind the gallery above is tracked under `docs/`
-(`run_<ts>/` single run, `bench_<ts>/` comparison).
+(`rosenbrock/run_<ts>/` + `rosenbrock/bench_<ts>/`, `sphere/run_<ts>/` + `sphere/bench_<ts>/`).
 
 `scripts/simple_metaheuristic.py` implements the workshop loaded-coin
 algorithm (`--p-head 0.5`, `--step 0.01`); `scripts/genetic.py`
