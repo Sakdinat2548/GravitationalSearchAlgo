@@ -104,9 +104,14 @@ identical, both `minimize` modes + odd agent count.
 
 ## Conventions / gotchas
 
-- C++20. Integer loops use `Range(n)` / `Range(a, b)` (`views::iota` wrapper); keep
-  `std::iota` (`ranges::iota` is C++23). `dimensions_` and dim counters are `size_t`;
-  index agent rows via `AgentOffset(agent)` (`agent * dimensions_`).
+- C++20. Integer loops use `impl::Range(n)` / `impl::Range(a, b)` (`views::iota` wrapper,
+  unsigned-only by constraint); keep `std::iota` (`ranges::iota` is C++23).
+  `dimensions_` and dim counters are `size_t`; index agent rows via
+  `AgentOffset(agent)` (`agent * dimensions_`). Internal helpers (`Range`,
+  `RandUni`, `BetterFit`, json_io guards) live in `gsa::impl` — keep them there.
+- Objective must return finite values — non-finite fitness throws
+  `std::invalid_argument` naming the agent. CSV writers throw `std::runtime_error`
+  on I/O failure and validate snapshot vector sizes.
 - Per-`Optimize()` buffers only — never add instance state. Hot loop
   `ComputeAccelerations` (O(N²·kbest·dims)): keep hoisted row spans
   (`positions.subspan(AgentOffset(i), dimensions_)`), `nth_element` k-best, no per-iter alloc.
