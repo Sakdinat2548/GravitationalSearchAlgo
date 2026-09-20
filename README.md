@@ -435,6 +435,10 @@ velocities/accelerations reset at the start.
 
 **Tip:** `g0` is scale-dependent — tune it to your bounds. If the solver stalls early (all agents collapse onto the initial best), forces are too strong: try *decreasing* `g0` or *increasing* `alpha`. If it barely moves, forces are too weak: *increase* `g0` or *decrease* `alpha`. For a `[-5, 5]` domain `g0 = 10.0` converges cleanly, while the default `g0 = 100.0` overshoots and stalls.
 
+**Note:** the objective must return finite values — a single `NaN`/`inf`
+aborts the run with `std::invalid_argument`. Clamp penalties inside your
+objective (e.g. `return std::min(f, 1e300)`) if it can spike.
+
 ## Tests
 
 `tests/` uses GoogleTest (Conan: `gtest/1.14.0`; `test_common.hpp` shares objectives/invariant helpers). Individual tests in `tests/tasks/`, one `*.cpp` per suite, each registered as a separate CTest entry via `--gtest_filter`:
