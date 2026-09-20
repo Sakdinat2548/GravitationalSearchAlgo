@@ -58,4 +58,15 @@ TEST(Validation, RejectsBadConfig) {
          .snapshot_count = 502});
   };
   EXPECT_THROW(snapshot_count_above_max(), std::invalid_argument);
+
+  auto nan_objective = [] {
+    return gsa::GravitationalSearchAlgorithm(
+        2, -5.0, 5.0,
+        [](std::span<const double>) {
+          return std::numeric_limits<double>::quiet_NaN();
+        },
+        Config());
+  };
+  EXPECT_THROW((void)nan_objective().Optimize(), std::invalid_argument)
+      << "NaN fitness rejected";
 }

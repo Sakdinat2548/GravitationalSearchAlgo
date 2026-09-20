@@ -20,7 +20,7 @@ struct Bounds {
   std::vector<double> upper;
 };
 
-namespace detail {
+namespace impl {
 
 template <std::invocable Fn>
 inline auto Guard(Fn&& fn) -> decltype(fn()) {
@@ -78,10 +78,10 @@ inline std::vector<double> ParseBoundsSide(std::string_view name,
       std::format("\"{}\" must be a number or array of numbers", name));
 }
 
-}  // namespace detail
+}  // namespace impl
 
 inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
-  return detail::Guard([&] {
+  return impl::Guard([&] {
     GsaConfig cfg;
     cfg.n_agents = j.value("n_agents", cfg.n_agents);
     cfg.max_iter = j.value("max_iter", cfg.max_iter);
@@ -91,13 +91,13 @@ inline GsaConfig LoadConfigFromJson(const nlohmann::json& j) {
     cfg.seed = j.value("seed", cfg.seed);
     cfg.snapshot_count = j.value("snapshot_count", cfg.snapshot_count);
 
-    detail::ValidateConfig(cfg);
+    impl::ValidateConfig(cfg);
     return cfg;
   });
 }
 
 inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
-  return detail::Guard([&] {
+  return impl::Guard([&] {
     if (!j.contains("lower") || !j.contains("upper")) [[unlikely]] {
       throw std::invalid_argument(
           R"(Config requires both "lower" and "upper" bounds)");
@@ -112,8 +112,8 @@ inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
     }
 
     Bounds b;
-    b.lower = detail::ParseBoundsSide("lower", j.at("lower"), dims);
-    b.upper = detail::ParseBoundsSide("upper", j.at("upper"), dims);
+    b.lower = impl::ParseBoundsSide("lower", j.at("lower"), dims);
+    b.upper = impl::ParseBoundsSide("upper", j.at("upper"), dims);
 
     if (b.lower.size() != b.upper.size()) [[unlikely]] {
       throw std::invalid_argument(
@@ -122,7 +122,7 @@ inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
 
     b.dimensions = b.lower.size();
 
-    for (const auto i : Range(b.dimensions)) {
+    for (const auto i : impl::Range(b.dimensions)) {
       if (b.lower[i] > b.upper[i]) [[unlikely]] {
         throw std::invalid_argument(
             std::format("Lower bound ({}) cannot be greater than upper bound "
@@ -136,7 +136,7 @@ inline Bounds LoadBoundsFromJson(const nlohmann::json& j) {
 }
 
 inline GsaConfig LoadConfigFromString(const std::string_view json_str) {
-  return detail::Guard(
+  return impl::Guard(
       [&] { return LoadConfigFromJson(nlohmann::json::parse(json_str)); });
 }
 

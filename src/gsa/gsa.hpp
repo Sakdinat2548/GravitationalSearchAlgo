@@ -24,15 +24,26 @@ namespace gsa {
 
 using RandomEngine = XoshiroCpp::Xoshiro256PlusPlus;
 
-template <std::integral T>
+namespace impl {
+
+template <std::unsigned_integral T>
 constexpr auto Range(T stop) {
   return std::views::iota(T{}, stop);
 }
 
-template <std::integral T, std::integral U>
+template <std::unsigned_integral T, std::unsigned_integral U>
 constexpr auto Range(T start, U stop) {
   return std::views::iota(start, stop);
 }
+
+// Fast uniform random generator using top 53 bits
+[[nodiscard]] inline double RandUni(RandomEngine& gen, double min,
+                                    double max) noexcept {
+  const double scale{0x1.0p-53};  // 2^-53
+  return min + (((gen() >> 11) * scale) * (max - min));
+}
+
+}  // namespace impl
 
 struct GsaConfig {
   size_t n_agents{40};
@@ -46,16 +57,16 @@ struct GsaConfig {
 
 /** Per-iteration snapshot of the agent population. */
 struct GsaIterationInfo {
-  double best_so_far;     // best value up to and including this iteration
-  double best_iter;       // best agent fitness this iteration
-  double worst_iter;      // worst agent fitness this iteration
-  double mean_fitness;    // mean agent fitness this iteration
-  double median_fitness;  // median agent fitness this iteration
-  double stddev_fitness;  // std dev of agent fitness this iteration
+  double best_so_far{};     // best value up to and including this iteration
+  double best_iter{};       // best agent fitness this iteration
+  double worst_iter{};      // worst agent fitness this iteration
+  double mean_fitness{};    // mean agent fitness this iteration
+  double median_fitness{};  // median agent fitness this iteration
+  double stddev_fitness{};  // std dev of agent fitness this iteration
 };
 
 struct GsaResult {
-  double best_val;
+  double best_val{};
   std::vector<double> best_pos;
   std::vector<GsaIterationInfo> history;
   std::vector<size_t> snapshot_iters;
@@ -64,12 +75,6 @@ struct GsaResult {
   std::vector<double> snapshot_fitnesses;
   size_t snapshot_dims{};
 };
-
-// Fast uniform random generator using top 53 bits
-inline double RandUni(RandomEngine& gen, double min, double max) noexcept {
-  const double scale{0x1.0p-53};  // 2^-53
-  return min + (((gen() >> 11) * scale) * (max - min));
-}
 
 constexpr double kEpsilon{1e-12};
 constexpr double kMassFloor{1e-6};
@@ -138,7 +143,7 @@ class GravitationalSearchAlgorithm {
 
     InitializePositions(s, gen);
 
-    for (auto k : Range(1ULL, config_.max_iter + 1)) {
+    for (auto k : impl::Range(1ULL, config_.max_iter + 1)) {
       EvaluateFitness(s, global_best_val, global_best_pos);
       result.history.push_back(RecordIteration(s, global_best_val));
       ComputeMasses(s);
@@ -208,7 +213,7 @@ class GravitationalSearchAlgorithm {
           "snapshot_count ({}) exceeds max_iter + 1 ({})", cfg.snapshot_count,
           cfg.max_iter + 1));
     }
-    for (auto i : Range(lower.size())) {
+    for (auto i : impl::Range(lower.size())) {
       if (lower[i] > upper[i]) [[unlikely]] {
         throw std::invalid_argument(
             std::format("lower[{}] = {} > upper[{}] = {}: lower bound must be "
@@ -218,23 +223,23 @@ class GravitationalSearchAlgorithm {
     }
   }
 
-  static std::vector<size_t> SnapshotIters(const GsaConfig& cfg) {
+  [[nodiscard]] static std::vector<size_t> SnapshotIters(const GsaConfig& cfg) {
     if (cfg.snapshot_count == 0) return {};
     if (cfg.snapshot_count == 1) return {cfg.max_iter};
     std::vector<size_t> iters;
     iters.reserve(cfg.snapshot_count);
-    for (auto i : Range(cfg.snapshot_count)) {
+    for (auto i : impl::Range(cfg.snapshot_count)) {
       iters.push_back(i * cfg.max_iter / (cfg.snapshot_count - 1));
     }
     return iters;
   }
 
-  static size_t PositiveDims(int dims) {
+  [[nodiscard]] static size_t PositiveDims(int dims) {
     if (dims <= 0) throw std::invalid_argument("dims must be positive");
     return static_cast<size_t>(dims);
   }
 
-  static std::vector<double> FilledBounds(int dims, double value) {
+  [[nodiscard]] static std::vector<double> FilledBounds(int dims, double value) {
     return std::vector<double>(PositiveDims(dims), value);
   }
 
@@ -280,10 +285,10 @@ class GravitationalSearchAlgorithm {
 
   /** Initialize agent positions uniformly at random between bounds. */
   void InitializePositions(IterationState& s, RandomEngine& gen) const {
-    for (auto i : Range(config_.n_agents)) {
+    for (auto i : impl::Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
-      for (auto d : Range(dimensions_)) {
-        s.position[offset + d] = RandUni(gen, min_bounds_[d], max_bounds_[d]);
+      for (auto d : impl::Range(dimensions_)) {
+        s.position[offset + d] = impl::RandUni(gen, min_bounds_[d], max_bounds_[d]);
       }
     }
   }
@@ -291,10 +296,15 @@ class GravitationalSearchAlgorithm {
   /** Evaluate objective for each agent and update the global best. */
   void EvaluateFitness(IterationState& s, double& global_best_val,
                        std::vector<double>& global_best_pos) const {
-    for (auto i : Range(config_.n_agents)) {
+    for (auto i : impl::Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
       const double fitness_value{
           objective_fn_(s.position.subspan(offset, dimensions_))};
+      if (!std::isfinite(fitness_value)) [[unlikely]] {
+        throw std::invalid_argument(std::format(
+            "objective returned non-finite fitness ({}) for agent {}",
+            fitness_value, i));
+      }
       s.fitness[i] = fitness_value;
 
       const bool is_better{config_.minimize
@@ -310,7 +320,7 @@ class GravitationalSearchAlgorithm {
   }
 
   /** Compute normalized agent masses from fitness values. */
-  void ComputeMasses(IterationState& s) const {
+  void ComputeMasses(IterationState& s) const noexcept {
     auto [min_it, max_it] = std::ranges::minmax_element(s.fitness);
     const double min_fit{*min_it};
     const double max_fit{*max_it};
@@ -319,7 +329,7 @@ class GravitationalSearchAlgorithm {
     const double inv_fit_diff{1.0 / fit_diff};
 
     double sum_q{};
-    for (auto i : Range(config_.n_agents)) {
+    for (auto i : impl::Range(config_.n_agents)) {
       s.mass[i] = (config_.minimize ? (max_fit - s.fitness[i])
                                     : (s.fitness[i] - min_fit)) *
                   inv_fit_diff;
@@ -332,7 +342,7 @@ class GravitationalSearchAlgorithm {
     sum_q = std::max(sum_q, kEpsilon);
 
     const double inv_sum_q{1.0 / sum_q};
-    for (auto i : Range(config_.n_agents)) {
+    for (auto i : impl::Range(config_.n_agents)) {
       s.mass[i] *= inv_sum_q;
     }
   }
@@ -356,7 +366,7 @@ class GravitationalSearchAlgorithm {
     // Partition agent indices based on fitness (best first)
     std::iota(s.sorted_indices.begin(), s.sorted_indices.end(), 0);
     auto comp = [&](size_t a, size_t b) {
-      return BetterFit(s.fitness[a], s.fitness[b], config_.minimize);
+      return impl::BetterFit(s.fitness[a], s.fitness[b], config_.minimize);
     };
 
     if (k_best_count < config_.n_agents) {
@@ -364,7 +374,7 @@ class GravitationalSearchAlgorithm {
                                s.sorted_indices.begin() + k_best_count, comp);
     }
 
-    for (auto i : Range(config_.n_agents)) {
+    for (auto i : impl::Range(config_.n_agents)) {
       const size_t i_offset{AgentOffset(i)};
       const std::span<const double> x_i{
           s.position.subspan(i_offset, dimensions_)};
@@ -374,7 +384,7 @@ class GravitationalSearchAlgorithm {
 
       const double gmi{gravitational_const * m_i};
 
-      for (auto k : Range(k_best_count)) {
+      for (auto k : impl::Range(k_best_count)) {
         const size_t j{s.sorted_indices[k]};
         if (i == j) continue;
 
@@ -382,7 +392,7 @@ class GravitationalSearchAlgorithm {
             s.position.subspan(AgentOffset(j), dimensions_)};
 
         double r_squared{};
-        for (auto d : Range(dimensions_)) {
+        for (auto d : impl::Range(dimensions_)) {
           const double diff{x_i[d] - x_j[d]};
           r_squared += diff * diff;
         }
@@ -390,14 +400,14 @@ class GravitationalSearchAlgorithm {
         const double distance{std::sqrt(r_squared)};
         const double force_mag{gmi * s.mass[j] / (distance + kEpsilon)};
 
-        for (auto d : Range(dimensions_)) {
+        for (auto d : impl::Range(dimensions_)) {
           s.total_force[d] +=
-              RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
+              impl::RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
         }
       }
 
       const double inv_mass{1.0 / (m_i + kEpsilon)};
-      for (auto d : Range(dimensions_)) {
+      for (auto d : impl::Range(dimensions_)) {
         s.acceleration[i_offset + d] = s.total_force[d] * inv_mass;
       }
     }
@@ -405,11 +415,11 @@ class GravitationalSearchAlgorithm {
 
   /** Update velocities, move agents, and clamp positions to bounds. */
   void UpdateKinematics(IterationState& s, RandomEngine& gen) const {
-    for (auto i : Range(config_.n_agents)) {
+    for (auto i : impl::Range(config_.n_agents)) {
       const size_t offset{AgentOffset(i)};
-      for (auto d : Range(dimensions_)) {
+      for (auto d : impl::Range(dimensions_)) {
         const size_t index{offset + d};
-        s.velocity[index] = (RandUni(gen, 0.0, 1.0) * s.velocity[index]) +
+        s.velocity[index] = (impl::RandUni(gen, 0.0, 1.0) * s.velocity[index]) +
                             s.acceleration[index];
         s.position[index] = std::clamp(s.position[index] + s.velocity[index],
                                        min_bounds_[d], max_bounds_[d]);

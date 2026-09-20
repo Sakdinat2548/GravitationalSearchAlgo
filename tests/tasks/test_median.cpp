@@ -23,4 +23,10 @@ TEST(FitnessStats, MedianCorrectness) {
 
   expect({10.0, 1.0, 5.0, 3.0}, true, 4.0);
   expect({10.0, 1.0, 5.0, 3.0}, false, 4.0);
+
+  const std::vector<double> empty;
+  std::vector<size_t> empty_idx;
+  EXPECT_THROW((void)gsa::ComputeFitnessStats(empty, true, empty_idx),
+               std::invalid_argument)
+      << "empty fitness span rejected";
 }

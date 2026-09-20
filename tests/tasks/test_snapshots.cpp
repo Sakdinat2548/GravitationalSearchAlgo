@@ -124,6 +124,20 @@ TEST(Snapshots, CaptureAndCsvRoundTrip) {
   const double back{std::stod(first.substr(0, first.find(',')))};
   EXPECT_EQ(back, six.history[0].best_so_far)
       << "history.csv: best_so_far does not round-trip";
+
+  auto ragged = six;
+  ragged.snapshot_positions.pop_back();
+  EXPECT_THROW(gsa::WriteSnapshotsCsv(ragged, dir / "ragged.csv"),
+               std::invalid_argument)
+      << "ragged snapshots accepted";
+  auto zero_dims = six;
+  zero_dims.snapshot_dims = 0;
+  EXPECT_THROW(gsa::WriteSnapshotsCsv(zero_dims, dir / "zero_dims.csv"),
+               std::invalid_argument)
+      << "zero snapshot_dims accepted";
+  EXPECT_THROW(gsa::WriteHistoryCsv(six, dir), std::runtime_error)
+      << "directory path accepted for writing";
+
   std::error_code ec;
   std::filesystem::remove_all(dir, ec);
 }

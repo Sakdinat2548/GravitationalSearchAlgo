@@ -15,7 +15,7 @@ inline void WriteHistoryCsv(const GsaResult& result,
                             const std::filesystem::path& path) {
   std::ofstream out{path};
   if (!out) {
-    throw std::invalid_argument(
+    throw std::runtime_error(
         std::format("cannot open '{}' for writing", path.string()));
   }
   out << "best_so_far,best_iter,worst_iter,mean_fitness,median_fitness,"
@@ -25,20 +25,33 @@ inline void WriteHistoryCsv(const GsaResult& result,
                        it.worst_iter, it.mean_fitness, it.median_fitness,
                        it.stddev_fitness);
   }
+  out.flush();
+  if (!out) {
+    throw std::runtime_error(
+        std::format("failed writing '{}'", path.string()));
+  }
 }
 
 inline void WriteSnapshotsCsv(const GsaResult& result,
-                              const std::filesystem::path& path) {
+                               const std::filesystem::path& path) {
+  const size_t dims{result.snapshot_dims};
+  const size_t snaps{result.snapshot_iters.size()};
+  const size_t masses{result.snapshot_masses.size()};
+  if (snaps > 0) {
+    if (dims == 0) [[unlikely]] {
+      throw std::invalid_argument("snapshot_dims must be > 0 for snapshots");
+    }
+    if (masses != result.snapshot_fitnesses.size() || masses % snaps != 0 ||
+        result.snapshot_positions.size() != masses * dims) [[unlikely]] {
+      throw std::invalid_argument("snapshot vectors have inconsistent sizes");
+    }
+  }
   std::ofstream out{path};
   if (!out) {
-    throw std::invalid_argument(
+    throw std::runtime_error(
         std::format("cannot open '{}' for writing", path.string()));
   }
-  const size_t dims{result.snapshot_dims};
-  const size_t agents{result.snapshot_iters.empty()
-                          ? 0
-                          : result.snapshot_positions.size() /
-                                (result.snapshot_iters.size() * dims)};
+  const size_t agents{snaps == 0 ? 0 : masses / snaps};
   out << "iter,agent,mass,fitness";
   for (size_t d{}; d < dims; ++d) {
     out << std::format(",x{}", d + 1);
@@ -56,6 +69,11 @@ inline void WriteSnapshotsCsv(const GsaResult& result,
       }
       out << '\n';
     }
+  }
+  out.flush();
+  if (!out) {
+    throw std::runtime_error(
+        std::format("failed writing '{}'", path.string()));
   }
 }
 
