@@ -75,4 +75,11 @@ def run(fn, lower, upper, n_agents=50, max_iter=500, g0=100.0, alpha=20.0,
                 vel[i][d] = rng.random() * vel[i][d] + acc[i][d]
                 v = pos[i][d] + vel[i][d]
                 pos[i][d] = min(upper[d], max(lower[d], v))
+
+    # Final evaluation after the last update (mirrors Optimize(): the trail
+    # holds max_iter + 1 entries, the last one from the final positions).
+    for f in (fn(p) for p in pos):
+        if better(f, global_best):
+            global_best = f
+    trail.append(global_best)
     return trail
