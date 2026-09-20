@@ -135,6 +135,18 @@ TEST(Snapshots, CaptureAndCsvRoundTrip) {
   EXPECT_THROW(gsa::WriteSnapshotsCsv(zero_dims, dir / "zero_dims.csv"),
                std::invalid_argument)
       << "zero snapshot_dims accepted";
+  auto no_agents = six;
+  no_agents.snapshot_masses.clear();
+  no_agents.snapshot_fitnesses.clear();
+  no_agents.snapshot_positions.clear();
+  EXPECT_THROW(gsa::WriteSnapshotsCsv(no_agents, dir / "no_agents.csv"),
+               std::invalid_argument)
+      << "zero-agent snapshots accepted";
+  auto stray_vectors = six;
+  stray_vectors.snapshot_iters.clear();
+  EXPECT_THROW(gsa::WriteSnapshotsCsv(stray_vectors, dir / "stray.csv"),
+               std::invalid_argument)
+      << "populated vectors with empty iters accepted";
   EXPECT_THROW(gsa::WriteHistoryCsv(six, dir), std::runtime_error)
       << "directory path accepted for writing";
 

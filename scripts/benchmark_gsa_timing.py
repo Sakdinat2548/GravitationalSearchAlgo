@@ -1,4 +1,4 @@
-"""Time C++ GSA (bench.exe) vs pure-Python GSA (gsa.py) on identical workloads.
+"""Time C++ GSA (bench.exe) vs pure-Python GSA (gsa_pure.py) on identical workloads.
 
 Usage (from the repo root, .venv active):
     python scripts/benchmark_gsa_timing.py [--runs 3 --iters 1000 ...]
@@ -6,9 +6,21 @@ Usage (from the repo root, .venv active):
 Both sides run the same protocol: same dims/bounds/objective/population/
 iters/seeds (trajectories still differ: Xoshiro vs Python RNG — this measures
 speed only, not quality). Prints per-run means, totals, and the C++/Python
-speedup; saves timing.json next to bench.exe's gsa_avg.csv in a fresh
-timestamped exports/timing_<yyyymmdd_hhmmss>/ folder.
+speedup; saves timing.json in a fresh timestamped
+exports/timing_<yyyymmdd_hhmmss>/ folder (per-objective gsa_avg.csv lands in
+subfolders next to it).
 """
+
+
+def fresh_dir(base):
+    # UTC, matching the std::chrono timestamps bench.exe generates.
+    stamp = datetime.now(timezone.utc).strftime("timing_%Y%m%d_%H%M%S")
+    outdir = Path(base) / stamp
+    dup = 2
+    while outdir.exists():
+        outdir = Path(f"{base}/{stamp}_{dup}")
+        dup += 1
+    return outdir
 import argparse
 import json
 import subprocess
@@ -37,8 +49,7 @@ def main():
     p.add_argument("--bench-exe", default="build/Release/bench.exe")
     a = p.parse_args()
 
-    stamp = datetime.now(timezone.utc).strftime("timing_%Y%m%d_%H%M%S")
-    outdir = Path("exports") / stamp
+    outdir = fresh_dir("exports")
     outdir.mkdir(parents=True, exist_ok=True)
     bench = Path(a.bench_exe)
     if not bench.exists():

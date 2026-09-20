@@ -33,6 +33,10 @@ struct FitnessStats {
   if (n == 0) [[unlikely]] {
     throw std::invalid_argument("fitness span must not be empty");
   }
+  if (sorted_indices.size() != n) [[unlikely]] {
+    throw std::invalid_argument(
+        "sorted_indices must hold exactly one entry per fitness value");
+  }
   const auto [min_it, max_it] = std::ranges::minmax_element(fitness);
   std::iota(sorted_indices.begin(), sorted_indices.end(), 0);
   const auto comp = [&](size_t a, size_t b) {

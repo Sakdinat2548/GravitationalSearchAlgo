@@ -37,11 +37,18 @@ inline void WriteSnapshotsCsv(const GsaResult& result,
   const size_t dims{result.snapshot_dims};
   const size_t snaps{result.snapshot_iters.size()};
   const size_t masses{result.snapshot_masses.size()};
-  if (snaps > 0) {
+  if (snaps == 0) {
+    if (!result.snapshot_positions.empty() || masses != 0 ||
+        !result.snapshot_fitnesses.empty()) [[unlikely]] {
+      throw std::invalid_argument(
+          "snapshot vectors must be empty when snapshot_iters is empty");
+    }
+  } else {
     if (dims == 0) [[unlikely]] {
       throw std::invalid_argument("snapshot_dims must be > 0 for snapshots");
     }
-    if (masses != result.snapshot_fitnesses.size() || masses % snaps != 0 ||
+    if (masses == 0 || masses != result.snapshot_fitnesses.size() ||
+        masses % snaps != 0 ||
         result.snapshot_positions.size() != masses * dims) [[unlikely]] {
       throw std::invalid_argument("snapshot vectors have inconsistent sizes");
     }

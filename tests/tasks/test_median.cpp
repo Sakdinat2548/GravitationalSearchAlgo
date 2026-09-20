@@ -29,4 +29,10 @@ TEST(FitnessStats, MedianCorrectness) {
   EXPECT_THROW((void)gsa::ComputeFitnessStats(empty, true, empty_idx),
                std::invalid_argument)
       << "empty fitness span rejected";
+
+  const std::vector<double> three{3.0, 1.0, 2.0};
+  std::vector<size_t> short_idx(2);
+  EXPECT_THROW((void)gsa::ComputeFitnessStats(three, true, short_idx),
+               std::invalid_argument)
+      << "short sorted_indices rejected";
 }
