@@ -399,7 +399,7 @@ class GravitationalSearchAlgorithm {
         const double distance{std::sqrt(r_squared)};
         const double force_mag{gmi * s.mass[j] / (distance + kEpsilon)};
 
-        // Paper Eq. 7: each Kbest force term carries its own rand_j ~ U(0,1)
+        // Paper Eq. 21: each Kbest force term carries its own rand_j ~ U(0,1)
         // weight — one draw per (i, j, d). Do NOT hoist this out of the
         // d-loop: it changes the RNG stream and every trajectory with it.
         for (auto d : impl::Range(dimensions_)) {
