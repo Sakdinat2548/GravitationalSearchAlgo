@@ -67,17 +67,6 @@ noise=0.002`. Full per-bench record (protocol + params) in each bench dir's
 
 </details>
 
-## C++ vs pure-Python GSA runtime
-
-`scripts/gsa_pure.py` is a plain-Python port of the same algorithm; `scripts/benchmark_gsa_timing.py`
-times it against `bench.exe` on identical workloads (30D, ±30, 50 agents, 1000 iters,
-`g0=100, alpha=20`, 3 runs; trajectories differ by RNG, so this compares speed only):
-
-| Objective | C++ (`bench.exe`) | Python (`gsa_pure.py`) | Speedup |
-|---|---|---|---|
-| Sphere 30D | 0.12 s/run | 12.1 s/run | ~100× |
-| Rosenbrock 30D | 0.10 s/run | 12.2 s/run | ~120× |
-
 ## Build
 
 Requires [CMake](https://cmake.org) (3.20+) and [Conan 2](https://conan.io).
@@ -341,6 +330,10 @@ Parameter glossary (tuned values used above; step/noise scale with bounds width)
 | `pm` | GA | mutation probability per individual per generation (pull toward a random point) |
 | `noise` | GA | crossover blend noise as a fraction of bounds width (±`noise·width` per dim) |
 
+> Note: against a plain-loop Python port of the same algorithm (`scripts/gsa_pure.py`,
+> same 30D workload) the C++ build runs ~100–120× faster per run. Implementation
+> speed, not a quality claim — see `scripts/benchmark_gsa_timing.py`.
+
 ### JSON Configuration
 
 Parse JSON yourself, then load from the object:
@@ -441,6 +434,10 @@ velocities/accelerations reset at the start.
 - `seed` (uint64_t): RNG seed for reproducible runs; `0` uses `std::random_device`. Default: `0`.
 
 **Tip:** `g0` is scale-dependent — tune it to your bounds. If the solver stalls early (all agents collapse onto the initial best), forces are too strong: try *decreasing* `g0` or *increasing* `alpha`. If it barely moves, forces are too weak: *increase* `g0` or *decrease* `alpha`. For a `[-5, 5]` domain `g0 = 10.0` converges cleanly, while the default `g0 = 100.0` overshoots and stalls.
+
+**Note:** the objective must return finite values — a single `NaN`/`inf`
+aborts the run with `std::invalid_argument`. Clamp penalties inside your
+objective (e.g. `return std::min(f, 1e300)`) if it can spike.
 
 ## Tests
 

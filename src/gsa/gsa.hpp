@@ -88,23 +88,34 @@ class GravitationalSearchAlgorithm {
   GravitationalSearchAlgorithm(std::vector<double> lower,
                                std::vector<double> upper, Fn func,
                                GsaConfig cfg = {})
-      : GravitationalSearchAlgorithm(ValidatedTag{}, std::move(lower),
-                                     std::move(upper), 0, std::move(func),
-                                     std::move(cfg)) {}
+      : config_(std::move(cfg)),
+        min_bounds_(std::move(lower)),
+        max_bounds_(std::move(upper)),
+        objective_fn_(std::move(func)) {
+    dimensions_ = min_bounds_.size();
+    ValidateConfigs(min_bounds_, max_bounds_, config_, 0);
+  }
 
   GravitationalSearchAlgorithm(int dims, double lower, double upper, Fn func,
                                GsaConfig cfg = {})
-      : GravitationalSearchAlgorithm(ValidatedTag{}, FilledBounds(dims, lower),
-                                     FilledBounds(dims, upper),
-                                     PositiveDims(dims), std::move(func),
-                                     std::move(cfg)) {}
+      : config_(std::move(cfg)),
+        min_bounds_(FilledBounds(dims, lower)),
+        max_bounds_(FilledBounds(dims, upper)),
+        objective_fn_(std::move(func)) {
+    dimensions_ = min_bounds_.size();
+    ValidateConfigs(min_bounds_, max_bounds_, config_, PositiveDims(dims));
+  }
 
   GravitationalSearchAlgorithm(size_t dims, std::vector<double> lower,
                                std::vector<double> upper, Fn func,
                                GsaConfig cfg = {})
-      : GravitationalSearchAlgorithm(ValidatedTag{}, std::move(lower),
-                                     std::move(upper), dims, std::move(func),
-                                     std::move(cfg)) {}
+      : config_(std::move(cfg)),
+        min_bounds_(std::move(lower)),
+        max_bounds_(std::move(upper)),
+        objective_fn_(std::move(func)) {
+    dimensions_ = min_bounds_.size();
+    ValidateConfigs(min_bounds_, max_bounds_, config_, dims);
+  }
 
   [[nodiscard]] GsaResult Optimize() const {
     IterationState s{config_.n_agents, dimensions_};
@@ -174,20 +185,7 @@ class GravitationalSearchAlgorithm {
     return max_bounds_;
   }
 
- private:
-  struct ValidatedTag {};
-
-  GravitationalSearchAlgorithm(ValidatedTag, std::vector<double> lower,
-                               std::vector<double> upper, size_t expected_dims,
-                               Fn func, GsaConfig cfg)
-      : config_(std::move(cfg)),
-        min_bounds_(std::move(lower)),
-        max_bounds_(std::move(upper)),
-        objective_fn_(std::move(func)) {
-    dimensions_ = min_bounds_.size();
-    ValidateConfigs(min_bounds_, max_bounds_, config_, expected_dims);
-  }
-
+  private:
   static void ValidateConfigs(const std::vector<double>& lower,
                               const std::vector<double>& upper,
                               const GsaConfig& cfg, size_t expected_dims) {
@@ -257,12 +255,13 @@ class GravitationalSearchAlgorithm {
               (3 * n_agents * dims) + (2 * n_agents) + dims)),
           arena_i(std::make_unique_for_overwrite<size_t[]>(n_agents)) {
       double* const base{arena_d.get()};
-      position = {base, n_agents * dims};
-      velocity = {base + (n_agents * dims), n_agents * dims};
-      acceleration = {base + (2 * n_agents * dims), n_agents * dims};
-      fitness = {base + (3 * n_agents * dims), n_agents};
-      mass = {base + (3 * n_agents * dims) + n_agents, n_agents};
-      total_force = {base + (3 * n_agents * dims) + (2 * n_agents), dims};
+      const size_t agent_block{n_agents * dims};
+      position = {base, agent_block};
+      velocity = {base + agent_block, agent_block};
+      acceleration = {base + (2 * agent_block), agent_block};
+      fitness = {base + (3 * agent_block), n_agents};
+      mass = {base + (3 * agent_block) + n_agents, n_agents};
+      total_force = {base + (3 * agent_block) + (2 * n_agents), dims};
       sorted_indices = {arena_i.get(), n_agents};
       std::ranges::fill(velocity, 0.0);
       std::ranges::fill(acceleration, 0.0);
@@ -400,6 +399,9 @@ class GravitationalSearchAlgorithm {
         const double distance{std::sqrt(r_squared)};
         const double force_mag{gmi * s.mass[j] / (distance + kEpsilon)};
 
+        // Paper Eq. 21: each Kbest force term carries its own rand_j ~ U(0,1)
+        // weight — one draw per (i, j, d). Do NOT hoist this out of the
+        // d-loop: it changes the RNG stream and every trajectory with it.
         for (auto d : impl::Range(dimensions_)) {
           s.total_force[d] +=
               impl::RandUni(gen, 0.0, 1.0) * force_mag * (x_j[d] - x_i[d]);
