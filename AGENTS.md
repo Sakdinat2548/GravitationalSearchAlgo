@@ -47,8 +47,8 @@ no API key, $0).
 ## Project
 
 C++20 header-only Gravitational Search Algorithm (`src/gsa/gsa.hpp`, namespace `gsa`).
-Conan 2 deps (both header-only): `nlohmann_json/3.11.2`, `xoshiro-cpp/1.1`
-(`<xoshiro-cpp/XoshiroCpp.hpp>`). `GravitationalSearchAlgorithm` is templated on
+Conan 2 deps: `nlohmann_json/3.11.2`, `xoshiro-cpp/1.1` (both header-only;
+`<xoshiro-cpp/XoshiroCpp.hpp>`), `gtest/1.14.0` (compiled once for tests). `GravitationalSearchAlgorithm` is templated on
 the objective (any `std::invocable<std::span<const double>>` returning `double`, CTAD-deduced).
 
 ## Build / Verify (MSYS2 UCRT64 g++ on Windows)
@@ -66,17 +66,20 @@ ctest --preset conan-release
   `conan profile detect` — it mis-detects MSVC and defaults to cppstd=14, which rejects
   xoshiro-cpp (needs ≥17). `conan-release` is Conan-generated per machine
   (`CMakeUserPresets.json` include); the name is stable, the generator is not.
-- Fallback without Conan (`default` preset, Ninja) needs system-installed deps:
+- Fallback without Conan (`default` preset, Ninja) needs system-installed deps
+  (`nlohmann_json`, `xoshiro-cpp`, plus `gtest` with CMake config files):
   `cmake --preset default && cmake --build --preset default && ctest --preset default`.
 - Outputs: `build/Release/{demo,main,bench}.exe`, `build/Release/tests/gsa_test.exe`.
 
 ## Tests
 
-11 CTest entries from `tests/tasks/*.cpp` via self-contained `TEST(name)` framework
-(`tests/TEST.md`): `gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
+11 CTest entries from `tests/tasks/*.cpp` via GoogleTest (`tests/TEST.md` maps
+suites to entries): `gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
 `gsa_thread_safety`, `gsa_median`, `gsa_convergence`, `gsa_validation`,
-`gsa_json_io_config`, `gsa_json_io_bounds`, `gsa_snapshots`. Single test:
-`build/Release/tests/gsa_test.exe <name>` (e.g. `determinism`). Recurring invariants:
+`gsa_json_io_config`, `gsa_json_io_bounds`, `gsa_snapshots`. Single suite:
+`build/Release/tests/gsa_test.exe --gtest_filter=Determinism.*`. New tests need a
+`--gtest_filter` CTest entry; `EXPECT_THROW` needs a named lambda for multi-arg
+statements. Recurring invariants:
 history size == `max_iter + 1`, monotonic `best_so_far` per mode, mean/median within
 `[best_iter, worst_iter]` (reversed for maximize), `stddev >= 0` finite, same seed ⇒
 identical, both `minimize` modes + odd agent count.

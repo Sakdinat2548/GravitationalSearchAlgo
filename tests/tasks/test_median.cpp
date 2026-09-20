@@ -1,19 +1,16 @@
-#include "gsa/stats.hpp"
-#include "../test_framework.hpp"
-
-#include <vector>
 #include <ranges>
+#include <vector>
 
-TEST(median_correctness) {
-  bool ok{true};
-  const auto expect = [&](const std::vector<double>& f, bool minimize,
-                          double expected) {
+#include <gtest/gtest.h>
+
+#include "gsa/stats.hpp"
+
+TEST(FitnessStats, MedianCorrectness) {
+  const auto expect = [](const std::vector<double>& f, bool minimize,
+                         double expected) {
     std::vector<size_t> idx(f.size());
     const gsa::FitnessStats stats{gsa::ComputeFitnessStats(f, minimize, idx)};
-    if (stats.median != expected) {
-      ok = false;
-      gsa_test::Expect(false, "median mismatch");
-    }
+    EXPECT_DOUBLE_EQ(stats.median, expected) << "median mismatch";
   };
 
   for (size_t n : {4ULL, 5ULL}) {
@@ -26,5 +23,4 @@ TEST(median_correctness) {
 
   expect({10.0, 1.0, 5.0, 3.0}, true, 4.0);
   expect({10.0, 1.0, 5.0, 3.0}, false, 4.0);
-  return ok;
 }

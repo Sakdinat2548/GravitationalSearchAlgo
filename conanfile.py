@@ -14,3 +14,4 @@ class GSAConan(ConanFile):
     def requirements(self):
         self.requires("nlohmann_json/3.11.2")  # type: ignore[reportOptionalCall]
         self.requires("xoshiro-cpp/1.1")  # type: ignore[reportOptionalCall]
+        self.requires("gtest/1.14.0")  # type: ignore[reportOptionalCall]

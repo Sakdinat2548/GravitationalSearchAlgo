@@ -3,14 +3,15 @@
 
 #include <array>
 #include <cmath>
-#include <format>
 #include <limits>
 #include <ranges>
 #include <span>
 #include <string_view>
+#include <vector>
+
+#include <gtest/gtest.h>
 
 #include "gsa/gsa.hpp"
-#include "test_framework.hpp"
 
 namespace gsa_test {
 
@@ -63,36 +64,32 @@ inline gsa::GsaResult Optimize(int dims, double lo, double hi,
   return gsa.Optimize();
 }
 
-/** Assert per-iteration invariants; returns true if all pass. */
-inline bool CheckHistory(const gsa::GsaResult& res, const gsa::GsaConfig& cfg,
+/** Assert per-iteration invariants. */
+inline void CheckHistory(const gsa::GsaResult& res, const gsa::GsaConfig& cfg,
                          std::string_view name) {
-  bool ok{true};
-  const auto report = [&](bool cond, std::string_view what) {
-    ok = ok && cond;
-    if (!cond) Expect(false, std::format("{}: {}", name, what));
-  };
-
-  report(res.history.size() == cfg.max_iter + 1,
-         "history size == max_iter + 1");
+  EXPECT_EQ(res.history.size(), cfg.max_iter + 1)
+      << name << ": history size == max_iter + 1";
 
   double prev_best{cfg.minimize ? std::numeric_limits<double>::max()
                                   : std::numeric_limits<double>::lowest()};
   for (const auto& it : res.history) {
-    const bool monotonic = cfg.minimize ? it.best_so_far <= prev_best
-                                        : it.best_so_far >= prev_best;
-    report(monotonic, "best_so_far monotonic");
+    if (cfg.minimize) {
+      EXPECT_LE(it.best_so_far, prev_best) << name << ": best_so_far monotonic";
+    } else {
+      EXPECT_GE(it.best_so_far, prev_best) << name << ": best_so_far monotonic";
+    }
     prev_best = it.best_so_far;
 
     const double lo{cfg.minimize ? it.best_iter : it.worst_iter};
     const double hi{cfg.minimize ? it.worst_iter : it.best_iter};
-    report(it.mean_fitness >= lo && it.mean_fitness <= hi,
-           "mean in [best, worst]");
-    report(it.median_fitness >= lo && it.median_fitness <= hi,
-           "median in [best, worst]");
-    report(it.stddev_fitness >= 0.0 && std::isfinite(it.stddev_fitness),
-           "stddev finite");
+    EXPECT_GE(it.mean_fitness, lo) << name << ": mean in [best, worst]";
+    EXPECT_LE(it.mean_fitness, hi) << name << ": mean in [best, worst]";
+    EXPECT_GE(it.median_fitness, lo) << name << ": median in [best, worst]";
+    EXPECT_LE(it.median_fitness, hi) << name << ": median in [best, worst]";
+    EXPECT_GE(it.stddev_fitness, 0.0) << name << ": stddev finite";
+    EXPECT_TRUE(std::isfinite(it.stddev_fitness))
+        << name << ": stddev finite";
   }
-  return ok;
 }
 
 }  // namespace gsa_test

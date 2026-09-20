@@ -2,14 +2,14 @@
 #include <thread>
 #include <vector>
 
+#include <gtest/gtest.h>
+
 #include "../test_common.hpp"
-#include "../test_framework.hpp"
 
 using gsa_test::Config;
-using gsa_test::Expect;
 using gsa_test::Sphere;
 
-TEST(thread_safety) {
+TEST(ThreadSafety, ConcurrentOptimizeIdentical) {
   const auto cfg = Config();
   gsa::GravitationalSearchAlgorithm gsa(8, -5.0, 5.0, Sphere, cfg);
 
@@ -25,13 +25,8 @@ TEST(thread_safety) {
     t.join();
   }
 
-  bool ok{true};
   const double best = results[0].best_val;
   for (const auto& r : results) {
-    if (r.best_val != best) {
-      Expect(false, "concurrent Optimize() results differ");
-      ok = false;
-    }
+    EXPECT_EQ(r.best_val, best) << "concurrent Optimize() results differ";
   }
-  return ok;
 }

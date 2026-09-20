@@ -1,23 +1,21 @@
+#include <gtest/gtest.h>
+
 #include "../test_common.hpp"
-#include "../test_framework.hpp"
 
 using gsa_test::CheckHistory;
 using gsa_test::Config;
 using gsa_test::Optimize;
 using gsa_test::Sphere;
 
-TEST(history_size) {
-  bool ok{true};
-
+TEST(History, SizeAndInvariants) {
   for (bool minimize : {true, false}) {
+    SCOPED_TRACE(minimize ? "min" : "max");
     const auto cfg = Config(minimize);
-    const auto res = Optimize(8, -5.0, 5.0, Sphere, cfg);
-    ok = CheckHistory(res, cfg, minimize ? "min" : "max") && ok;
+    CheckHistory(Optimize(8, -5.0, 5.0, Sphere, cfg), cfg,
+                 minimize ? "min" : "max");
   }
 
+  SCOPED_TRACE("odd");
   const auto odd = Config(true, 51);
-  const auto res = Optimize(8, -5.0, 5.0, Sphere, odd);
-  ok = CheckHistory(res, odd, "odd") && ok;
-
-  return ok;
+  CheckHistory(Optimize(8, -5.0, 5.0, Sphere, odd), odd, "odd");
 }

@@ -25,6 +25,16 @@ option(GSA_BUILD_TESTS "Build and register the CTest suite" ON)
 option(GSA_BUILD_MAIN "Build the main executable (examples/main.cpp)" ON)
 option(GSA_BUILD_BENCH "Build the multi-run benchmark (examples/bench_gsa.cpp)" ON)
 
+if(GSA_BUILD_TESTS)
+  find_package(GTest CONFIG REQUIRED)
+  get_target_property(GSA_GTEST_INCLUDES GTest::gtest
+                      INTERFACE_INCLUDE_DIRECTORIES)
+  set(GSA_GTEST_ISYSTEM)
+  foreach(dir IN LISTS GSA_GTEST_INCLUDES)
+    list(APPEND GSA_GTEST_ISYSTEM "-isystem${dir}")
+  endforeach()
+endif()
+
 add_library(gsa INTERFACE)
 add_library(gsa::gsa ALIAS gsa)
 target_include_directories(
@@ -36,23 +46,26 @@ target_compile_options(gsa INTERFACE -Wall -Wextra)
 set(GSA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/demo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/examples/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/examples/bench_gsa.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_history.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_determinism.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_modes.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_median.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_convergence.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_validation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_snapshots.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples/bench_gsa.cpp)
+if(GSA_BUILD_TESTS)
+  list(APPEND GSA_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_history.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_stats.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_determinism.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_modes.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_thread_safety.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_median.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_convergence.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_validation.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tests/tasks/test_snapshots.cpp)
+endif()
 
 add_custom_target(check-gsa
     COMMAND ${CMAKE_CXX_COMPILER} -Wall -Wextra -Werror -std=c++20 -fsyntax-only
             -I${CMAKE_CURRENT_SOURCE_DIR}/src
             -I${nlohmann_json_INCLUDE_DIRS_RELEASE}
             -I${xoshiro-cpp_INCLUDE_DIRS_RELEASE}
+            ${GSA_GTEST_ISYSTEM}
             ${GSA_SOURCES}
     DEPENDS ${GSA_SOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})

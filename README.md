@@ -75,9 +75,10 @@ configuration in `build/Release` with `-O3 -DNDEBUG`.
 
 ### Dependencies
 
-Conan 2 manages all external dependencies (both header-only):
-- `nlohmann_json/3.11.2` — JSON configuration support
-- `xoshiro-cpp/1.1` — Xoshiro256++ PRNG
+Conan 2 manages all external dependencies:
+- `nlohmann_json/3.11.2` — JSON configuration support (header-only)
+- `xoshiro-cpp/1.1` — Xoshiro256++ PRNG (header-only)
+- `gtest/1.14.0` — test framework (compiled from source on first `conan install`)
 
 No vendored dependencies; everything comes from Conan Center.
 
@@ -112,8 +113,9 @@ This generates build files under `build/Release` with the Conan toolchain
 preset name is stable across platforms even though its generator is not:
 Conan picks MinGW Makefiles on Windows and the native generator elsewhere.
 
-> Both dependencies are header-only, so no binaries are ever built or
-> downloaded — profile compiler-version mismatches are harmless.
+> The library deps are header-only, so no binaries are ever built or
+> downloaded for them — profile compiler-version mismatches are harmless.
+> (`gtest` builds once from source for the test binary.)
 
 ### Build
 
@@ -168,7 +170,7 @@ Runs 10 CTest tests: `gsa_history`, `gsa_stats`, `gsa_determinism`, `gsa_modes`,
 
 ### Alternative: `default` Preset (Ninja, No Conan)
 
-If you already have `nlohmann_json` and `xoshiro-cpp` installed system-wide:
+If you already have `nlohmann_json`, `xoshiro-cpp`, and `gtest` installed system-wide:
 
 ```bash
 cmake --preset default
@@ -176,7 +178,7 @@ cmake --build --preset default
 ctest --preset default
 ```
 
-This uses a Ninja Release build in `build/` without the Conan toolchain. You must ensure both dependencies are findable via `find_package`.
+This uses a Ninja Release build in `build/` without the Conan toolchain. You must ensure all three dependencies are findable via `find_package`.
 
 ### Manual Build (No CMake)
 
@@ -431,7 +433,7 @@ velocities/accelerations reset at the start.
 
 ## Tests
 
-`tests/` holds a self-contained framework (`test_framework.hpp` registers named tests; `test_common.hpp` shares objectives/invariant helpers). Individual tests in `tests/tasks/`, one `*.cpp` per test, registered as separate CTest entries:
+`tests/` uses GoogleTest (Conan: `gtest/1.14.0`; `test_common.hpp` shares objectives/invariant helpers). Individual tests in `tests/tasks/`, one `*.cpp` per suite, each registered as a separate CTest entry via `--gtest_filter`:
 
 - `test_history.cpp` — history size `== max_iter + 1`, monotonic `best_so_far`, mean/median within `[best_iter, worst_iter]`, finite non-negative `stddev` (both modes).
 - `test_stats.cpp` — history stats finite and in-range across objectives.
@@ -449,16 +451,18 @@ Build manually with:
 g++.exe -O3 -std=c++20 -Isrc \
     -I<path_to_nlohmann_json_include> \
     -I<path_to_xoshiro_cpp_include> \
-    tests/test_main.cpp tests/tasks/test_history.cpp \
+    -I<path_to_gtest_include> \
+    tests/tasks/test_history.cpp \
     tests/tasks/test_stats.cpp tests/tasks/test_determinism.cpp \
     tests/tasks/test_modes.cpp tests/tasks/test_thread_safety.cpp \
     tests/tasks/test_median.cpp tests/tasks/test_convergence.cpp \
-    tests/tasks/test_validation.cpp tests/tasks/test_snapshots.cpp -o gsa_test.exe
+    tests/tasks/test_validation.cpp tests/tasks/test_snapshots.cpp \
+    -lgtest -lgtest_main -o gsa_test.exe
 ```
 
 Run (or use `ctest --preset conan-release`):
 
 ```bash
 ./gsa_test.exe
-./gsa_test.exe determinism
+./gsa_test.exe --gtest_filter=Determinism.*
 ```
