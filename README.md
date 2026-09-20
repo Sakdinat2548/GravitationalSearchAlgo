@@ -69,14 +69,14 @@ noise=0.002`. Full per-bench record (protocol + params) in each bench dir's
 
 ## C++ vs pure-Python GSA runtime
 
-`scripts/gsa.py` is a plain-Python port of the same algorithm; `scripts/benchmark_gsa_timing.py`
+`scripts/gsa_pure.py` is a plain-Python port of the same algorithm; `scripts/benchmark_gsa_timing.py`
 times it against `bench.exe` on identical workloads (30D, ±30, 50 agents, 1000 iters,
 `g0=100, alpha=20`, 3 runs; trajectories differ by RNG, so this compares speed only):
 
-| Objective | C++ (`bench.exe`) | Python (`gsa.py`) | Speedup |
+| Objective | C++ (`bench.exe`) | Python (`gsa_pure.py`) | Speedup |
 |---|---|---|---|
-| Sphere 30D | 0.12 s/run | 12.1 s/run | ~99× |
-| Rosenbrock 30D | 0.10 s/run | 12.2 s/run | ~122× |
+| Sphere 30D | 0.12 s/run | 12.1 s/run | ~100× |
+| Rosenbrock 30D | 0.10 s/run | 12.2 s/run | ~120× |
 
 ## Build
 

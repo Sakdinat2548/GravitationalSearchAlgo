@@ -17,7 +17,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-import gsa as gsa_py
+import gsa_pure
 from objective import FUNCTIONS
 
 
@@ -61,7 +61,7 @@ def main():
 
         t = time.perf_counter()
         for r in range(a.runs):
-            gsa_py.run(fn, lower, upper, a.agents, a.iters,
+            gsa_pure.run(fn, lower, upper, a.agents, a.iters,
                        a.g0, a.alpha, True, a.seed_base + r)
         py = time.perf_counter() - t
 
