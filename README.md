@@ -65,6 +65,8 @@ GSA `g0=100, alpha=20` · meta `p-head=0.9, step=0.002` · GA `pc=0.8, pm=0.03,
 noise=0.002`. Full per-bench record (protocol + params) in each bench dir's
 `algos.json`.
 
+</details>
+
 <details>
 <summary><strong>C++ vs pure-Python GSA runtime</strong> — same workload, wall time per run (click to expand/collapse)</summary>
 
@@ -76,8 +78,6 @@ times it against `bench.exe` on identical workloads (30D, ±30, 50 agents, 1000 
 |---|---|---|---|
 | Sphere 30D | 0.12 s/run | 12.1 s/run | ~99× |
 | Rosenbrock 30D | 0.10 s/run | 12.2 s/run | ~122× |
-
-</details>
 
 </details>
 
