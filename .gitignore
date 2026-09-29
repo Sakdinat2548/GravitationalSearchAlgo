@@ -16,6 +16,9 @@ compile_commands.json
 /exports/
 __pycache__/
 
+# Original paper PDF (copyrighted, local-only, not committed).
+docs/GSA_A_Gravitational_Search_Algorithm.pdf
+
 # Editor/IDE files
 .vscode/
 opencode.json

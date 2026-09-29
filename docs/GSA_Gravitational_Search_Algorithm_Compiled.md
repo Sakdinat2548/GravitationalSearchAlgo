@@ -7,7 +7,7 @@
 **Keywords:** Optimization; Heuristic search algorithms; Gravitational Search Algorithm; Law of gravity
 **DOI:** 10.1016/j.ins.2009.03.004
 
-**Source:** GSA_A_Gravitational_Search_Algorithm.pdf
+**Source:** Rashedi et al. (2009) — original publisher PDF not committed (keep a local copy as `GSA_A_Gravitational_Search_Algorithm.pdf` to re-verify).
 
 ---
 
