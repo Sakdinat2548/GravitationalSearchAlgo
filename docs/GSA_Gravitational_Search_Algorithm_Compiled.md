@@ -1,4 +1,3 @@
-```markdown
 # GSA: A Gravitational Search Algorithm
 
 **Authors:** Esmat Rashedi, Hossein Nezamabadi-pour, Saeid Saryazdi
@@ -624,4 +623,3 @@ $$(a_{ij}) = \begin{pmatrix} -32 & -16 & 0 & 16 & 32 & -32 & \cdots & 0 & 16 & 3
 [34] P.K. Tripathi, S. Bandyopadhyay, S.K. Pal, Multi-objective particle swarm optimization with time variant inertia and acceleration coefficients, Information Sciences 177 (2007) 5033–5049.
 [35] D.H. Wolpert, W.G. Macready, No free lunch theorems for optimization, IEEE Transactions on Evolutionary Computation 1 (1997) 67–82.
 [36] X. Yao, Y. Liu, G. Lin, Evolutionary programming made faster, IEEE Transactions on Evolutionary Computation 3 (1999) 82–102.
-```
